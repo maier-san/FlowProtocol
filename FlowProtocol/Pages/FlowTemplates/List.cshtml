@@ -1,0 +1,19 @@
+﻿@page
+@model FlowProtocol.Pages.FlowTemplates.ListModel
+@{
+    ViewData["Title"] = "Vorlagen";
+}
+<h3>Vorlagen</h3>
+<h4>Auflistung der Vorlagen aus @Model.TemplatePath:</h4>
+<ul>
+  @foreach (var idxtemplate in Model.Templates)
+  {
+    <li>
+      <a
+        asp-page="./Apply"
+        asp-route-template="@idxtemplate">
+        @idxtemplate
+      </a>
+    </li>
+  }
+</ul>

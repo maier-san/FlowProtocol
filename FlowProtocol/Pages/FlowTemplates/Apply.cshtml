@@ -1,0 +1,58 @@
+﻿@page "{template}"
+@model FlowProtocol.Pages.FlowTemplates.ApplyModel
+
+@{
+    ViewData["Title"] = "Vorlage @Model.TemplateName anwenden";
+}
+
+@if (Model.ShowRestrictions.Any())
+{
+    <form method="post">
+        <h3>Vorlage @Model.TemplateName</h3>
+        @foreach (var k in Model.GivenKeys)
+        {
+            <input type="hidden" asp-for="SelectedOptions[k]" />
+        }
+        @foreach (var r in Model.ShowRestrictions)
+        {
+            <div class="formbuilder-radio-group form-group">
+                <label class="formbuilder-radio-group-label">
+                    @r.QuestionText
+                    <br>
+                    @if (!string.IsNullOrEmpty(r.HelpText))
+                    {
+                        <span class="tooltip-element" tooltip="@r.HelpText">?</span>
+                    }
+                </label>
+                <div class="radio-group">
+                    @foreach (var idx in r.Options)
+                    {
+                        <div class="formbuilder-radio">
+                            <input value="@idx.Key" type="radio" asp-for="SelectedOptions[r.Key]">
+                            <label>@idx.OptionText</label>
+                        </div>
+                    }
+                </div>
+            </div><br>
+        }
+        <button type="submit" class="btn btn-primary">Weiter</button>
+    </form>
+}
+else
+{
+    <h4>Prüfpunkte basierend auf Vorlage @Model.TemplateName:</h4>
+    <ol>
+        @foreach (var t in Model.ShowToDos)
+        {
+            <li>
+                @t.ToDoText
+                @if (!string.IsNullOrEmpty(t.BestPractice))
+                {
+                    <br />
+                    <span style="color: #993366;">Best Practice: @t.BestPractice</span>
+                }
+            </li>
+        }
+    </ol>
+    <a asp-page="./List" class="btn btn-default">Zurück zur Liste</a>
+}
