@@ -10,7 +10,10 @@ namespace FlowProtocol.Pages.FlowTemplates
    public class ListModel : PageModel
    {
       public List<string> Templates { get; set; }
+      public List<string> Directiories {get; set;}
       public string TemplatePath { get; set; }
+      [BindProperty(SupportsGet = true)]
+      public string DetailPath {get; set;}
 
       public ListModel(IConfiguration configuration)
       {
@@ -18,39 +21,42 @@ namespace FlowProtocol.Pages.FlowTemplates
          Templates = new List<string>();
       }
       
-      public void OnGet()
+      public void OnGet(string detailPath)
       {
-         DirectoryInfo di = new DirectoryInfo(TemplatePath);
-         Templates = di.GetFiles("*.fpt").Select(x => x.Name.Replace(".fpt", "")).ToList<string>();
+         string currentPath = TemplatePath;
+         if (!string.IsNullOrEmpty(detailPath)) currentPath += "\\" + detailPath;
+         DirectoryInfo di = new DirectoryInfo(currentPath);
+         Directiories = di.GetDirectories().Select(x => x.Name).ToList<string>();
+         Templates = di.GetFiles("*.qfp").Select(x => x.Name.Replace(".qfp", "")).ToList<string>();
 
-         if (!Templates.Contains("Demo2")) CreateDemo2(TemplatePath);
+         //if (!Templates.Contains("Demo2")) CreateDemo2(TemplatePath);
       }
 
       
       private void CreateDemo2(string templatepath)
       {
          Template demo = new Template();
-         demo.AddRestriction("L1", "Werden Datensätze im Datenbestand gelöscht?")
+         demo.AddRestriction("L1", "Werden Datensï¿½tze im Datenbestand gelï¿½scht?")
              .AddOption("J", "Ja")
-               .AddToDo("Es wurde sichergestellt, dass nur die beabsichtigten Datensätze gelöscht werden.", "Allgemeinen Fall nachbauen, Datensätze zählen")
-               .AddRestriction("L2", "Gibt es im Schema Fremdverweise auf die gelöschten Datensätze?")
+               .AddToDo("Es wurde sichergestellt, dass nur die beabsichtigten Datensï¿½tze gelï¿½scht werden.", "Allgemeinen Fall nachbauen, Datensï¿½tze zï¿½hlen")
+               .AddRestriction("L2", "Gibt es im Schema Fremdverweise auf die gelï¿½schten Datensï¿½tze?")
                .AddOption("J", "Ja")
-                  .AddToDo("Es wurde sichergestellt, dass beim Löschen kleine Blockaden durch Integritätsbeziehungen auftreten.", "Allgemeinen Fall nachbauen")
-                  .AddToDo("Es wurde sichergestellt, dass beim Löschen keine unbeabsichtigen Löschweitergaben angewendet werden.", "Nach Beziehungen suchen.")
-                  .AddToDo("Es wurde sichergestellt, dass nach dem Löschen von Datensätzen keine verwaisten Datensätze zurückbleiben.", "Allgemeinen Fall nachbauen")
+                  .AddToDo("Es wurde sichergestellt, dass beim Lï¿½schen kleine Blockaden durch Integritï¿½tsbeziehungen auftreten.", "Allgemeinen Fall nachbauen")
+                  .AddToDo("Es wurde sichergestellt, dass beim Lï¿½schen keine unbeabsichtigen Lï¿½schweitergaben angewendet werden.", "Nach Beziehungen suchen.")
+                  .AddToDo("Es wurde sichergestellt, dass nach dem Lï¿½schen von Datensï¿½tzen keine verwaisten Datensï¿½tze zurï¿½ckbleiben.", "Allgemeinen Fall nachbauen")
                .EndOption()
                .EndRestriction("N", "Nein")
             .EndOption()
             .EndRestriction("N", "Nein")
-            .AddRestriction("G1", "Wird eine Geschäftslogik durchlaufen?")
+            .AddRestriction("G1", "Wird eine Geschï¿½ftslogik durchlaufen?")
             .AddOption("J", "Ja")
-               .AddToDo("Es wurde sichergestellt, dass alle Einschränkungskonflikte korrekt verarbeitet werden.")
+               .AddToDo("Es wurde sichergestellt, dass alle Einschrï¿½nkungskonflikte korrekt verarbeitet werden.")
                .AddToDo("Es wurde sichergestellt, dass ein Abbruch-Konflikt korrekt und transparent verarbeitet wird")
-               .AddRestriction("G2", "Werden durch die Geschäftslogik Werte berechnet?")
+               .AddRestriction("G2", "Werden durch die Geschï¿½ftslogik Werte berechnet?")
                .AddOption("JR", "Ja, es werden fachlich bedeutsame Werte berechnet.")
-                  .AddToDo("Es wurde sichergestellt, dass die durch die GL berechneten Werte in allgemeingültigsten Fall korrekt sind.", "Referenzsituation erstellen")
-                  .AddToDo("Es wurde sichergestellt, dass die durch die GL berechneten Werte auch in mindestens zwei Sonderfällen korrekt ermittelt werden.")
-                  .AddToDo("Es wurde sichergestellt, dass auch eine Werte-Berechnung durch die GL auch über mehrere Datensätze korrekt funktioniert.")
+                  .AddToDo("Es wurde sichergestellt, dass die durch die GL berechneten Werte in allgemeingï¿½ltigsten Fall korrekt sind.", "Referenzsituation erstellen")
+                  .AddToDo("Es wurde sichergestellt, dass die durch die GL berechneten Werte auch in mindestens zwei Sonderfï¿½llen korrekt ermittelt werden.")
+                  .AddToDo("Es wurde sichergestellt, dass auch eine Werte-Berechnung durch die GL auch ï¿½ber mehrere Datensï¿½tze korrekt funktioniert.")
                .EndOption()
                .AddOption("JT", "Ja, es werden aber nur Werte von untergeordneter Bedeutung berechnet.")
                   .AddToDo("Es wurde sichergestellt, dass die durch die GL berechneten Werte der Spezifikation entsprechen.")

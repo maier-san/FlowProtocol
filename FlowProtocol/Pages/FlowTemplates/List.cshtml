@@ -4,7 +4,20 @@
     ViewData["Title"] = "Vorlagen";
 }
 <h3>Vorlagen</h3>
-<h4>Auflistung der Vorlagen aus @Model.TemplatePath:</h4>
+<h5>Weitere Ordner</h5>
+<ul>
+  @foreach (var idxdir in Model.Directiories)
+  {
+    <li>
+      <a
+        asp-page="./List"
+        asp-route-detailPath="@idxdir">
+        @idxdir
+      </a>
+    </li>      
+  }
+</ul>
+<h5>Direkte Vorlagen</h5>
 <ul>
   @foreach (var idxtemplate in Model.Templates)
   {
