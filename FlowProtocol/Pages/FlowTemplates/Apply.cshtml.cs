@@ -1,7 +1,6 @@
 using FlowProtocol.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Xml.Serialization;
 
 namespace FlowProtocol.Pages.FlowTemplates
 {
@@ -20,7 +19,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       public ApplyModel(IConfiguration configuration)
       {
          TemplatePath = configuration.GetValue<string>("TemplatePath");
-         TemplateName = "";
+         TemplateName = string.Empty;
          ShowRestrictions = new List<Restriction>();
          ShowToDos = new List<ToDo>();
          SelectedOptions = new Dictionary<string, string>();
@@ -39,7 +38,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       }
 
       /// <summary>
-      ///   Extrahiert die nächsten zu beantwortenden Fragen anhand der schon vorhandenen Antworten aus dem Template.
+      ///   Extrahiert die nÃ¤chsten zu beantwortenden Fragen anhand der schon vorhandenen Antworten aus dem Template.
       /// </summary>
       /// <param name="t">Die aktuelle Template-Ebene</param>
       private void ExtractRestrictions(Template t)
@@ -49,8 +48,8 @@ namespace FlowProtocol.Pages.FlowTemplates
          {
             if (!SelectedOptions.ContainsKey(r.Key) || !r.Options.Select(x => x.Key).Contains(SelectedOptions[r.Key]))
             {
-               // Frage noch unbeantwortet oder ungültig beantwortet: auf Seite Übernehmen
-               SelectedOptions[r.Key] = "";
+               // Frage noch unbeantwortet oder ungÃ¼ltig beantwortet: auf Seite Ã¼bernehmen
+               SelectedOptions[r.Key] = string.Empty;
                ShowRestrictions.Add(r);
             }
             else
@@ -76,12 +75,9 @@ namespace FlowProtocol.Pages.FlowTemplates
 
       private void LoadTemplate()
       {
-         string templatefile = TemplatePath + @"\" + TemplateName + ".fpt";
-         using (TextReader reader = new StreamReader(templatefile))
-         {
-            XmlSerializer x = new(typeof(Template));
-            CurrentTemplate = x.Deserialize(reader) as Template;
-         }
+         string templatefile = TemplatePath + @"\" + TemplateName + ".qfp";
+         TemplateReader tr = new TemplateReader();
+         CurrentTemplate = tr.ReadTemplate(templatefile);
       }
    }
 }
