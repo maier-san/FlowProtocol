@@ -7,6 +7,7 @@ namespace FlowProtocol.Pages.FlowTemplates
    public class ApplyModel : PageModel
    {
       public string TemplateName { get; set; }
+      public string TemplateBreadcrumb => TemplateName.Replace("\\", ", ");
       private string TemplatePath { get; set; }
       private Template? CurrentTemplate { get; set; }
       public List<Restriction> ShowRestrictions { get; set; }

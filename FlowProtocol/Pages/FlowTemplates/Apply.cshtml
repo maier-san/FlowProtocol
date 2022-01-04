@@ -2,13 +2,13 @@
 @model FlowProtocol.Pages.FlowTemplates.ApplyModel
 
 @{
-    ViewData["Title"] = "Vorlage @Model.TemplateName anwenden";
+    ViewData["Title"] = "Vorlage @Model.TemplateBreadcrumb";
 }
 
 @if (Model.ShowRestrictions.Any())
 {
     <form method="post">
-        <h3>Vorlage @Model.TemplateName</h3>
+        <h3>Vorlage @Model.TemplateBreadcrumb</h3>
         @foreach (var k in Model.GivenKeys)
         {
             <input type="hidden" asp-for="SelectedOptions[k]" />

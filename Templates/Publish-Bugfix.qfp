@@ -1,12 +1,12 @@
 ?F1: Ist die Funktion zur Aktualisierung von Qualifikationen betroffen?
     #J: Ja
-        ?F1a: Ist die Aktialisierung von Zuordnungen anhand anderer Zuordnungen betroffen?
+        ?F1a: Ist die Aktualisierung von Zuordnungen anhand anderer Zuordnungen betroffen?
             #J: Ja
                 >> Eine Qualifikation kann über die als hinreichend vorausgesetzten Qualifikationen erworben werden.
                 >> Eine Qualifikation wird nicht erworben, wenn eine als notwendig vorausgesetzte Qualifikation fehlt.
                 >> Eine Qualifikation wird nicht erworben, wenn eine als notwendig vorausgesetzte Qualifikation abgelaufen ist.
             #N: Nein
-        ?F1b: Ist die Aktialisierung von Zuordnungen anhand von Kursbesuchen betroffen?
+        ?F1b: Ist die Aktualisierung von Zuordnungen anhand von Kursbesuchen betroffen?
             #J: Ja
                 >> Eine Qualifikation kann über einen Kurs erworben werden.
                 >> Die Aktualisierung der Qualifikationszuordnungen wird bei entsprechender Geschäftslogikeinstellung über den Statuswechsel ausgelöst.

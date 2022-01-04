@@ -3,30 +3,37 @@
 @{
     ViewData["Title"] = "Vorlagen";
 }
-<h3>Vorlagen</h3>
-<h5>Weitere Ordner</h5>
-<ul>
-  @foreach (var idxdir in Model.Directiories)
-  {
-    <li>
-      <a
-        asp-page="./List"
-        asp-route-detailPath="@idxdir">
-        @idxdir
-      </a>
-    </li>      
-  }
-</ul>
-<h5>Direkte Vorlagen</h5>
-<ul>
-  @foreach (var idxtemplate in Model.Templates)
-  {
-    <li>
-      <a
-        asp-page="./Apply"
-        asp-route-template="@idxtemplate">
-        @idxtemplate
-      </a>
-    </li>
-  }
-</ul>
+<h2>Vorlagen</h2>
+@foreach (var group in Model.TemplateGroups)
+{
+  <hr>
+  <h5>@group.GroupName</h5>
+  <table style="width: 100%; border-collapse: collapse;" border="0" cellspacing="10" cellpadding="5">
+  <tbody>
+    @foreach (var row in group.Rows)
+    {
+      <tr>
+      <td style="width: 33.3333%;">
+        @if(row.Entry1 != null)
+        {
+          <a asp-page="./Apply" asp-route-template="@row.Entry1.TemplatePath">@row.Entry1.TemplateName</a>
+        }
+      </td>
+      <td style="width: 33.3333%;">
+        @if(row.Entry2 != null)
+        {
+          <a asp-page="./Apply" asp-route-template="@row.Entry2.TemplatePath">@row.Entry2.TemplateName</a>
+        }
+      </td>
+      <td style="width: 33.3333%;">
+        @if(row.Entry3 != null)
+        {
+          <a asp-page="./Apply" asp-route-template="@row.Entry3.TemplatePath">@row.Entry3.TemplateName</a>
+        }
+      </td>
+      </tr>      
+    }
+  </tbody>
+  </table>
+}
+<hr>

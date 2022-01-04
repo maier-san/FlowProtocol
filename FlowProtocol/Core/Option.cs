@@ -1,24 +1,16 @@
-﻿using System.Xml.Serialization;
-
-namespace FlowProtocol.Core
+﻿namespace FlowProtocol.Core
 {
    public class Option : Template
    {
-      [XmlAttribute] 
       public string Key { get; set;}
       public string OptionText { get; set; }
       
       public Option() : base()
       {
-         Key = "";
-         OptionText = "";
+         Key = string.Empty;
+         OptionText = string.Empty;
          Restrictions = new List<Restriction>();
          ToDos = new List<ToDo>();
-      }
-
-      public Option(Restriction parent) : this()
-      {
-         Parent = parent;
       }
    }
 }
