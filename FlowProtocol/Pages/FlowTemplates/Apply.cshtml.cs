@@ -32,7 +32,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          LoadTemplate();
          if (CurrentTemplate == null)
          {
-            return RedirectToPage("./NoTemplate");
+            return RedirectToPage("/NoTemplate");
          }
          ExtractRestrictions(CurrentTemplate);
          return Page();
