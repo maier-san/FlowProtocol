@@ -8,6 +8,7 @@ namespace FlowProtocol.Pages.FlowTemplates
 {
    public class ListModel : PageModel
    {
+      public string? UserGroup {get; set;}
       public List<TemplateGroup> TemplateGroups {get; set;}
       public string TemplatePath { get; set; }
             
@@ -17,9 +18,11 @@ namespace FlowProtocol.Pages.FlowTemplates
          TemplateGroups = new List<TemplateGroup>();
       }
       
-      public void OnGet()
+      public void OnGet(string userGroup)
       {
          string currentPath = TemplatePath;
+         UserGroup = userGroup;
+         if (!string.IsNullOrEmpty(UserGroup)) currentPath += "\\" + UserGroup;
          ReadDirectory(currentPath);
       }
       
@@ -89,7 +92,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       public TemplateEntry(FileInfo di, string templatePath)
       {
          TemplateName = di.Name.Replace(".qfp",string.Empty);
-         TemplatePath = di.FullName.Replace(templatePath + "\\", string.Empty).Replace(".qfp",String.Empty);
+         TemplatePath = di.FullName.Replace(templatePath + "\\", string.Empty).Replace(".qfp",string.Empty);
       }
    }
 }

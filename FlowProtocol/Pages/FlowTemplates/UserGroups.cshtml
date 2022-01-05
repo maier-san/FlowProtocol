@@ -1,0 +1,19 @@
+@page
+@model FlowProtocol.Pages.FlowTemplates.UserGroupsModel
+@{
+    ViewData["Title"] = "Anwendergruppen";
+}
+<h2>Anwendergruppen</h2>
+<p>Wählen Sie die passende Anwendergruppe aus, um die zugeordneten Vorlagen anzuzeigen.</p>
+<table class="cinereousTable">
+<tbody>
+@foreach (var group in Model.UserGroups)
+{
+    <tr>
+        <td>
+            <a asp-page="./List" asp-route-userGroup="@group">@group</a>
+        </td>
+    </tr>
+}
+</tbody>
+</table>

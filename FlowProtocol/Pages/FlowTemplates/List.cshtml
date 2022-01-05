@@ -1,15 +1,15 @@
-﻿@page
+﻿@page "{userGroup}"
 @model FlowProtocol.Pages.FlowTemplates.ListModel
 @{
     ViewData["Title"] = "Vorlagen";
 }
-<h2>Vorlagen</h2>
+<h2>Vorlagen @Model.UserGroup</h2>
+<p>Wählen Sie die Vorlage aus, die Sie anwenden möchten.</p>
 @foreach (var group in Model.TemplateGroups)
 {
-  <hr>
   <h5>@group.GroupName</h5>
-  <table style="width: 100%; border-collapse: collapse;" border="0" cellspacing="10" cellpadding="5">
-  <tbody>
+  <table class="cinereousTable">
+    <tbody>
     @foreach (var row in group.Rows)
     {
       <tr>
@@ -35,5 +35,5 @@
     }
   </tbody>
   </table>
+  <br>
 }
-<hr>

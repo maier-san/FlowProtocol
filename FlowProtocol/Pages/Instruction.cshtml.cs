@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace FlowProtocol.Pages
 {
    public class InstructionModel : PageModel
-   {
-      private readonly ILogger<InstructionModel> _logger;
+   {      
+      public string TemplatePath { get; set; }
 
-      public InstructionModel(ILogger<InstructionModel> logger)
-      {
-         _logger = logger;
+      public InstructionModel(IConfiguration configuration)
+      {         
+         TemplatePath = configuration.GetValue<string>("TemplatePath");
       }
 
       public void OnGet()
