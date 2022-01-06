@@ -1,0 +1,4 @@
+?S1: Ist die Tabelle $Tabelle Bestandteil einer ER3-Datenquelle?
+    #J: Ja
+        >> Die auf der Tabelle $Tabelle aufbauenden ER3-Datenquellen sind vollständig abwärtskompatibel.
+    #N: Nein
