@@ -13,18 +13,27 @@ namespace FlowProtocol.Core
        {
            if (!File.Exists(filepath)) return null;
            Template main = new Template();
+           TemplateList[-1] = main;
+           ReadTemplatePart(filepath, ref main, 0);
+           return main;
+       }
+
+       private void ReadTemplatePart(string filepath, ref Template main, int masterindent)
+       {
+           
            using (StreamReader sr = new StreamReader(filepath))
            {
                Regex regRestriction = new Regex(@"\?(.*):(.*)");
                Regex regOption = new Regex("#(.*):(.*)");
-               Regex regTodo = new Regex(">>(.*)");               
-               TemplateList[-1] = main; 
+               Regex regTodo = new Regex(">>(.*)");
+               Regex regInsert = new Regex(@"\+\+(.*):(.*)");                        
                while (sr.Peek() != -1)
                {
                    string? line = sr.ReadLine();
                    if (!string.IsNullOrWhiteSpace(line))
                    {                       
-                       int indent = line.Length-line.TrimStart().Length;
+                       line = line.Replace("\t", "    ");
+                       int indent = masterindent + line.Length-line.TrimStart().Length;
                        string codeline = line.Trim();
                        if (regRestriction.IsMatch(codeline))
                        {                           
@@ -58,10 +67,22 @@ namespace FlowProtocol.Core
                                parent.ToDos.Add(t);
                            }
                        }
+                       else if (regInsert.IsMatch(codeline))
+                       {
+                           Template? parent = GetMatchingParent(indent, TemplateList);
+                           if (parent != null)
+                           {
+                               var m = regInsert.Match(codeline);
+                               string flowFunctionFilepath = new FileInfo(filepath).DirectoryName + "\\" + m.Groups[1] + ".qff";
+                               if (File.Exists(flowFunctionFilepath))
+                               {
+                                   ReadTemplatePart(flowFunctionFilepath, ref parent, indent);
+                               }
+                           }
+                       }
                    }
                }
-           }
-           return main;
+           }           
        }
 
        // Sucht das passende Parent-Objekt anhand der Einrückung aus der Liste heraus
