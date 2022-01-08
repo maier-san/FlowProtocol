@@ -10,9 +10,10 @@ Die Vorlagen sind die Kernelemente von FlowProtocol. Sie beinhalten die Fragen s
 
 
 ## Aufbau einer Vorlage
-Vorlagen sind einfache Textdateien mit der Dateiendung „*.qfp“ (Quick Flow Protocol). Die Syntax besteht aus ganz wenigen Steuerzeichen und wurde speziell darauf ausgelegt, dass Vorlagen sehr einfach mit einem beliebigen Editor erstellt und bearbeitet werden können. Der Inhalt einer Vorlage besteht im Wesentlichen aus den Komponenten Kommentar (//), Frage (?), Antwort (#), Prüfpunkt (>>) und Einbindungen (++), die in beliebiger Tiefe verschachtelt werden können. Fragen und Antworten haben jeweils eine möglichst kurze Kennung, mit denen der Verlauf der Durchführung als URL-Parameter abgebildet wird. Zeilenumbrüche und Einrückungen sind essenziell zur Abbildung der Struktur, wobei die Anzahl der Zeichen relevant ist. Das nachfolgende Beispiel zeigt, wie die Syntax aufgebaut ist:
+Vorlagen sind einfache Textdateien mit der Dateiendung „*.qfp“ (Quick Flow Protocol). Die Syntax besteht aus ganz wenigen Steuerzeichen und wurde speziell darauf ausgelegt, dass Vorlagen sehr einfach mit einem beliebigen Editor erstellt und bearbeitet werden können. Der Inhalt einer Vorlage besteht im Wesentlichen aus den Komponenten Kommentar (// und ///), Frage (?), Antwort (#), Prüfpunkt (>>) und Einbindungen (++), die in beliebiger Tiefe verschachtelt werden können. Fragen und Antworten haben jeweils eine möglichst kurze Kennung, mit denen der Verlauf der Durchführung als URL-Parameter abgebildet wird. Zeilenumbrüche und Einrückungen sind essenziell zur Abbildung der Struktur, wobei die Anzahl der Zeichen relevant ist. Das nachfolgende Beispiel zeigt, wie die Syntax aufgebaut ist:
 ```
-// Diese Vorlage umfasst Prüffragen für die Erstellung von Listenbereichen.
+/// Kontrollpunkte für die Erstellung von Listenbereichen.
+/// Version 1.0 (c) W. Maier
 ?F1: Welche Art von Liste wurde erstellt?
     #E: Editierbare Liste
         >> Elemente in der Liste können bearbeitet werden.

@@ -50,14 +50,15 @@ jedoch in der Darstellung ignoriert.</p>
 „*.qfp“ (Quick Flow Protocol). Die Syntax besteht aus ganz wenigen
 Steuerzeichen und wurde speziell darauf ausgelegt, dass Vorlagen sehr einfach mit einem beliebigen Editor
 erstellt und bearbeitet werden können. Der Inhalt einer Vorlage besteht im
-Wesentlichen aus den Komponenten Kommentar (//), Frage (?), Antwort (#), Prüfpunkt (&gt;&gt;) und Einbindungen (++), 
+Wesentlichen aus den Komponenten Kommentar (// und ///), Frage (?), Antwort (#), Prüfpunkt (&gt;&gt;) und Einbindungen (++), 
 die in beliebiger Tiefe verschachtelt werden können. 
 Fragen und Antworten haben jeweils eine möglichst kurze Kennung,
 mit denen der Verlauf der Durchführung als URL-Parameter abgebildet wird.
 Zeilenumbrüche und Einrückungen sind essenziell zur Abbildung der Struktur,
 wobei die Anzahl der Zeichen relevant ist. Das nachfolgende Beispiel zeigt, wie
 die Syntax aufgebaut ist:</p>
-<div style="text-indent:2px;"><code>// Diese Vorlage umfasst Prüffragen für die Erstellung von Listenbereichen.</code></div>
+<div style="text-indent:2px;"><code>/// Kontrollpunkte für die Erstellung von Listenbereichen.</code></div>
+<div style="text-indent:2px;"><code>/// Version 1.0 (c) W. Maier</code></div>
 <div style="text-indent:2px;"><code>?F1: Welche Art von Liste wurde erstellt?</code></div>
 <div style="text-indent:22px;"><code>#E: Editierbare Liste</code></div>
 <div style="text-indent:42px;"><code>>> Elemente in der Liste können bearbeitet werden.</code></div>
