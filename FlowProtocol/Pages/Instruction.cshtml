@@ -73,7 +73,7 @@ die Syntax aufgebaut ist:</p>
 <h5>Einbindungen</h5>
 <p>Manche Abschnitte aus Vorlagen sind eventuell so allgemein, dass man sie in gleichger Form in mehreren Vorlagen verwenden möchte.
 In diesem Fall kann man diese Abschnitte als Funktionsdatei mit der Dateiendung „*.qff“ (Quick Flow Protocol) in eine eigene Datei auslagern
-und über eine Einbindung (<code>++Dateiname</code>) an einer bestimmten Stelle in einer Vorlage aufrufen. 
+und über eine Einbindung (<code>~Include Dateiname</code>) an einer bestimmten Stelle in einer Vorlage aufrufen. 
 Die Datei muss dabei im gleichen Verzeichnis liegen.
 Bei einem solchen Aufruf lassen sich auch Variablen mit Werte belegen, z.B. <code>$Bereich=Test; $Postfix=1</code>, so dass
 beim Einlsen der Datei Ersetzungen möglich sind, z.B.<br>

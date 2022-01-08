@@ -35,7 +35,7 @@ namespace FlowProtocol.Core
                 Regex regRestriction = new Regex(@"\?(.*):(.*)");
                 Regex regOption = new Regex("#(.*):(.*)");
                 Regex regTodo = new Regex(">>(.*)");
-                Regex regInsert = new Regex(@"\+\+(.*):(.*)");                        
+                Regex regInsert = new Regex(@"~Include (.*):(.*)");                        
                 while (sr.Peek() != -1)
                 {
                     string? line = sr.ReadLine();

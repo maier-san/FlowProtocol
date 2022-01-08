@@ -1,8 +1,8 @@
 ?F1: Ist die Berechnung von Fehlzeiten betroffen?
     #J: Ja
-        ++GLogik: $GLName=Fehlzeiten;
+        ~Include GLogik: $GLName=Fehlzeiten;
     #N: Nein
 ?F2: Ist das Schema der Fehlzeiten betroffen?
     #J: Ja
-        ++Schema: $Tabelle=Fehlzeiten;
+        ~Include Schema: $Tabelle=Fehlzeiten;
     #N: Nein
