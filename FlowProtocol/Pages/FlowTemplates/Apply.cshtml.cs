@@ -1,6 +1,7 @@
 using FlowProtocol.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
 
 namespace FlowProtocol.Pages.FlowTemplates
 {
@@ -8,10 +9,11 @@ namespace FlowProtocol.Pages.FlowTemplates
    {
       public string TemplateName { get; set; }
       public string TemplateBreadcrumb => TemplateName.Replace("\\", ", ");
-      private string TemplatePath { get; set; }
-      private Template? CurrentTemplate { get; set; }
+      public List<string>? TemplateDescription => CurrentTemplate?.Description?.Split("\n").ToList();      
       public List<Restriction> ShowRestrictions { get; set; }
       public List<ToDo> ShowToDos { get; set; }
+      private string TemplatePath { get; set; }
+      private Template? CurrentTemplate { get; set; }
 
       [BindProperty(SupportsGet = true)]
       public Dictionary<string, string> SelectedOptions { get; set; }
@@ -79,6 +81,11 @@ namespace FlowProtocol.Pages.FlowTemplates
          string templatefile = TemplatePath + @"\" + TemplateName + ".qfp";
          TemplateReader tr = new TemplateReader();
          CurrentTemplate = tr.ReadTemplate(templatefile);
+      }
+
+      public bool IsURL(string text)
+      {
+         return Uri.IsWellFormedUriString(text, UriKind.RelativeOrAbsolute);
       }
    }
 }

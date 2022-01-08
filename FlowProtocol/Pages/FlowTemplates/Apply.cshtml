@@ -9,6 +9,15 @@
 {
     <form method="post">
         <h2>Vorlage @Model.TemplateBreadcrumb</h2>
+        @if(Model.TemplateDescription != null)
+        {
+            <p> 
+            @foreach(var line in Model.TemplateDescription)
+            {
+                @line<br>
+            }
+            </p><hr>            
+        }
         @foreach (var k in Model.GivenKeys)
         {
             <input type="hidden" asp-for="SelectedOptions[k]" />
@@ -46,10 +55,23 @@ else
         {
             <li>
                 @t.ToDoText
-                @if (!string.IsNullOrEmpty(t.BestPractice))
+                @if (t.SubItems.Any())
                 {
-                    <br />
-                    <span style="color: #993366;">Best Practice: @t.BestPractice</span>
+                    <ul>
+                        @foreach(var s in t.SubItems)
+                        {
+                            <li>
+                            @if(Model.IsURL(s))
+                            {
+                                <a href="@s" target="_blank">@s</a>
+                            }
+                            else
+                            {
+                                @s
+                            }
+                            </li>
+                        }
+                    </ul>
                 }
             </li>
         }

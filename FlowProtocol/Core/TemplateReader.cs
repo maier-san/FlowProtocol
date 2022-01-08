@@ -32,11 +32,14 @@ namespace FlowProtocol.Core
         {           
             using (StreamReader sr = new StreamReader(filepath))
             {
-                Regex regComment = new Regex("//.*");
-                Regex regRestriction = new Regex(@"\?(.*):(.*)");
-                Regex regOption = new Regex("#(.*):(.*)");
-                Regex regTodo = new Regex(">>(.*)");
-                Regex regInsert = new Regex(@"~Include (.*):(.*)");                        
+                Regex regDescription = new Regex("^///(.*)");
+                Regex regComment = new Regex("^//.*");
+                Regex regRestriction = new Regex(@"^\?(.*):(.*)");
+                Regex regOption = new Regex("^#(.*):(.*)");
+                Regex regSubItem = new Regex("^>(.*)");
+                Regex regTodo = new Regex("^>>(.*)");
+                Regex regInsert = new Regex(@"^~Include (.*):(.*)");                        
+                ToDo? currentToDo = null;
                 while (sr.Peek() != -1)
                 {
                     string? line = sr.ReadLine();
@@ -46,7 +49,26 @@ namespace FlowProtocol.Core
                         int indent = masterindent + line.Length-line.TrimStart().Length;
                         line = ReplaceVariables(line, assignments);
                         string codeline = line.Trim();
-                        if (regComment.IsMatch(codeline))
+                        if (regDescription.IsMatch(codeline))
+                        {                            
+                            if (!(main is Option))
+                            { // Beschreibung nur für das Hauptelement hinzufügen und ansonsten ignorieren
+                                var m = regDescription.Match(codeline);
+                                string descriptionLine = m.Groups[1].Value.Trim();
+                                if (!string.IsNullOrWhiteSpace(descriptionLine))
+                                {
+                                    if (!string.IsNullOrWhiteSpace(main.Description)) 
+                                    {
+                                        main.Description += "\n" + descriptionLine;
+                                    }
+                                    else 
+                                    {
+                                        main.Description = descriptionLine;
+                                    }
+                                }
+                            }
+                        }
+                        else if (regComment.IsMatch(codeline))
                         {
                             // Nur Kommentar: ignorieren
                         }
@@ -60,6 +82,7 @@ namespace FlowProtocol.Core
                                 parent.Restrictions.Add(r);
                                 ResttrictionStack.Push(new Tuple<int, Restriction>(indent, r));
                             }
+                            currentToDo = null;
                         }
                         else if (regOption.IsMatch(codeline))
                         {
@@ -71,6 +94,7 @@ namespace FlowProtocol.Core
                                 parent.Options.Add(o);
                                 TemplateStack.Push(new Tuple<int, Template>(indent, o));
                             }
+                            currentToDo = null;
                         }
                         else if (regTodo.IsMatch(codeline))
                         {
@@ -80,6 +104,15 @@ namespace FlowProtocol.Core
                                 var m = regTodo.Match(codeline);
                                 ToDo t = new ToDo(){ToDoText = m.Groups[1].Value.Trim()};
                                 parent.ToDos.Add(t);
+                                currentToDo = t;
+                            }
+                        }
+                        else if (regSubItem.IsMatch(codeline))
+                        {
+                            if (currentToDo != null)
+                            {
+                                var m = regSubItem.Match(codeline);
+                                currentToDo.SubItems.Add(m.Groups[1].Value.Trim());
                             }
                         }
                         else if (regInsert.IsMatch(codeline))

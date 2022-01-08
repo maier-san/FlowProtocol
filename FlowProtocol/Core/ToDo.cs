@@ -3,12 +3,12 @@
    public class ToDo
    {
       public string ToDoText { get; set; }
-      public string BestPractice { get; set; }
+      public List<string> SubItems {get; set;}
 
       public ToDo()
       {
          ToDoText = "";
-         BestPractice = "";
+         SubItems = new List<string>();
       }
    }
 }

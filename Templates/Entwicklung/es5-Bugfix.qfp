@@ -1,8 +1,13 @@
+/// Sicherstellung, dass alle wichtigen Aspekte der Anwendungssicherheit berücksichigigt sind.
+/// Abgefragt werden speziell Aspekte der Anwendung es5
 ?F1: Ist die Funktion zur Aktualisierung von Qualifikationen betroffen?
     #J: Ja
         ?F1a: Ist die Aktualisierung von Zuordnungen anhand anderer Zuordnungen betroffen?
             #J: Ja
                 >> Eine Qualifikation kann über die als hinreichend vorausgesetzten Qualifikationen erworben werden.
+                    > Eingerückter Kommentar 1
+                    > Eingerückter Kommentar 2
+                    > https://custom.stevensbikes.de
                 >> Eine Qualifikation wird nicht erworben, wenn eine als notwendig vorausgesetzte Qualifikation fehlt.
                 >> Eine Qualifikation wird nicht erworben, wenn eine als notwendig vorausgesetzte Qualifikation abgelaufen ist.
             #N: Nein
@@ -13,6 +18,7 @@
             #N: Nein
     #N: Nein
 ?F2: Ist die Funktion zur Darstellung der zugeordneten Qualifikationen betroffen?
+    // Nur ein Kommentar
     #J: Ja
         >> Alle Spalten in der Ansicht der zugeordneten Qualifikationen eines Kontaktes zeigen korrekte Daten an.
         >> Alle Spalten in der Ansicht der Übersicht der zugeordneten Qualifikationen zeigen korrekte Daten an.
