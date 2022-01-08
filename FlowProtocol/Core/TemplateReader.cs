@@ -1,34 +1,35 @@
 namespace FlowProtocol.Core
 {
     using System;
+    using System.Collections;
     using System.IO;
     using System.Text.RegularExpressions;
 
     public class TemplateReader
-   {
-       // Liste der einzelnen Template-Ebenen in Abhängigkeit der Einrückung
-       Dictionary<int, Template> TemplateList = new Dictionary<int, Template>();
-       // Liste der einzelnen Restriction-Ebenen in Abhängigkeit der Einrückung
-       Dictionary<int, Restriction> ResttrictionList = new Dictionary<int, Restriction>();
+    {
+        // Stack der übergeordnete Template-Ebenen zusammen mit ihrer Einrückung       
+        Stack<Tuple<int, Template>> TemplateStack = new Stack<Tuple<int, Template>>();
+        // Stack der übergeordnete Restriction-Ebenen zusammen mit ihrer Einrückung       
+        Stack<Tuple<int, Restriction>> ResttrictionStack = new Stack<Tuple<int, Restriction>>();
        
-       // Liest eine Template-Datei ein
-       // filepath = der vollständige Dateipfad
-       public Template? ReadTemplate(string filepath)
-       {
-           if (!File.Exists(filepath)) return null;
-           Template main = new Template();
-           Dictionary<string, string> assignments = new Dictionary<string, string>();
-           TemplateList[-1] = main;
-           ReadTemplatePart(filepath, ref main, 0, assignments);
-           return main;
-       }
+        // Liest eine Template-Datei ein
+        // filepath = der vollständige Dateipfad
+        public Template? ReadTemplate(string filepath)
+        {
+            if (!File.Exists(filepath)) return null;
+            Template main = new Template();
+            Dictionary<string, string> assignments = new Dictionary<string, string>();
+            TemplateStack.Push(new Tuple<int, Template>(-1, main));
+            ReadTemplatePart(filepath, ref main, 0, assignments);
+            return main;
+        }
 
-       // Liest eine Template-Datei oder eine Template-Funktionsdatei aus
-       // main = die aktuelle Template-Ebene auf der eingelesen wird
-       // masterindent = die Einrücktiefe an der aufrufenden Stelle
-       // filepath = der vollständige Dateipfad
-       private void ReadTemplatePart(string filepath, ref Template main, int masterindent, Dictionary<string, string> assignments)
-       {           
+        // Liest eine Template-Datei oder eine Template-Funktionsdatei aus
+        // main = die aktuelle Template-Ebene auf der eingelesen wird
+        // masterindent = die Einrücktiefe an der aufrufenden Stelle
+        // filepath = der vollständige Dateipfad
+        private void ReadTemplatePart(string filepath, ref Template main, int masterindent, Dictionary<string, string> assignments)
+        {           
             using (StreamReader sr = new StreamReader(filepath))
             {
                 Regex regComment = new Regex("//.*");
@@ -51,29 +52,29 @@ namespace FlowProtocol.Core
                         }
                         else if (regRestriction.IsMatch(codeline))
                         {                           
-                            Template? parent = GetMatchingParent(indent, TemplateList);
+                            Template? parent = GetMatchingParent(indent, TemplateStack);
                             if (parent != null)
                             {
                                 var m = regRestriction.Match(codeline);
                                 Restriction r = new Restriction(){Key = m.Groups[1].Value.Trim(), QuestionText = m.Groups[2].Value.Trim()};
                                 parent.Restrictions.Add(r);
-                                ResttrictionList[indent] = r;
+                                ResttrictionStack.Push(new Tuple<int, Restriction>(indent, r));
                             }
                         }
                         else if (regOption.IsMatch(codeline))
                         {
-                            Restriction? parent = GetMatchingParent(indent, ResttrictionList);
+                            Restriction? parent = GetMatchingParent(indent, ResttrictionStack);
                             if (parent != null)
                             {
                                 var m = regOption.Match(codeline);
                                 Option o = new Option(){Key = m.Groups[1].Value.Trim(), OptionText = m.Groups[2].Value.Trim()};
                                 parent.Options.Add(o);
-                                TemplateList[indent] = o;
+                                TemplateStack.Push(new Tuple<int, Template>(indent, o));
                             }
                         }
                         else if (regTodo.IsMatch(codeline))
                         {
-                            Template? parent = GetMatchingParent(indent, TemplateList);
+                            Template? parent = GetMatchingParent(indent, TemplateStack);
                             if (parent != null)
                             {
                                 var m = regTodo.Match(codeline);
@@ -83,7 +84,7 @@ namespace FlowProtocol.Core
                         }
                         else if (regInsert.IsMatch(codeline))
                         {
-                            Template? parent = GetMatchingParent(indent, TemplateList);
+                            Template? parent = GetMatchingParent(indent, TemplateStack);
                             if (parent != null)
                             {
                                 var m = regInsert.Match(codeline);
@@ -99,21 +100,18 @@ namespace FlowProtocol.Core
                     }
                 }    
             }           
-       }
+        }
 
-       // Sucht das passende Parent-Objekt anhand der Einrückung aus der Liste heraus
-       private T? GetMatchingParent<T>(int indent, Dictionary<int, T> list) where T : class
-       {
-            int bestMatch = -1;
+        private T? GetMatchingParent<T>(int indent, Stack<Tuple<int, T>> list) where T : class
+        {
             T? ret = null;
-            foreach(var idx in list)
+            Tuple<int, T> p = list.Peek();
+            while (list.Any() && p.Item1 >= indent) 
             {
-                if (idx.Key < indent && idx.Key >= bestMatch)
-                {
-                    ret = idx.Value;
-                    bestMatch = idx.Key;
-                }
+                list.Pop();
+                p = list.Peek();
             }
+            if (list.Any()) ret = p.Item2;
             return ret;
         }
 
@@ -135,10 +133,10 @@ namespace FlowProtocol.Core
                 }
            }
            return assignments;
-       }
+        }
 
-       // Ersetzt die Variablen durch die Werte.
-       private string ReplaceVariables(string codeline, Dictionary<string, string> assignments)
+        // Ersetzt die Variablen durch die Werte.
+        private string ReplaceVariables(string codeline, Dictionary<string, string> assignments)
         {
             if (string.IsNullOrWhiteSpace(codeline)) return codeline;
             string ret = codeline;
