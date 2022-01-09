@@ -11,7 +11,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       public string TemplateBreadcrumb => TemplateName.Replace("\\", ", ");
       public List<string>? TemplateDescription => CurrentTemplate?.Description?.Split("\n").ToList();      
       public List<Restriction> ShowRestrictions { get; set; }
-      public List<ToDo> ShowToDos { get; set; }
+      public Dictionary<string, List<ResultItem>> ShowResultGroups {get; set;}
       private string TemplatePath { get; set; }
       private Template? CurrentTemplate { get; set; }
 
@@ -24,7 +24,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          TemplatePath = configuration.GetValue<string>("TemplatePath");
          TemplateName = string.Empty;
          ShowRestrictions = new List<Restriction>();
-         ShowToDos = new List<ToDo>();
+         ShowResultGroups = new Dictionary<string, List<ResultItem>>();
          SelectedOptions = new Dictionary<string, string>();
          GivenKeys = new List<string>();
       }
@@ -46,7 +46,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       /// <param name="t">Die aktuelle Template-Ebene</param>
       private void ExtractRestrictions(Template t)
       {
-         ShowToDos.AddRange(t.ToDos);
+         AddResultItems(t.ResultItems);
          foreach (var r in t.Restrictions)
          {
             if (!SelectedOptions.ContainsKey(r.Key) || !r.Options.Select(x => x.Key).Contains(SelectedOptions[r.Key]))
@@ -64,6 +64,19 @@ namespace FlowProtocol.Pages.FlowTemplates
                   ExtractRestrictions(o as Template);
                }
             }
+         }
+      }
+
+      // Fügt die Ergebnispunkte in die Ergebnisgruppen hinzu
+      private void AddResultItems(List<ResultItem> resultlist)
+      {
+         foreach(var item in resultlist)
+         {
+            if (!ShowResultGroups.ContainsKey(item.ResultItemGroup))
+            {
+               ShowResultGroups[item.ResultItemGroup] = new List<ResultItem>();
+            }
+            ShowResultGroups[item.ResultItemGroup].Add(item);
          }
       }
 

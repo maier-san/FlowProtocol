@@ -10,7 +10,7 @@
          Key = string.Empty;
          OptionText = string.Empty;
          Restrictions = new List<Restriction>();
-         ToDos = new List<ToDo>();
+         ResultItems = new List<ResultItem>();
       }
    }
 }

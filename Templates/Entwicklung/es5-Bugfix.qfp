@@ -4,29 +4,29 @@
     #J: Ja
         ?F1a: Ist die Aktualisierung von Zuordnungen anhand anderer Zuordnungen betroffen?
             #J: Ja
-                >> Eine Qualifikation kann über die als hinreichend vorausgesetzten Qualifikationen erworben werden.
+                >> Testpunkte >> Eine Qualifikation kann über die als hinreichend vorausgesetzten Qualifikationen erworben werden.
                     > Eingerückter Kommentar 1
                     > Eingerückter Kommentar 2
                     > https://custom.stevensbikes.de
-                >> Eine Qualifikation wird nicht erworben, wenn eine als notwendig vorausgesetzte Qualifikation fehlt.
-                >> Eine Qualifikation wird nicht erworben, wenn eine als notwendig vorausgesetzte Qualifikation abgelaufen ist.
+                >> Testpunkte >> Eine Qualifikation wird nicht erworben, wenn eine als notwendig vorausgesetzte Qualifikation fehlt.
+                >> Testpunkte >> Eine Qualifikation wird nicht erworben, wenn eine als notwendig vorausgesetzte Qualifikation abgelaufen ist.
             #N: Nein
         ?F1b: Ist die Aktualisierung von Zuordnungen anhand von Kursbesuchen betroffen?
             #J: Ja
-                >> Eine Qualifikation kann über einen Kurs erworben werden.
-                >> Die Aktualisierung der Qualifikationszuordnungen wird bei entsprechender Geschäftslogikeinstellung über den Statuswechsel ausgelöst.
+                >> Testpunkte >> Eine Qualifikation kann über einen Kurs erworben werden.
+                >> Testpunkte >> Die Aktualisierung der Qualifikationszuordnungen wird bei entsprechender Geschäftslogikeinstellung über den Statuswechsel ausgelöst.
             #N: Nein
     #N: Nein
 ?F2: Ist die Funktion zur Darstellung der zugeordneten Qualifikationen betroffen?
     // Nur ein Kommentar
     #J: Ja
-        >> Alle Spalten in der Ansicht der zugeordneten Qualifikationen eines Kontaktes zeigen korrekte Daten an.
-        >> Alle Spalten in der Ansicht der Übersicht der zugeordneten Qualifikationen zeigen korrekte Daten an.
+        >> Entwicklertests >> Alle Spalten in der Ansicht der zugeordneten Qualifikationen eines Kontaktes zeigen korrekte Daten an.
+        >> Entwicklertests >> Alle Spalten in der Ansicht der Übersicht der zugeordneten Qualifikationen zeigen korrekte Daten an.
     #N: Nein
 ?F3: Ist die Funktion zur Darstellung der Profilqualifikationen betroffen?
     #J: Ja
-        >> Alle Spalten in der Ansicht der Profilqualifikationen zeigen korrekte Daten an.
-        >> Alle Ampelfarben der verknüpften Qualifikatioen (VQ) werden korrekt dargestellt.
-        >> Alle Ampelfarben der Profilqualifikatioen (PQ) werden korrekt dargestellt.
-        >> Auch die weißen Ampeln der schwebenden Qualifikatioen werden korrekt dargestellt.
+        >> Nachtests >> Alle Spalten in der Ansicht der Profilqualifikationen zeigen korrekte Daten an.
+        >> Nachtests >> Alle Ampelfarben der verknüpften Qualifikatioen (VQ) werden korrekt dargestellt.
+        >> Nachtests >> Alle Ampelfarben der Profilqualifikatioen (PQ) werden korrekt dargestellt.
+        >> Nachtests >> Auch die weißen Ampeln der schwebenden Qualifikatioen werden korrekt dargestellt.
     #N: Nein

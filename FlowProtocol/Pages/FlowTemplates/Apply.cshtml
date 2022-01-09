@@ -50,31 +50,42 @@
 else
 {
     <h2>Ergebnisliste (@Model.TemplateBreadcrumb)</h2>
-    <ol>
-        @foreach (var t in Model.ShowResultItems)
+    @foreach(var group in Model.ShowResultGroups)
+    {
+        @if (!string.IsNullOrWhiteSpace(group.Key))
         {
-            <li>
-                @t.ResultItemText
-                @if (t.SubItems.Any())
-                {
-                    <ul>
-                        @foreach(var s in t.SubItems)
-                        {
-                            <li>
-                            @if(Model.IsURL(s))
-                            {
-                                <a href="@s" target="_blank">@s</a>
-                            }
-                            else
-                            {
-                                @s
-                            }
-                            </li>
-                        }
-                    </ul>
-                }
-            </li>
+            <h4>@group.Key</h4>
         }
-    </ol>
+        else if (Model.ShowResultGroups.Count > 1)
+        {
+            <h4>Allgemein</h4>
+        }
+        <ol>
+            @foreach (var t in group.Value)
+            {
+                <li>
+                    @t.ResultItemText
+                    @if (t.SubItems.Any())
+                    {
+                        <ul>
+                            @foreach(var s in t.SubItems)
+                            {
+                                <li>
+                                @if(Model.IsURL(s))
+                                {
+                                    <a href="@s" target="_blank">@s</a>
+                                }
+                                else
+                                {
+                                    @s
+                                }
+                                </li>
+                            }
+                        </ul>
+                    }
+                </li>
+            }
+        </ol>
+    }
     <p><a asp-page="/Index" class="btn btn-primary">Zurück zur Startseite</a></p>
 }

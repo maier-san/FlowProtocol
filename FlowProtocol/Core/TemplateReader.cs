@@ -37,9 +37,10 @@ namespace FlowProtocol.Core
                 Regex regRestriction = new Regex(@"^\?(.*):(.*)");
                 Regex regOption = new Regex("^#(.*):(.*)");
                 Regex regSubItem = new Regex("^>(.*)");
-                Regex regTodo = new Regex("^>>(.*)");
+                Regex regGroupedResultItem = new Regex("^>>(.*)>>(.*)");
+                Regex regResultItem = new Regex("^>>(.*)");
                 Regex regInsert = new Regex(@"^~Include (.*):(.*)");                        
-                ToDo? currentToDo = null;
+                ResultItem? currentResultItem = null;
                 while (sr.Peek() != -1)
                 {
                     string? line = sr.ReadLine();
@@ -82,7 +83,7 @@ namespace FlowProtocol.Core
                                 parent.Restrictions.Add(r);
                                 ResttrictionStack.Push(new Tuple<int, Restriction>(indent, r));
                             }
-                            currentToDo = null;
+                            currentResultItem = null;
                         }
                         else if (regOption.IsMatch(codeline))
                         {
@@ -94,25 +95,36 @@ namespace FlowProtocol.Core
                                 parent.Options.Add(o);
                                 TemplateStack.Push(new Tuple<int, Template>(indent, o));
                             }
-                            currentToDo = null;
+                            currentResultItem = null;
                         }
-                        else if (regTodo.IsMatch(codeline))
+                        else if (regGroupedResultItem.IsMatch(codeline))
                         {
                             Template? parent = GetMatchingParent(indent, TemplateStack);
                             if (parent != null)
                             {
-                                var m = regTodo.Match(codeline);
-                                ToDo t = new ToDo(){ToDoText = m.Groups[1].Value.Trim()};
-                                parent.ToDos.Add(t);
-                                currentToDo = t;
+                                var m = regGroupedResultItem.Match(codeline);
+                                ResultItem t = new ResultItem(){ResultItemGroup = m.Groups[1].Value.Trim(), ResultItemText = m.Groups[2].Value.Trim()};
+                                parent.ResultItems.Add(t);
+                                currentResultItem = t;
+                            }
+                        }
+                        else if (regResultItem.IsMatch(codeline))
+                        {
+                            Template? parent = GetMatchingParent(indent, TemplateStack);
+                            if (parent != null)
+                            {
+                                var m = regResultItem.Match(codeline);
+                                ResultItem t = new ResultItem(){ResultItemText = m.Groups[1].Value.Trim()};
+                                parent.ResultItems.Add(t);
+                                currentResultItem = t;
                             }
                         }
                         else if (regSubItem.IsMatch(codeline))
                         {
-                            if (currentToDo != null)
+                            if (currentResultItem != null)
                             {
                                 var m = regSubItem.Match(codeline);
-                                currentToDo.SubItems.Add(m.Groups[1].Value.Trim());
+                                currentResultItem.SubItems.Add(m.Groups[1].Value.Trim());
                             }
                         }
                         else if (regInsert.IsMatch(codeline))
