@@ -49,12 +49,12 @@
 }
 else
 {
-    <h2>Prüfpunkte (@Model.TemplateBreadcrumb)</h2>
+    <h2>Ergebnisliste (@Model.TemplateBreadcrumb)</h2>
     <ol>
-        @foreach (var t in Model.ShowToDos)
+        @foreach (var t in Model.ShowResultItems)
         {
             <li>
-                @t.ToDoText
+                @t.ResultItemText
                 @if (t.SubItems.Any())
                 {
                     <ul>
