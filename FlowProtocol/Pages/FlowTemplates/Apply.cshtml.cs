@@ -14,6 +14,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       public Dictionary<string, List<ResultItem>> ShowResultGroups {get; set;}
       private string TemplatePath { get; set; }
       private Template? CurrentTemplate { get; set; }
+      public List<ReadErrorItem> ReadErrors {get; set; }
 
       [BindProperty(SupportsGet = true)]
       public Dictionary<string, string> SelectedOptions { get; set; }
@@ -27,6 +28,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          ShowResultGroups = new Dictionary<string, List<ResultItem>>();
          SelectedOptions = new Dictionary<string, string>();
          GivenKeys = new List<string>();
+         ReadErrors = new List<ReadErrorItem>();
       }
       public IActionResult OnGet(string template)
       {
@@ -94,6 +96,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          string templatefile = TemplatePath + @"\" + TemplateName + ".qfp";
          TemplateReader tr = new TemplateReader();
          CurrentTemplate = tr.ReadTemplate(templatefile);
+         ReadErrors = tr.ReadErrors;
       }
 
       public bool IsURL(string text)

@@ -8,15 +8,27 @@ namespace FlowProtocol.Core
     public class TemplateReader
     {
         // Stack der übergeordnete Template-Ebenen zusammen mit ihrer Einrückung       
-        Stack<Tuple<int, Template>> TemplateStack = new Stack<Tuple<int, Template>>();
+        private Stack<Tuple<int, Template>> TemplateStack = new Stack<Tuple<int, Template>>();
         // Stack der übergeordnete Restriction-Ebenen zusammen mit ihrer Einrückung       
-        Stack<Tuple<int, Restriction>> ResttrictionStack = new Stack<Tuple<int, Restriction>>();
+        private Stack<Tuple<int, Restriction>> ResttrictionStack = new Stack<Tuple<int, Restriction>>();
+        // Fehler beim Einlesen
+        public List<ReadErrorItem> ReadErrors {get; private set;}
        
+        public TemplateReader()
+        {
+            ReadErrors = new List<ReadErrorItem>();
+        }
+
         // Liest eine Template-Datei ein
         // filepath = der vollständige Dateipfad
         public Template? ReadTemplate(string filepath)
         {
-            if (!File.Exists(filepath)) return null;
+            ReadErrors.Clear();
+            if (!File.Exists(filepath)) 
+            {
+                AddReadError("Vorlagendatei nicht gefunden.", filepath, 0, string.Empty);
+                return null;
+            }
             Template main = new Template();
             Dictionary<string, string> assignments = new Dictionary<string, string>();
             TemplateStack.Push(new Tuple<int, Template>(-1, main));
@@ -41,16 +53,22 @@ namespace FlowProtocol.Core
                 Regex regResultItem = new Regex("^>>(.*)");
                 Regex regInsert = new Regex(@"^~Include (.*):(.*)");                        
                 ResultItem? currentResultItem = null;
+                int linenumber = 0;
                 while (sr.Peek() != -1)
                 {
                     string? line = sr.ReadLine();
+                    linenumber++;
                     if (!string.IsNullOrWhiteSpace(line))
                     {                       
                         line = line.Replace("\t", "    ");                       
                         int indent = masterindent + line.Length-line.TrimStart().Length;
                         line = ReplaceVariables(line, assignments);
                         string codeline = line.Trim();
-                        if (regDescription.IsMatch(codeline))
+                        if (string.IsNullOrWhiteSpace(codeline))
+                        {
+                            // Leerzeile: ignorieren
+                        }
+                        else if (regDescription.IsMatch(codeline))
                         {                            
                             if (!(main is Option))
                             { // Beschreibung nur für das Hauptelement hinzufügen und ansonsten ignorieren
@@ -68,6 +86,7 @@ namespace FlowProtocol.Core
                                     }
                                 }
                             }
+                            else AddReadError("Beschreibungskommentar auf untergeordneter Ebene wird ignoriert.", filepath, linenumber, codeline);
                         }
                         else if (regComment.IsMatch(codeline))
                         {
@@ -83,6 +102,7 @@ namespace FlowProtocol.Core
                                 parent.Restrictions.Add(r);
                                 ResttrictionStack.Push(new Tuple<int, Restriction>(indent, r));
                             }
+                            else AddReadError("Frage kann nicht zugeordnet werden.", filepath, linenumber, codeline);
                             currentResultItem = null;
                         }
                         else if (regOption.IsMatch(codeline))
@@ -95,6 +115,7 @@ namespace FlowProtocol.Core
                                 parent.Options.Add(o);
                                 TemplateStack.Push(new Tuple<int, Template>(indent, o));
                             }
+                            else AddReadError("Antwort kann nicht zugeordnet werden.", filepath, linenumber, codeline);
                             currentResultItem = null;
                         }
                         else if (regGroupedResultItem.IsMatch(codeline))
@@ -107,6 +128,7 @@ namespace FlowProtocol.Core
                                 parent.ResultItems.Add(t);
                                 currentResultItem = t;
                             }
+                            else AddReadError("Gruppierter Ausgabeeintrag kann nicht zugeordnet werden.", filepath, linenumber, codeline);
                         }
                         else if (regResultItem.IsMatch(codeline))
                         {
@@ -118,6 +140,7 @@ namespace FlowProtocol.Core
                                 parent.ResultItems.Add(t);
                                 currentResultItem = t;
                             }
+                            else AddReadError("Ausgabeeintrag kann nicht zugeordnet werden.", filepath, linenumber, codeline);
                         }
                         else if (regSubItem.IsMatch(codeline))
                         {
@@ -126,6 +149,7 @@ namespace FlowProtocol.Core
                                 var m = regSubItem.Match(codeline);
                                 currentResultItem.SubItems.Add(m.Groups[1].Value.Trim());
                             }
+                            else AddReadError("Ergänzungseintrag kann keinen Ausgabeeintrag zugeordnet werden.", filepath, linenumber, codeline);
                         }
                         else if (regInsert.IsMatch(codeline))
                         {
@@ -140,11 +164,27 @@ namespace FlowProtocol.Core
                                     Dictionary<string, string> subassignments = ReadAssignments(m.Groups[2].Value);
                                     ReadTemplatePart(flowFunctionFilepath, ref parent, indent, subassignments);
                                 }
+                                else AddReadError("Einbindungsdatei existiert nicht.", filepath, linenumber, codeline);                                
                             }
+                            else AddReadError("Einbindung kann nicht zugeordnet werden.", filepath, linenumber, codeline);                            
                         }
+                        else AddReadError("Zeile nicht interpretierbar", filepath, linenumber, codeline);
                     }
                 }    
             }           
+        }
+
+        // Fügt einen Einlesefehler hinzu
+        private void AddReadError(string errorText, string filepath, int linenumber, string codeline)
+        {
+            ReadErrorItem rei =  new ReadErrorItem()
+                {
+                    ErrorText = errorText, 
+                    FilePath = filepath,
+                    LineNumber = linenumber,
+                    Codeline = codeline
+                };
+            ReadErrors.Add(rei);
         }
 
         private T? GetMatchingParent<T>(int indent, Stack<Tuple<int, T>> list) where T : class

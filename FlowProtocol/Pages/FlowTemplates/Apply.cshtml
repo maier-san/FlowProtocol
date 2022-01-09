@@ -18,6 +18,22 @@
             }
             </p><hr>            
         }
+        @if(Model.ReadErrors.Any())
+        {
+            <p><strong>Hinweis:</strong> Bei Einlesen der Datei(en) wurden nachfolgende Fehler festgestellt. 
+                Bitte wenden Sie sich an den Autoren der Vorlage oder einen Administrator, um die Korrekturen zu veranlassen:</p>
+                <ol>
+                    @foreach(var eitem in Model.ReadErrors)
+                    {
+                        <li>
+                            <strong>@eitem.ErrorText</strong><br />
+                            Zeile @eitem.LineNumber in <i>@eitem.FilePath</i><br />
+                            <span style="color: #ff0000;">@eitem.Codeline</span>
+                        </li>
+                    }
+                </ol>
+            <hr> 
+        }
         @foreach (var k in Model.GivenKeys)
         {
             <input type="hidden" asp-for="SelectedOptions[k]" />
