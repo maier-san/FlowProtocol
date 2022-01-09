@@ -16,7 +16,7 @@
                 >> Testpunkte >> Eine Qualifikation kann über einen Kurs erworben werden.
                 >> Testpunkte >> Die Aktualisierung der Qualifikationszuordnungen wird bei entsprechender Geschäftslogikeinstellung über den Statuswechsel ausgelöst.
             #N: Nein
-                ~Implies F2=N; F3=N
+                ~Cmd Implies F2=J; F3=J
     #N: Nein
 ?F2: Ist die Funktion zur Darstellung der zugeordneten Qualifikationen betroffen?
     // Nur ein Kommentar

@@ -2,6 +2,7 @@ using FlowProtocol.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
+using System.Text.RegularExpressions;
 
 namespace FlowProtocol.Pages.FlowTemplates
 {
@@ -49,6 +50,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       private void ExtractRestrictions(Template t)
       {
          AddResultItems(t.ResultItems);
+         RunCommand(t.Commands);
          foreach (var r in t.Restrictions)
          {
             if (!SelectedOptions.ContainsKey(r.Key) || !r.Options.Select(x => x.Key).Contains(SelectedOptions[r.Key]))
@@ -59,7 +61,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             }
             else
             {
-               GivenKeys.Add(r.Key);               
+               GivenKeys.Add(r.Key);
                Option? o = r.Options.Find(x => x.Key == SelectedOptions[r.Key]);
                if (o != null)
                {
@@ -80,6 +82,49 @@ namespace FlowProtocol.Pages.FlowTemplates
             }
             ShowResultGroups[item.ResultItemGroup].Add(item);
          }
+      }
+
+      // Führt die Laufzeitbefehle aus
+      private void RunCommand(List<Command> commandlist)
+      {
+         foreach(var cmd in commandlist)
+         {
+            switch (cmd.ComandName)
+            {
+                case "Implies": RunCmd_Implies(cmd.Arguments); break;
+            }
+         }
+      }
+
+      // Impiled-Commando auführen
+      private void RunCmd_Implies(string arguments)
+      {
+         Dictionary<string, string> assignments = ReadAssignments(arguments);
+         foreach(var ass in assignments)
+         {
+            SelectedOptions[ass.Key] = ass.Value;
+            if (!GivenKeys.Contains(ass.Key)) GivenKeys.Add(ass.Key);
+         }
+      }
+
+      // Liest aus einem Ausdruck "F1=W1; F2=W2" die Variablenzuweisungen aus und gibt diese zurück.
+      private Dictionary<string, string> ReadAssignments(string? varExpression)
+      {
+         Dictionary<string, string> assignments = new Dictionary<string, string>();
+         if (!string.IsNullOrWhiteSpace(varExpression))
+         {
+               Regex regAssignement = new Regex(@"([A-Za-z0-9]*)=(.*)");
+               foreach(var idx in varExpression.Split(";"))
+               {
+                  string assignment = idx.Trim();
+                  if (regAssignement.IsMatch(assignment))
+                  {
+                     var m = regAssignement.Match(assignment);
+                     assignments[m.Groups[1].Value.Trim()] = m.Groups[2].Value.Trim();
+                  }
+               }
+         }
+         return assignments;
       }
 
       public IActionResult OnPost()

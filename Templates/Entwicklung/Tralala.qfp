@@ -1,0 +1,31 @@
+/// Tralala-Test
+/// Version 1.00 (c) W.Maier
+?F1: Das ist Frage F1
+    #A: Antwort A
+        >> Gruppe A >> Punkt 1 für Gruppe A (F1=A)
+            > Unterpunkt für Punkt 1 für Gruppe A            
+            > https://custom.stevensbikes.de
+        >> Gruppe A >> Punkt 2 für Gruppe A  
+    #B: Antwort B
+        >> Gruppe A >> Punkt 3 für Gruppe A, (F1=B, impliziert F2a=B)
+        ~Cmd Implies F2a=B
+?F2: Das ist Frage F2    
+    #A: Antwort A
+        >> Gruppe B >> Punkt 1 für Gruppe B (F2=A)
+        ?F2a: Frage F2a
+            #A: Antwort A
+                >> Gruppe B >> Punkt 2 für Gruppe B (F2=A, F2a=A)
+            #B: Antwort B
+                >> Gruppe B >> Punkt 3 für Gruppe B (F2=A, F2a=B)
+    #B: Antwort B
+        >> Gruppe B >> Punkt 4 für Gruppe B (F2=B)
+?F3: Das ist Frage F3    
+    #A: Antwort A
+        >> Gruppe C >> Punkt 1 für Gruppe C (F3=A)
+        ?F1: Nochmal Frage F1
+            #A: Antwort A
+                >> Gruppe C >> Punkt 2 für Gruppe C (F3=A, F1=A)
+            #B: Antwort B
+                >> Gruppe C >> Punkt 3 für Gruppe C (F3=A, F1=B)
+    #B: Antwort B
+        >> Gruppe C >> Punkt 4 für Gruppe C (F3=B)

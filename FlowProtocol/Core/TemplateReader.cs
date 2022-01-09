@@ -51,7 +51,8 @@ namespace FlowProtocol.Core
                 Regex regSubItem = new Regex("^>(.*)");
                 Regex regGroupedResultItem = new Regex("^>>(.*)>>(.*)");
                 Regex regResultItem = new Regex("^>>(.*)");
-                Regex regInsert = new Regex(@"^~Include (.*):(.*)");                        
+                Regex regInsert = new Regex(@"^~Include (.*):(.*)");
+                Regex regCommand = new Regex(@"^~Cmd ([A-Za-z0-9]*) (.*)");                      
                 ResultItem? currentResultItem = null;
                 int linenumber = 0;
                 while (sr.Peek() != -1)
@@ -166,9 +167,22 @@ namespace FlowProtocol.Core
                                 }
                                 else AddReadError("Einbindungsdatei existiert nicht.", filepath, linenumber, codeline);                                
                             }
-                            else AddReadError("Einbindung kann nicht zugeordnet werden.", filepath, linenumber, codeline);                            
+                            else AddReadError("Einbindung kann nicht zugeordnet werden.", filepath, linenumber, codeline);
+                            currentResultItem = null;                         
                         }
-                        else AddReadError("Zeile nicht interpretierbar", filepath, linenumber, codeline);
+                        else if (regCommand.IsMatch(codeline))
+                        {
+                            Template? parent = GetMatchingParent(indent, TemplateStack);
+                            if (parent != null)
+                            {
+                                var m = regCommand.Match(codeline);
+                                Command c = new Command(){ComandName = m.Groups[1].Value.Trim(), Arguments = m.Groups[2].Value.Trim()};
+                                parent.Commands.Add(c);
+                            }
+                            else AddReadError("Befehl kann nicht zugeordnet werden.", filepath, linenumber, codeline);                            
+                            currentResultItem = null;
+                        }
+                        else AddReadError("Zeile nicht interpretierbar", filepath, linenumber, codeline);                        
                     }
                 }    
             }           
@@ -182,7 +196,7 @@ namespace FlowProtocol.Core
                     ErrorText = errorText, 
                     FilePath = filepath,
                     LineNumber = linenumber,
-                    Codeline = codeline
+                    Codeline = codeline.Trim()
                 };
             ReadErrors.Add(rei);
         }
