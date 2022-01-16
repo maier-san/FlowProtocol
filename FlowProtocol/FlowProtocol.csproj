@@ -6,20 +6,4 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Content Remove="Pages\FlowTemplates\NoTemplate.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\FlowTemplates\NoTemplate.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\FlowTemplates\NoTemplate.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Pages\FlowTemplates\NoTemplate.cshtml" />
-  </ItemGroup>
-
 </Project>

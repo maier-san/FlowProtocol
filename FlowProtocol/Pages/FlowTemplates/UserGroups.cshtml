@@ -7,12 +7,18 @@
 <p>Wählen Sie die passende Anwendergruppe aus, um die zugeordneten Vorlagen anzuzeigen.</p>
 <table class="cinereousTable">
 <tbody>
-@foreach (var group in Model.UserGroups)
+@for(int row = 0; row < Model.UserGroupArray?.Rows; row++)
 {
     <tr>
-        <td>
-            <a asp-page="./List" asp-route-userGroup="@group">@group</a>
-        </td>
+        @for(int col = 0; col < Model.UserGroupArray?.Cols; col++)
+        {
+            @if(Model.UserGroupArray?.Array?[row,col] != null)
+            {
+                <td>
+                    <a asp-page="./List" asp-route-userGroup="@Model.UserGroupArray.Array[row,col]">@Model.UserGroupArray.Array[row,col]</a>
+                </td>
+            }
+        }
     </tr>
 }
 </tbody>

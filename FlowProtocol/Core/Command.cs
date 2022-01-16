@@ -9,7 +9,7 @@ namespace FlowProtocol.Core
 
       public Command(ReadErrorItem errorTemplate)
       {
-         ComandName = string.Empty;;
+         ComandName = string.Empty;
          Arguments = string.Empty;
          ErrorTemplate =errorTemplate;
       }

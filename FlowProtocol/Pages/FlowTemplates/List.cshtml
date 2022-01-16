@@ -7,30 +7,21 @@
 <p>Wählen Sie die Vorlage aus, die Sie anwenden möchten.</p>
 @foreach (var group in Model.TemplateGroups)
 {
-  <h5>@group.GroupName</h5>
+  <h5>@group.Key</h5>
   <table class="cinereousTable">
     <tbody>
-    @foreach (var row in group.Rows)
+    @for(int row = 0; row < group.Value?.Rows; row++)
     {
       <tr>
-      <td style="width: 33.3333%;">
-        @if(row.Entry1 != null)
-        {
-          <a asp-page="./Apply" asp-route-template="@row.Entry1.TemplatePath">@row.Entry1.TemplateName</a>
+        @for(int col = 0; col < group.Value?.Cols; col++)
+        {          
+          @if(group.Value.Array?[row,col] != null)
+          {
+            <td >
+            <a asp-page="./Apply" asp-route-template="@group.Value.Array[row,col]?.TemplatePath">@group.Value.Array[row,col]?.TemplateName</a>
+            </td>
+          }          
         }
-      </td>
-      <td style="width: 33.3333%;">
-        @if(row.Entry2 != null)
-        {
-          <a asp-page="./Apply" asp-route-template="@row.Entry2.TemplatePath">@row.Entry2.TemplateName</a>
-        }
-      </td>
-      <td style="width: 33.3333%;">
-        @if(row.Entry3 != null)
-        {
-          <a asp-page="./Apply" asp-route-template="@row.Entry3.TemplatePath">@row.Entry3.TemplateName</a>
-        }
-      </td>
       </tr>      
     }
   </tbody>

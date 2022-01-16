@@ -12,16 +12,17 @@ namespace FlowProtocol.Helper
             Cols = 0;
         }
 
-        public void ReadList(List<T> objectList L, int cols)
+        public void ReadList(List<T> liste, int cols)
         {
-            int count = L.Count;
+            int count = liste.Count;
             Cols = cols;
             if (Cols <= 0) Cols = 1;
             Rows = count / Cols;
-            Array = new T[Rows,Cols]();
+            if (count % Cols > 0) Rows++;
+            Array = new T[Rows,Cols];
             int idxRow=0;
             int idxCol=0;
-            foreach(T idx in L)
+            foreach(T idx in liste)
             {
                 Array[idxRow,idxCol] = idx;
                 idxCol++;
