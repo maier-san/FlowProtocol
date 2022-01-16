@@ -8,14 +8,14 @@ namespace FlowProtocol.Pages.FlowTemplates
 {
    public class ApplyModel : PageModel
    {
-      public string TemplateName { get; set; }
-      public string TemplateBreadcrumb => TemplateName.Replace("\\", ", ");
-      public List<string>? TemplateDescription => CurrentTemplate?.Description?.Split("\n").ToList();      
+      public string TemplateBreadcrumb {get; set; }
+      public List<string>? TemplateDescription {get; set; }      
       public List<Restriction> ShowRestrictions { get; set; }
       public Dictionary<string, List<ResultItem>> ShowResultGroups {get; set;}
       private string TemplatePath { get; set; }
+      private string TemplateDetailPath { get; set; }
       private Template? CurrentTemplate { get; set; }
-      public List<ReadErrorItem> ReadErrors {get; set; }
+      public List<ReadErrorItem> ReadErrors {get; set;}
 
       [BindProperty(SupportsGet = true)]
       public Dictionary<string, string> SelectedOptions { get; set; }
@@ -24,22 +24,31 @@ namespace FlowProtocol.Pages.FlowTemplates
       public ApplyModel(IConfiguration configuration)
       {
          TemplatePath = configuration.GetValue<string>("TemplatePath");
-         TemplateName = string.Empty;
          ShowRestrictions = new List<Restriction>();
          ShowResultGroups = new Dictionary<string, List<ResultItem>>();
          SelectedOptions = new Dictionary<string, string>();
          GivenKeys = new List<string>();
          ReadErrors = new List<ReadErrorItem>();
+         TemplateDetailPath = string.Empty;
+         TemplateBreadcrumb = "Unbekannte Vorlage";
       }
       public IActionResult OnGet(string template)
       {
-         TemplateName = template;
-         LoadTemplate();
-         if (CurrentTemplate == null)
+         string templateFileName = TemplatePath + "\\" + template + ".qfp";
+         System.IO.FileInfo fi = new System.IO.FileInfo(templateFileName);
+         if (fi == null || fi.DirectoryName == null)
          {
-            return RedirectToPage("/NoTemplate");
+            return RedirectToPage("./NoTemplate");
          }
-         ExtractRestrictions(CurrentTemplate);
+         TemplateDetailPath = fi.DirectoryName;
+         TemplateBreadcrumb = template.Replace("\\", ", ");
+         Template? currentTemplate = LoadTemplate(templateFileName);         
+         if (currentTemplate == null)
+         {
+            return RedirectToPage("./NoTemplate");
+         }
+         TemplateDescription = currentTemplate?.Description?.Split("\n").ToList();
+         if (currentTemplate != null) ExtractRestrictions(currentTemplate);
          return Page();
       }
 
@@ -49,8 +58,8 @@ namespace FlowProtocol.Pages.FlowTemplates
       /// <param name="t">Die aktuelle Template-Ebene</param>
       private void ExtractRestrictions(Template t)
       {
-         AddResultItems(t.ResultItems);
          RunCommand(t.Commands);
+         AddResultItems(t.ResultItems);         
          foreach (var r in t.Restrictions)
          {
             if (!SelectedOptions.ContainsKey(r.Key) || !r.Options.Select(x => x.Key).Contains(SelectedOptions[r.Key]))
@@ -91,20 +100,51 @@ namespace FlowProtocol.Pages.FlowTemplates
          {
             switch (cmd.ComandName)
             {
-                case "Implies": RunCmd_Implies(cmd.Arguments); break;
+                case "Implies": RunCmd_Implies(cmd); break;
+                case "Include": RunCmd_Include(cmd); break;
+                default: AddCommandError($"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
             }
          }
       }
 
-      // Impiled-Commando auführen
-      private void RunCmd_Implies(string arguments)
+      // Impiles-Commando auführen
+      private void RunCmd_Implies(Command cmd)
       {
-         Dictionary<string, string> assignments = ReadAssignments(arguments);
+         Dictionary<string, string> assignments = ReadAssignments(cmd.Arguments);
          foreach(var ass in assignments)
          {
             SelectedOptions[ass.Key] = ass.Value;
             if (!GivenKeys.Contains(ass.Key)) GivenKeys.Add(ass.Key);
          }
+      }
+
+      // Include-Commando ausführen
+      private void RunCmd_Include(Command cmd)
+      {
+         Regex regFileArgument = new Regex(@"^([A-Za-z0-9]*) (.*)");
+         string arguments = cmd.Arguments;
+         if (regFileArgument.IsMatch(arguments))
+         {
+            var m = regFileArgument.Match(arguments);                        
+            string template= m.Groups[1].Value.Trim();
+            string templateFileName = TemplateDetailPath + "\\" + template.Trim().Replace(".qff", string.Empty) + ".qff";
+            Dictionary<string, string> assignments = ReadAssignments(m.Groups[2].Value);
+            Template? subTemplate = LoadTemplate(templateFileName, assignments);
+            if (subTemplate == null)
+            {
+               AddCommandError($"Die Datei {templateFileName} konnte nicht geladen werden.", cmd);
+                return;
+            }
+            ExtractRestrictions(subTemplate);
+         }
+      }
+
+      // Fügt einen Fehler beim ausführend eines Commandos hinzu
+      private void AddCommandError(string errorText, Command cmd)
+      {
+         ReadErrorItem errorTemplate = cmd.ErrorTemplate;
+         errorTemplate.ErrorText = errorText;
+         ReadErrors.Add(errorTemplate);
       }
 
       // Liest aus einem Ausdruck "F1=W1; F2=W2" die Variablenzuweisungen aus und gibt diese zurück.
@@ -136,12 +176,12 @@ namespace FlowProtocol.Pages.FlowTemplates
          return RedirectToPage("./Apply", SelectedOptions);
       }
 
-      private void LoadTemplate()
-      {
-         string templatefile = TemplatePath + @"\" + TemplateName + ".qfp";
+      private Template? LoadTemplate(string templatefile, Dictionary<string, string>? assignments = null)
+      {         
          TemplateReader tr = new TemplateReader();
-         CurrentTemplate = tr.ReadTemplate(templatefile);
-         ReadErrors = tr.ReadErrors;
+         Template? currentTemplate = tr.ReadTemplate(templatefile, assignments);          
+         ReadErrors.AddRange(tr.ReadErrors);
+         return currentTemplate;
       }
 
       public bool IsURL(string text)
