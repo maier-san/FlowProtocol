@@ -12,9 +12,16 @@ namespace FlowProtocol.Helper
             Cols = 0;
         }
 
-        public void ReadList(List<T> liste, int cols)
+        public void ReadList(List<T> liste, int cols = -1)
         {
             int count = liste.Count;
+            if (cols == -1)
+            {
+                if (count > 10) cols = 4;
+                else if(count > 4) cols = 3;
+                else if (count > 1) cols = 2;
+                else cols = 1;
+            }
             Cols = cols;
             if (Cols <= 0) Cols = 1;
             Rows = count / Cols;

@@ -43,7 +43,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          if (di.FullName == TemplatePath) groupName = "Favoriten";
          List<TemplateEntry> templatelist = di.GetFiles("*.qfp").Select(x => new TemplateEntry(x, TemplatePath)).ToList();
          ObjectArray<TemplateEntry> templateArray = new ObjectArray<TemplateEntry>();
-         templateArray.ReadList(templatelist, 4);
+         templateArray.ReadList(templatelist);
          TemplateGroups[groupName] = templateArray;
       }
 

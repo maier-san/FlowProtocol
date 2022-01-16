@@ -23,7 +23,7 @@ namespace FlowProtocol.Pages.FlowTemplates
         {
             DirectoryInfo di = new DirectoryInfo(TemplatePath);
             List<string> userGroups = di.GetDirectories().Select(x => x.Name).ToList();
-            UserGroupArray.ReadList(userGroups, 2);
+            UserGroupArray.ReadList(userGroups);
         }
     } 
 }
