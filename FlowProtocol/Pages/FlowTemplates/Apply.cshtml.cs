@@ -58,8 +58,8 @@ namespace FlowProtocol.Pages.FlowTemplates
       /// <param name="t">Die aktuelle Template-Ebene</param>
       private void ExtractRestrictions(Template t)
       {
-         RunCommand(t.Commands);
-         AddResultItems(t.ResultItems);         
+         AddResultItems(t.ResultItems); 
+         RunCommand(t.Commands);                 
          foreach (var r in t.Restrictions)
          {
             if (!SelectedOptions.ContainsKey(r.Key) || !r.Options.Select(x => x.Key).Contains(SelectedOptions[r.Key]))
