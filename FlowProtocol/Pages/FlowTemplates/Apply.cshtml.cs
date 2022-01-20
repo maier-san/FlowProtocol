@@ -78,6 +78,11 @@ namespace FlowProtocol.Pages.FlowTemplates
                }
             }
          }
+         if (!ShowRestrictions.Any() && t.FollowTemplate != null)
+         {
+            // Alle Fragen sind beantwortet und es gibt ein Folge-Template: ausführen
+            ExtractRestrictions(t.FollowTemplate);
+         }
       }
 
       // Fügt die Ergebnispunkte in die Ergebnisgruppen hinzu
