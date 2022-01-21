@@ -20,6 +20,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       [BindProperty(SupportsGet = true)]
       public Dictionary<string, string> SelectedOptions { get; set; }
       public List<string> GivenKeys { get; set; }
+      private Dictionary<string, string> GlobalVars { get; set; }
       
       public ApplyModel(IConfiguration configuration)
       {
@@ -31,6 +32,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          ReadErrors = new List<ReadErrorItem>();
          TemplateDetailPath = string.Empty;
          TemplateBreadcrumb = "Unbekannte Vorlage";
+         GlobalVars = new Dictionary<string, string>();
       }
       public IActionResult OnGet(string template)
       {
@@ -58,10 +60,11 @@ namespace FlowProtocol.Pages.FlowTemplates
       /// <param name="t">Die aktuelle Template-Ebene</param>
       private void ExtractRestrictions(Template t)
       {
-         AddResultItems(t.ResultItems); 
-         RunCommand(t.Commands);                 
+         RunCommand(t.Commands);
+         AddResultItems(t.ResultItems);          
          foreach (var r in t.Restrictions)
          {
+            r.ApplyTextOperation(ReplaceGlobalVars);
             if (!SelectedOptions.ContainsKey(r.Key) || !r.Options.Select(x => x.Key).Contains(SelectedOptions[r.Key]))
             {
                // Frage noch unbeantwortet oder ungültig beantwortet: auf Seite übernehmen
@@ -90,6 +93,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       {
          foreach(var item in resultlist)
          {
+            item.ApplyTextOperation(ReplaceGlobalVars);            
             if (!ShowResultGroups.ContainsKey(item.ResultItemGroup))
             {
                ShowResultGroups[item.ResultItemGroup] = new List<ResultItem>();
@@ -103,10 +107,12 @@ namespace FlowProtocol.Pages.FlowTemplates
       {
          foreach(var cmd in commandlist)
          {
+            cmd.ApplyTextOperation(ReplaceGlobalVars);
             switch (cmd.ComandName)
             {
                 case "Implies": RunCmd_Implies(cmd); break;
                 case "Include": RunCmd_Include(cmd); break;
+                case "Set": RunCmd_Set(cmd); break;
                 default: AddCommandError($"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
             }
          }
@@ -144,6 +150,17 @@ namespace FlowProtocol.Pages.FlowTemplates
          }
       }
 
+      // Set-Befehl ausführen
+      private void RunCmd_Set(Command cmd)
+      {         
+         string arguments = cmd.Arguments;
+         Dictionary<string, string> assignments = ReadAssignments(arguments);
+         foreach(var assignment in assignments)
+         {
+            GlobalVars[assignment.Key] = assignment.Value;
+         }
+      }
+
       // Fügt einen Fehler beim ausführend eines Commandos hinzu
       private void AddCommandError(string errorText, Command cmd)
       {
@@ -158,13 +175,13 @@ namespace FlowProtocol.Pages.FlowTemplates
          Dictionary<string, string> assignments = new Dictionary<string, string>();
          if (!string.IsNullOrWhiteSpace(varExpression))
          {
-               Regex regAssignement = new Regex(@"([A-Za-z0-9]*)=(.*)");
+               Regex regSetAssignement = new Regex(@"([A-Za-z0-9]*)=(.*)");
                foreach(var idx in varExpression.Split(";"))
                {
                   string assignment = idx.Trim();
-                  if (regAssignement.IsMatch(assignment))
+                  if (regSetAssignement.IsMatch(assignment))
                   {
-                     var m = regAssignement.Match(assignment);
+                     var m = regSetAssignement.Match(assignment);
                      assignments[m.Groups[1].Value.Trim()] = m.Groups[2].Value.Trim();
                   }
                }
@@ -187,6 +204,15 @@ namespace FlowProtocol.Pages.FlowTemplates
          Template? currentTemplate = tr.ReadTemplate(templatefile, assignments);          
          ReadErrors.AddRange(tr.ReadErrors);
          return currentTemplate;
+      }
+
+      private string ReplaceGlobalVars(string input)
+      {
+         foreach (var v in GlobalVars)
+         {
+            input = input.Replace("$" + v.Key, v.Value);
+         }
+         return input;
       }
 
       public bool IsURL(string text)

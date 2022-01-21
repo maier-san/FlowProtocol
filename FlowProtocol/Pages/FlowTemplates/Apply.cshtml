@@ -44,10 +44,6 @@
                 <label class="formbuilder-radio-group-label">
                     @r.QuestionText
                     <br>
-                    @if (!string.IsNullOrEmpty(r.HelpText))
-                    {
-                        <span class="tooltip-element" tooltip="@r.HelpText">?</span>
-                    }
                 </label>
                 <div class="radio-group">
                     @foreach (var idx in r.Options)

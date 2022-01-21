@@ -13,5 +13,11 @@ namespace FlowProtocol.Core
          Arguments = string.Empty;
          ErrorTemplate =errorTemplate;
       }
+
+      // Wendet eine Text-Operation auf die Text-Bestandteile des Command an
+      public void ApplyTextOperation(Func<string, string> conv)
+      {
+         Arguments = conv(Arguments);
+      }
    }
 }
