@@ -39,8 +39,8 @@ namespace FlowProtocol.Core
             {
                 Regex regDescription = new Regex("^///(.*)");
                 Regex regComment = new Regex("^//.*");
-                Regex regRestriction = new Regex(@"^\?(.*):(.*)");
-                Regex regOption = new Regex("^#(.*):(.*)");
+                Regex regRestriction = new Regex(@"^\?([A-Za-z0-9]*):(.*)");
+                Regex regOption = new Regex("^#([A-Za-z0-9]*):(.*)");
                 Regex regSubItem = new Regex("^>(.*)");
                 Regex regGroupedResultItem = new Regex("^>>(.*)>>(.*)");
                 Regex regResultItem = new Regex("^>>(.*)");

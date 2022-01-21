@@ -191,7 +191,7 @@ namespace FlowProtocol.Pages.FlowTemplates
 
       public bool IsURL(string text)
       {
-         return Uri.IsWellFormedUriString(text, UriKind.RelativeOrAbsolute);
+         return text.StartsWith("http://") && Uri.IsWellFormedUriString(text, UriKind.RelativeOrAbsolute);
       }
    }
 }
