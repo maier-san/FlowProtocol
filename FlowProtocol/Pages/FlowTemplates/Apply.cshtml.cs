@@ -154,10 +154,24 @@ namespace FlowProtocol.Pages.FlowTemplates
       private void RunCmd_Set(Command cmd)
       {         
          string arguments = cmd.Arguments;
-         Dictionary<string, string> assignments = ReadAssignments(arguments);
-         foreach(var assignment in assignments)
+         Dictionary<string, string> sets = ReadAssignments(arguments);         
+         foreach(var s in sets)
          {
-            GlobalVars[assignment.Key] = assignment.Value;
+            GlobalVars[s.Key] = s.Value;
+         }
+         Dictionary<string, int> adds = ReadAddAssignments(arguments);
+         foreach(var a in adds)
+         {
+            bool baseOK = true;
+            int baseValue = 0;
+            if (GlobalVars.ContainsKey(a.Key))
+            {
+               baseOK = int.TryParse(GlobalVars[a.Key], out baseValue);
+            }
+            if (baseOK)
+            {
+               GlobalVars[a.Key] = (baseValue + a.Value).ToString();
+            }
          }
       }
 
@@ -174,17 +188,43 @@ namespace FlowProtocol.Pages.FlowTemplates
       {
          Dictionary<string, string> assignments = new Dictionary<string, string>();
          if (!string.IsNullOrWhiteSpace(varExpression))
-         {
-               Regex regSetAssignement = new Regex(@"([A-Za-z0-9]*)=(.*)");
+         {                   
+               Regex regSetAssignment = new Regex(@"([A-Za-z0-9]*)=(.*)");               
                foreach(var idx in varExpression.Split(";"))
                {
                   string assignment = idx.Trim();
-                  if (regSetAssignement.IsMatch(assignment))
+                  if (regSetAssignment.IsMatch(assignment))
                   {
-                     var m = regSetAssignement.Match(assignment);
+                     var m = regSetAssignment.Match(assignment);
                      assignments[m.Groups[1].Value.Trim()] = m.Groups[2].Value.Trim();
                   }
                }
+         }
+         return assignments;
+      }
+
+      // Liest aus einem Ausdruck "F1+=W1; F2+=W2" die Variablen-Addier-Zuweisungen aus und gibt diese zurück.
+      private Dictionary<string, int> ReadAddAssignments(string? varExpression)
+      {
+         Dictionary<string, int> assignments = new Dictionary<string, int>();
+         if (!string.IsNullOrWhiteSpace(varExpression))
+         {
+            Regex regAddAssignment = new Regex(@"([A-Za-z0-9]*)\+=([0-9]*)");                         
+            foreach(var idx in varExpression.Split(";"))
+            {
+               string assignment = idx.Trim();
+               if (regAddAssignment.IsMatch(assignment))
+               {
+                  var m = regAddAssignment.Match(assignment);                     
+                  
+                  int incValue = 0;
+                  bool incOK = int.TryParse(m.Groups[2].Value.Trim(), out  incValue);
+                  if (incOK)
+                  {
+                     assignments[m.Groups[1].Value.Trim()] = incValue;
+                  }
+               }                  
+            }
          }
          return assignments;
       }
