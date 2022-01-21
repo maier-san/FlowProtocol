@@ -27,7 +27,7 @@ jobs:
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
         - run: |
-            docker build -f ./docker/flowprotocol.dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/es_flowprotocol:${{ github.sha }} ./src/
+            docker build -f ./docker/flowprotocol.dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/es_flowprotocol:${{ github.sha }} .
             docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/es_flowprotocol:${{ github.sha }}
 
         - name: 'Deploy to Azure Container Instances'
