@@ -122,10 +122,10 @@ namespace FlowProtocol.Pages.FlowTemplates
       private void RunCmd_Implies(Command cmd)
       {
          Dictionary<string, string> assignments = ReadAssignments(cmd.Arguments);
-         foreach(var ass in assignments)
+         foreach(var a in assignments)
          {
-            SelectedOptions[ass.Key] = ass.Value;
-            if (!GivenKeys.Contains(ass.Key)) GivenKeys.Add(ass.Key);
+            SelectedOptions[a.Key] = a.Value;
+            if (!GivenKeys.Contains(a.Key)) GivenKeys.Add(a.Key);
          }
       }
 
