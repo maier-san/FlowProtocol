@@ -144,7 +144,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       // Include-Commando ausführen
       private void RunCmd_Include(Command cmd)
       {
-         Regex regFileArgument = new Regex(@"^([A-Za-z0-9]*) (.*)");
+         Regex regFileArgument = new Regex(@"^([A-Za-z0-9]*)\s*(.*)");
          string arguments = cmd.Arguments;
          if (regFileArgument.IsMatch(arguments))
          {

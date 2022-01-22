@@ -44,8 +44,8 @@ namespace FlowProtocol.Core
                 Regex regSubItem = new Regex("^>(.*)");
                 Regex regGroupedResultItem = new Regex("^>>(.*)>>(.*)");
                 Regex regResultItem = new Regex("^>>(.*)");
-                Regex regExecute = new Regex(@"^~Execute.*");
-                Regex regCommand = new Regex(@"^~([A-Za-z0-9]*) (.*)");                      
+                Regex regExecute = new Regex(@"^~Execute");
+                Regex regCommand = new Regex(@"^~([A-Za-z0-9]*)\s*(.*)");                      
                 ResultItem? currentResultItem = null;
                 int linenumber = 0;
                 while (sr.Peek() != -1)
