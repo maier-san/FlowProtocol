@@ -65,19 +65,31 @@ namespace FlowProtocol.Pages.FlowTemplates
          foreach (var r in t.Restrictions)
          {
             r.ApplyTextOperation(ReplaceGlobalVars);
-            if (!SelectedOptions.ContainsKey(r.Key) || !r.Options.Select(x => x.Key).Contains(SelectedOptions[r.Key]))
+            
+            if (!SelectedOptions.ContainsKey(r.Key))
             {
-               // Frage noch unbeantwortet oder ungültig beantwortet: auf Seite übernehmen
+               // Frage noch unbeantwortet auf Seite übernehmen
                SelectedOptions[r.Key] = string.Empty;
                ShowRestrictions.Add(r);
             }
             else
             {
                GivenKeys.Add(r.Key);
+               string selectedOption = SelectedOptions[r.Key];
                Option? o = r.Options.Find(x => x.Key == SelectedOptions[r.Key]);
+               if (o == null)
+               {
+                  // Antwort nicht in Liste: Suche nach x-Option
+                  o = r.Options.Find(x => x.Key == "x");
+               }
                if (o != null)
                {
+                  // Antwort gefunden
                   ExtractRestrictions(o as Template);
+               }
+               else
+               {
+                  // Antwort unbekannt, keine x-Option gefunden: ignorieren                  
                }
             }
          }
