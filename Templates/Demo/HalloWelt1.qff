@@ -1,0 +1,8 @@
+//  Hallo-Welt-Funktion
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+	#a1: Ganz normal
+		>> Hallo Welt
+	#a2: In Großbuchstaben
+		>> HALLO WELT
+	#a3: Rückwärts
+		>> tleW ollaH

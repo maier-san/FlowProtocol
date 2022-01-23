@@ -1,0 +1,4 @@
+/// Der Textbaustein "Hallo Welt" wird in einer Form deiner Wahl ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Include HalloWelt2 weltindex=1; weltbezeichnung=Meine Welt
+~Include HalloWelt2 weltindex=2; weltbezeichnung=Deine Welt

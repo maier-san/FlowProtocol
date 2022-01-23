@@ -1,0 +1,19 @@
+/// Der Textbaustein "Hallo Welt" wird in einer Form deiner Wahl ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+	#a1: Ganz normal
+		>> Hallo Welt
+	#a2: In Großbuchstaben
+		>> HALLO WELT
+		~Implies F2a=j
+	#a3: Rückwärts
+		>> tleW ollaH
+?F2: Welcher Zusatz soll ergänzt werden?
+	#z1: "Wie geht es dir?"
+		?F2a: Soll der Zusatz mit Sternchen ausgegeben werden?
+			#j: Ja
+				>> *** Wie geht es dir? ***
+			#n: Nein
+				>> Wie geht es dir?
+	#z2: "Ich grüße dich!"
+		>> Ich grüße dich!

@@ -1,0 +1,13 @@
+/// Der Textbaustein "Hallo Welt" wird in einer Form deiner Wahl ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+	#a1: Ganz normal
+		>> Hallo Welt
+	#a2: In Großbuchstaben
+		?F1a: Soll "Hallo Welt" zusätzlich rückwärts ausgegeben werden?
+			#j: Ja
+				>> TLEW OLLAH
+			#n: Nein
+				>> HALLO WELT
+	#a3: Rückwärts
+		>> tleW ollaH
