@@ -24,9 +24,9 @@ namespace FlowProtocol.Core
         public Template? ReadTemplate(string filepath, Dictionary<string, string>? assignments = null)
         {
             ReadErrors.Clear();
-            if (!File.Exists(filepath)) 
+            if (!File.Exists(filepath.Replace("\\","/"))) 
             {
-                AddReadError("Vorlagendatei nicht gefunden.", filepath, 0, string.Empty);
+                AddReadError("Vorlagendatei nicht gefunden.", filepath.Replace("\\","/"), 0, string.Empty);
                 return null;
             }
             Template main = new Template();
@@ -35,7 +35,7 @@ namespace FlowProtocol.Core
                 assignments = new Dictionary<string, string>();
             }
             TemplateStack.Push(new Tuple<int, Template>(-1, main));
-            using (StreamReader sr = new StreamReader(filepath))
+            using (StreamReader sr = new StreamReader(filepath.Replace("\\","/")))
             {
                 Regex regDescription = new Regex("^///(.*)");
                 Regex regComment = new Regex("^//.*");
