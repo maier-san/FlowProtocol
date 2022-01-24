@@ -54,7 +54,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          public TemplateEntry(FileInfo di, string templatePath)
          {
             TemplateName = di.Name.Replace(".qfp",string.Empty);
-            TemplatePath = di.FullName.Replace(templatePath + "/", string.Empty).Replace(".qfp",string.Empty);
+            TemplatePath = di.FullName.Replace("/","\\").Replace(templatePath.Replace("/","\\") + "\\", string.Empty).Replace(".qfp",string.Empty);
          }
       }
    }   
