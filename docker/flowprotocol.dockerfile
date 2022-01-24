@@ -1,5 +1,5 @@
 # Build Container with: docker build -f .\docker\flowprotocol.dockerfile -t flowprotocol .
-# Start Container with: docker run -p 8080:80 flowprotocol
+# Start Container with: docker run -e TemplatePath=templates -v "$(pwd)"/templates:/app/templates -p 8080:80 flowprotocol
 
 # https://hub.docker.com/_/microsoft-dotnet
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
