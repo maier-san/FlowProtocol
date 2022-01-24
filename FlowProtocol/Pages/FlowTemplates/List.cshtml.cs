@@ -23,7 +23,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       {
          string currentPath = TemplatePath;
          UserGroup = userGroup;
-         if (!string.IsNullOrEmpty(UserGroup)) currentPath += "\\" + UserGroup;
+         if (!string.IsNullOrEmpty(UserGroup)) currentPath += "/" + UserGroup;
          ReadDirectory(currentPath);
       }
       
@@ -54,7 +54,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          public TemplateEntry(FileInfo di, string templatePath)
          {
             TemplateName = di.Name.Replace(".qfp",string.Empty);
-            TemplatePath = di.FullName.Replace(templatePath + "\\", string.Empty).Replace(".qfp",string.Empty);
+            TemplatePath = di.FullName.Replace(templatePath + "/", string.Empty).Replace(".qfp",string.Empty);
          }
       }
    }   
