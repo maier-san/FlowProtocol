@@ -35,7 +35,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       public IActionResult OnGet(string template)
       {
          string templateFileName = TemplatePath + "/" + template + ".qfp";
-         System.IO.FileInfo fi = new System.IO.FileInfo(templateFileName);
+         System.IO.FileInfo fi = new System.IO.FileInfo(templateFileName.Replace("\\","/"));
          if (fi == null || fi.DirectoryName == null)
          {
             return RedirectToPage("./NoTemplate");
