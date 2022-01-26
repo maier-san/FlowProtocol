@@ -1,0 +1,10 @@
+// Hallo-Welt-Funktion
+// Parameter $weltindex: Schlüsselindex
+// Parameter $weltbezeichnung: Weltbezeichnung
+?F$weltindex1: Wie soll $weltbezeichnung begrüßt werden?
+	#a1: Mit "Hallo"
+		>> Hallo $weltbezeichnung
+	#a2: Mit "Guten Morgen"
+		>> Guten Morgen $weltbezeichnung
+	#a3: Mit Aloah
+		>> Aloah $weltbezeichnung

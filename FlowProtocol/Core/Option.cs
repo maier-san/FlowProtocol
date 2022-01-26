@@ -12,5 +12,11 @@
          Restrictions = new List<Restriction>();
          ResultItems = new List<ResultItem>();
       }
+
+      // Wendet eine Text-Operation auf die Text-Bestandteile der Frage an.
+      public void ApplyTextOperation(Func<string, string> conv)
+      {
+         OptionText = conv(OptionText);
+      }
    }
 }

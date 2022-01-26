@@ -39,12 +39,13 @@ namespace FlowProtocol.Core
             {
                 Regex regDescription = new Regex("^///(.*)");
                 Regex regComment = new Regex("^//.*");
-                Regex regRestriction = new Regex(@"^\?(.*):(.*)");
-                Regex regOption = new Regex("^#(.*):(.*)");
+                Regex regRestriction = new Regex(@"^\?([A-Za-z0-9]*):(.*)");
+                Regex regOption = new Regex("^#([A-Za-z0-9]*):(.*)");
                 Regex regSubItem = new Regex("^>(.*)");
                 Regex regGroupedResultItem = new Regex("^>>(.*)>>(.*)");
                 Regex regResultItem = new Regex("^>>(.*)");
-                Regex regCommand = new Regex(@"^~([A-Za-z0-9]*) (.*)");                      
+                Regex regExecute = new Regex(@"^~Execute");
+                Regex regCommand = new Regex(@"^~([A-Za-z0-9]*)\s*(.*)");                      
                 ResultItem? currentResultItem = null;
                 int linenumber = 0;
                 while (sr.Peek() != -1)
@@ -87,7 +88,7 @@ namespace FlowProtocol.Core
                         }
                         else if (regRestriction.IsMatch(codeline))
                         {                           
-                            Template? parent = GetMatchingParent(indent, TemplateStack);
+                            Template? parent = GetMatchingParentTemplate(indent, TemplateStack);
                             if (parent != null)
                             {
                                 var m = regRestriction.Match(codeline);
@@ -113,7 +114,7 @@ namespace FlowProtocol.Core
                         }
                         else if (regGroupedResultItem.IsMatch(codeline))
                         {
-                            Template? parent = GetMatchingParent(indent, TemplateStack);
+                            Template? parent = GetMatchingParentTemplate(indent, TemplateStack);
                             if (parent != null)
                             {
                                 var m = regGroupedResultItem.Match(codeline);
@@ -125,7 +126,7 @@ namespace FlowProtocol.Core
                         }
                         else if (regResultItem.IsMatch(codeline))
                         {
-                            Template? parent = GetMatchingParent(indent, TemplateStack);
+                            Template? parent = GetMatchingParentTemplate(indent, TemplateStack);
                             if (parent != null)
                             {
                                 var m = regResultItem.Match(codeline);
@@ -144,9 +145,21 @@ namespace FlowProtocol.Core
                             }
                             else AddReadError("Ergänzungseintrag kann keinen Ausgabeeintrag zugeordnet werden.", filepath, linenumber, codeline);
                         }
+                        else if (regExecute.IsMatch(codeline))
+                        {
+                            Template? parent = GetMatchingParentTemplate(indent, TemplateStack);
+                            if (parent != null)
+                            {
+                                Template t = new Template();
+                                parent.FollowTemplate = t;                                
+                                TemplateStack.Push(new Tuple<int, Template>(indent, t));
+                            }
+                            else AddReadError("Befehl kann nicht zugeordnet werden.", filepath, linenumber, codeline);                            
+                            currentResultItem = null;
+                        }
                         else if (regCommand.IsMatch(codeline))
                         {
-                            Template? parent = GetMatchingParent(indent, TemplateStack);
+                            Template? parent = GetMatchingParentTemplate(indent, TemplateStack);
                             if (parent != null)
                             {
                                 ReadErrorItem errortemplate =  new ReadErrorItem()
@@ -181,6 +194,12 @@ namespace FlowProtocol.Core
                     Codeline = codeline.Trim()
                 };
             ReadErrors.Add(rei);
+        }
+
+        private Template? GetMatchingParentTemplate(int indent, Stack<Tuple<int, Template>> list)
+        {
+            Template? t = GetMatchingParent<Template>(indent, list);
+            if (t != null) return t.EndOfChain(); else return null;
         }
 
         private T? GetMatchingParent<T>(int indent, Stack<Tuple<int, T>> list) where T : class

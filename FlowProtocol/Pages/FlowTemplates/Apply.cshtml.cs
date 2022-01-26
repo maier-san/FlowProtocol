@@ -20,6 +20,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       [BindProperty(SupportsGet = true)]
       public Dictionary<string, string> SelectedOptions { get; set; }
       public List<string> GivenKeys { get; set; }
+      private Dictionary<string, string> GlobalVars { get; set; }
       
       public ApplyModel(IConfiguration configuration)
       {
@@ -31,6 +32,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          ReadErrors = new List<ReadErrorItem>();
          TemplateDetailPath = string.Empty;
          TemplateBreadcrumb = "Unbekannte Vorlage";
+         GlobalVars = new Dictionary<string, string>();
       }
       public IActionResult OnGet(string template)
       {
@@ -58,25 +60,43 @@ namespace FlowProtocol.Pages.FlowTemplates
       /// <param name="t">Die aktuelle Template-Ebene</param>
       private void ExtractRestrictions(Template t)
       {
-         AddResultItems(t.ResultItems); 
-         RunCommand(t.Commands);                 
+         RunCommand(t.Commands);
+         AddResultItems(t.ResultItems);          
          foreach (var r in t.Restrictions)
          {
-            if (!SelectedOptions.ContainsKey(r.Key) || !r.Options.Select(x => x.Key).Contains(SelectedOptions[r.Key]))
+            r.ApplyTextOperation(ReplaceGlobalVars);
+            
+            if (!SelectedOptions.ContainsKey(r.Key))
             {
-               // Frage noch unbeantwortet oder ungültig beantwortet: auf Seite übernehmen
+               // Frage noch unbeantwortet auf Seite übernehmen
                SelectedOptions[r.Key] = string.Empty;
                ShowRestrictions.Add(r);
             }
             else
             {
                GivenKeys.Add(r.Key);
+               string selectedOption = SelectedOptions[r.Key];
                Option? o = r.Options.Find(x => x.Key == SelectedOptions[r.Key]);
+               if (o == null)
+               {
+                  // Antwort nicht in Liste: Suche nach x-Option
+                  o = r.Options.Find(x => x.Key == "x");
+               }
                if (o != null)
                {
+                  // Antwort gefunden
                   ExtractRestrictions(o as Template);
                }
+               else
+               {
+                  // Antwort unbekannt, keine x-Option gefunden: ignorieren                  
+               }
             }
+         }
+         if (!ShowRestrictions.Any() && t.FollowTemplate != null)
+         {
+            // Alle Fragen sind beantwortet und es gibt ein Folge-Template: ausführen
+            ExtractRestrictions(t.FollowTemplate);
          }
       }
 
@@ -85,6 +105,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       {
          foreach(var item in resultlist)
          {
+            item.ApplyTextOperation(ReplaceGlobalVars);            
             if (!ShowResultGroups.ContainsKey(item.ResultItemGroup))
             {
                ShowResultGroups[item.ResultItemGroup] = new List<ResultItem>();
@@ -98,10 +119,12 @@ namespace FlowProtocol.Pages.FlowTemplates
       {
          foreach(var cmd in commandlist)
          {
+            cmd.ApplyTextOperation(ReplaceGlobalVars);
             switch (cmd.ComandName)
             {
                 case "Implies": RunCmd_Implies(cmd); break;
                 case "Include": RunCmd_Include(cmd); break;
+                case "Set": RunCmd_Set(cmd); break;
                 default: AddCommandError($"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
             }
          }
@@ -111,17 +134,17 @@ namespace FlowProtocol.Pages.FlowTemplates
       private void RunCmd_Implies(Command cmd)
       {
          Dictionary<string, string> assignments = ReadAssignments(cmd.Arguments);
-         foreach(var ass in assignments)
+         foreach(var a in assignments)
          {
-            SelectedOptions[ass.Key] = ass.Value;
-            if (!GivenKeys.Contains(ass.Key)) GivenKeys.Add(ass.Key);
+            SelectedOptions[a.Key] = a.Value;
+            if (!GivenKeys.Contains(a.Key)) GivenKeys.Add(a.Key);
          }
       }
 
       // Include-Commando ausführen
       private void RunCmd_Include(Command cmd)
       {
-         Regex regFileArgument = new Regex(@"^([A-Za-z0-9]*) (.*)");
+         Regex regFileArgument = new Regex(@"^([A-Za-z0-9]*)\s*(.*)");
          string arguments = cmd.Arguments;
          if (regFileArgument.IsMatch(arguments))
          {
@@ -139,6 +162,31 @@ namespace FlowProtocol.Pages.FlowTemplates
          }
       }
 
+      // Set-Befehl ausführen
+      private void RunCmd_Set(Command cmd)
+      {         
+         string arguments = cmd.Arguments;
+         Dictionary<string, string> sets = ReadAssignments(arguments);         
+         foreach(var s in sets)
+         {
+            GlobalVars[s.Key] = s.Value;
+         }
+         Dictionary<string, int> adds = ReadAddAssignments(arguments);
+         foreach(var a in adds)
+         {
+            bool baseOK = true;
+            int baseValue = 0;
+            if (GlobalVars.ContainsKey(a.Key))
+            {
+               baseOK = int.TryParse(GlobalVars[a.Key], out baseValue);
+            }
+            if (baseOK)
+            {
+               GlobalVars[a.Key] = (baseValue + a.Value).ToString();
+            }
+         }
+      }
+
       // Fügt einen Fehler beim ausführend eines Commandos hinzu
       private void AddCommandError(string errorText, Command cmd)
       {
@@ -152,17 +200,43 @@ namespace FlowProtocol.Pages.FlowTemplates
       {
          Dictionary<string, string> assignments = new Dictionary<string, string>();
          if (!string.IsNullOrWhiteSpace(varExpression))
-         {
-               Regex regAssignement = new Regex(@"([A-Za-z0-9]*)=(.*)");
+         {                   
+               Regex regSetAssignment = new Regex(@"([A-Za-z0-9]*)=(.*)");               
                foreach(var idx in varExpression.Split(";"))
                {
                   string assignment = idx.Trim();
-                  if (regAssignement.IsMatch(assignment))
+                  if (regSetAssignment.IsMatch(assignment))
                   {
-                     var m = regAssignement.Match(assignment);
+                     var m = regSetAssignment.Match(assignment);
                      assignments[m.Groups[1].Value.Trim()] = m.Groups[2].Value.Trim();
                   }
                }
+         }
+         return assignments;
+      }
+
+      // Liest aus einem Ausdruck "F1+=W1; F2+=W2" die Variablen-Addier-Zuweisungen aus und gibt diese zurück.
+      private Dictionary<string, int> ReadAddAssignments(string? varExpression)
+      {
+         Dictionary<string, int> assignments = new Dictionary<string, int>();
+         if (!string.IsNullOrWhiteSpace(varExpression))
+         {
+            Regex regAddAssignment = new Regex(@"([A-Za-z0-9]*)\+=([0-9]*)");                         
+            foreach(var idx in varExpression.Split(";"))
+            {
+               string assignment = idx.Trim();
+               if (regAddAssignment.IsMatch(assignment))
+               {
+                  var m = regAddAssignment.Match(assignment);                     
+                  
+                  int incValue = 0;
+                  bool incOK = int.TryParse(m.Groups[2].Value.Trim(), out  incValue);
+                  if (incOK)
+                  {
+                     assignments[m.Groups[1].Value.Trim()] = incValue;
+                  }
+               }                  
+            }
          }
          return assignments;
       }
@@ -184,9 +258,18 @@ namespace FlowProtocol.Pages.FlowTemplates
          return currentTemplate;
       }
 
+      private string ReplaceGlobalVars(string input)
+      {
+         foreach (var v in GlobalVars)
+         {
+            input = input.Replace("$" + v.Key, v.Value);
+         }
+         return input;
+      }
+
       public bool IsURL(string text)
       {
-         return Uri.IsWellFormedUriString(text, UriKind.RelativeOrAbsolute);
+         return text.StartsWith("http://") && Uri.IsWellFormedUriString(text, UriKind.RelativeOrAbsolute);
       }
    }
 }

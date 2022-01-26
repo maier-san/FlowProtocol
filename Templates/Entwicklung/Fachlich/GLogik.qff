@@ -1,6 +1,0 @@
-// Frageblock für eine Geschäftslogik
-// $GLName: Name der Geschäftslogk
-?G1: Ist die Erstellung neuer Elemente in der Geschäftslogik $GLName betroffen?
-    #J: Ja
-        >> Die Erstellung neuer Elemente in der Geschäftslogik $GLName funktioniert wie sie soll.            
-    #N: Nein

@@ -1,0 +1,23 @@
+/// Der Textbaustein "Hallo Welt" wird in einer Form deiner Wahl ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+	#a1: Ganz normal
+		>> Hallo Welt
+		~Set Preis=5
+	#a2: In Großbuchstaben
+		>> HALLO WELT
+		~Set Preis=8
+	#a3: Rückwärts
+		>> tleW ollaH
+		~Set Preis=12
+?F2: Welcher Zusatz soll ergänzt werden?
+	#z1: "Wie geht es dir?"
+		>> Wie geht es dir?
+		~Set Preis+=3
+	#z2: "Ich grüße dich!"
+		>> Ich grüße dich!
+		~Set Preis+=7
+?F3: Soll der Preis ausgegeben werden?
+	#j: Ja
+		>> Der Preis beträgt $Preis Euro.
+	#n: Nein		
