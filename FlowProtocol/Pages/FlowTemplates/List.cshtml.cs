@@ -23,7 +23,8 @@ namespace FlowProtocol.Pages.FlowTemplates
       {
          string currentPath = TemplatePath;
          UserGroup = userGroup;
-         if (!string.IsNullOrEmpty(UserGroup)) currentPath += "\\" + UserGroup;
+         char separator = Path.DirectorySeparatorChar;
+         if (!string.IsNullOrEmpty(UserGroup)) currentPath += separator + UserGroup;
          ReadDirectory(currentPath);
       }
       
@@ -35,13 +36,14 @@ namespace FlowProtocol.Pages.FlowTemplates
          {
             ReadDirectory(idx.FullName);
          }
+         TemplateGroups.OrderBy(x=>x.Key);
       }
       
       private void AddTemplateArray(DirectoryInfo di)
       {
          string groupName = di.Name;
          if (di.FullName == TemplatePath) groupName = "Favoriten";
-         List<TemplateEntry> templatelist = di.GetFiles("*.qfp").Select(x => new TemplateEntry(x, TemplatePath)).ToList();
+         List<TemplateEntry> templatelist = di.GetFiles("*.qfp").Select(x => new TemplateEntry(x, TemplatePath)).OrderBy(x=>x.TemplateName).ToList();
          ObjectArray<TemplateEntry> templateArray = new ObjectArray<TemplateEntry>();
          templateArray.ReadList(templatelist);
          TemplateGroups[groupName] = templateArray;
@@ -54,7 +56,8 @@ namespace FlowProtocol.Pages.FlowTemplates
          public TemplateEntry(FileInfo di, string templatePath)
          {
             TemplateName = di.Name.Replace(".qfp",string.Empty);
-            TemplatePath = di.FullName.Replace(templatePath + "\\", string.Empty).Replace(".qfp",string.Empty);
+            char separator = Path.DirectorySeparatorChar;
+            TemplatePath = di.FullName.Replace(templatePath + separator, string.Empty).Replace(".qfp",string.Empty);
          }
       }
    }   
