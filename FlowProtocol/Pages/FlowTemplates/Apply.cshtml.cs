@@ -36,20 +36,21 @@ namespace FlowProtocol.Pages.FlowTemplates
       }
       public IActionResult OnGet(string template)
       {
-         string templateFileName = TemplatePath + "\\" + template + ".qfp";
+         char separator = Path.DirectorySeparatorChar;
+         string templateFileName = TemplatePath + separator + template + ".qfp";
          System.IO.FileInfo fi = new System.IO.FileInfo(templateFileName);
          if (fi == null || fi.DirectoryName == null)
          {
             return RedirectToPage("./NoTemplate");
          }
          TemplateDetailPath = fi.DirectoryName;
-         TemplateBreadcrumb = template.Replace("\\", ", ");
+         TemplateBreadcrumb = template.Replace(separator.ToString(), ", ");
          Template? currentTemplate = LoadTemplate(templateFileName);         
          if (currentTemplate == null)
          {
             return RedirectToPage("./NoTemplate");
          }
-         TemplateDescription = currentTemplate?.Description?.Split("\n").ToList();
+         TemplateDescription = currentTemplate?.Description?.Split(Environment.NewLine).ToList();
          if (currentTemplate != null) ExtractRestrictions(currentTemplate);
          return Page();
       }
@@ -150,7 +151,8 @@ namespace FlowProtocol.Pages.FlowTemplates
          {
             var m = regFileArgument.Match(arguments);                        
             string template= m.Groups[1].Value.Trim();
-            string templateFileName = TemplateDetailPath + "\\" + template.Trim().Replace(".qff", string.Empty) + ".qff";
+            char separator = Path.DirectorySeparatorChar;
+            string templateFileName = TemplateDetailPath + separator + template.Trim().Replace(".qff", string.Empty) + ".qff";
             Dictionary<string, string> assignments = ReadAssignments(m.Groups[2].Value);
             Template? subTemplate = LoadTemplate(templateFileName, assignments);
             if (subTemplate == null)

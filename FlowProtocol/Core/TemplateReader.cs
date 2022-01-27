@@ -72,7 +72,7 @@ namespace FlowProtocol.Core
                                 {
                                     if (!string.IsNullOrWhiteSpace(main.Description)) 
                                     {
-                                        main.Description += "\n" + descriptionLine;
+                                        main.Description += Environment.NewLine + descriptionLine;
                                     }
                                     else 
                                     {
