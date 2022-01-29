@@ -1,19 +1,32 @@
 \documentclass[12pt ,a4paper]{article}
 \usepackage[ansi]{umlaute}
 \usepackage[german]{babel}
-%\usepackage{amsmath}
-%\usepackage{amsfonts}
-%\usepackage{amssymb}
-%\usepackage{amsthm}
-%\usepackage{epsfig}
-%\usepackage{epstopdf}
-\title{FlowProtocol}
+\usepackage{fancyheadings}
+\usepackage{geometry}
+\title{FlowProtocol - Anwenderhandbuch}
 \author{Wolfgang Maier}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{4pt}
-\newcommand{\webbox}[1]{\par\setlength{\fboxsep}{3mm}\fbox{\begin{minipage}{12cm}#1\end{minipage}}\par\vspace{3mm}}
-\newcommand{\webhead}[2]{{\large #1}\\[2mm]#2\\[1mm]\rule{\linewidth}{1pt}\\[3mm]}
-\newcommand{\webheadR}[1]{{\large #1}\\}
+%%
+%% Layout
+%%
+\setlength{\parindent}{0mm}
+\setlength{\parskip}{0.5ex plus0.2ex minus0.1ex}
+\geometry{lmargin=35mm,rmargin=25mm,tmargin=25mm,bmargin=25mm}
+\addtolength{\headheight}{2.5pt}
+\pagestyle{fancy}
+\renewcommand{\sectionmark}[1]{\markboth{\thesection.~#1}{}}
+%\setlength{\headrulewidth}{0pt}
+\rhead{\thepage}
+\cfoot{}
+%%
+%% Commands
+%%
+\newcommand{\FlowProtocol}{\textit{FlowProtocol}\ }
+\newcommand{\Syntax}{\subsubsection*{Syntax}}
+\newcounter{bspcount}
+\newcommand{\Beispiel}{\stepcounter{bspcount}\subsubsection*{Beispiel~\arabic{bspcount}}}
+\newcommand{\webbox}[1]{\par\setlength{\fboxsep}{3mm}\fbox{\begin{minipage}{12cm}\textsf{#1}\end{minipage}\par}\par\vspace{3mm}}
+\newcommand{\webhead}[2]{{\large  #1}\\[2mm]#2\\[1mm]\rule{\linewidth}{1pt}\\[3mm]}
+\newcommand{\webheadR}[1]{{\large  #1}\\}
 \newenvironment{circlist}%
 {\begin{list}{$\bigcirc$}{%
 \setlength{\labelsep}{5pt}
@@ -31,42 +44,48 @@
 \setlength{\parsep}{0pt}
 \setlength{\labelwidth}{1cm}
 }}{\end{list}}
+\newcommand{\ZeigeFehlerItem}[4]{\item\textbf{#1}\\#2\ \textsl{#3}\\\texttt{#4}}
+\newcommand{\FehlerBeschreibungItem}[2]{\item[#1]\textsl{#2}\\}
 \begin{document}
 \maketitle
 \tableofcontents
-\section{Allgemeine Beschreibung}
+\newpage
+\section{Beschreibung und Hintergrund}
 \subsection{Grundidee}
-\textit{FlowProtocol} ist eine Anwendung, mit der man Aufgaben-, bzw. Prüflisten zu ausgewählten Themengebieten anhand einfacher Kontrollfragen erstellen kann. Der Name leitet sich ab aus Flow für \glqq Flussdiagramm\grqq\   und \glqq Protokoll\grqq\   und steht für das Grundkonzept der Anwendung, anhand eines verzweigten Entscheidungsbaums ein Protokoll zusammenzustellen. Die Anwendung funktioniert dabei wie folgt:  Nach Auswahl einer Vorlage wird eine Reihe von Multiple-Choice-Fragen gestellt, mit denen die relevanten Aspekte eines Themas Schritt für Schritt eingegrenzt werden, und aus denen am Ende eine genau abgestimmte Auflistung von Punkten zusammengestellt wird, die beispielsweise als Protokoll verwendet werden können.
+\FlowProtocol ist eine Anwendung, mit der man Aufgaben-, bzw. Prüflisten zu ausgewählten Themengebieten anhand einfacher Kontrollfragen erstellen kann. Der Name leitet sich ab aus Flow für \glqq Flussdiagramm\grqq\   und \glqq Protokoll\grqq\   und steht für das Grundkonzept der Anwendung, anhand eines verzweigten Entscheidungsbaums ein Protokoll zusammenzustellen. Die Anwendung funktioniert dabei wie folgt:  Nach Auswahl einer Vorlage wird eine Reihe von Multiple-Choice-Fragen gestellt, mit denen die relevanten Aspekte eines Themas Schritt für Schritt eingegrenzt werden, und aus denen am Ende eine genau abgestimmte Auf"|listung von Punkten zusammengestellt wird, die beispielsweise als Protokoll verwendet werden können.
 
-Die Grundidee der Anwendung besteht darin, ein Medium zu bieten, um Spezialwissen ohne großen Aufwand zu erfassen, um es in sehr einfacher Form für andere bereitzustellen, ohne dass es dafür vermittelt und erworben werden muss. Die Erstellung der Vorlagen kann und soll direkt durch die Menschen erfolgen, die über das jeweilige Wissen verfügen, und von einer breiten Menge an Nutzern angewendet werden.
+Die Grundidee der Anwendung besteht darin, ein Medium zu bieten, um Spezialwissen ohne großen Aufwand zu erfassen und es dann in sehr einfacher Form für andere bereitzustellen, ohne dass es dafür vermittelt und erworben werden muss. Die Erstellung der Vorlagen kann und soll direkt durch die Menschen erfolgen, die über das jeweilige Wissen verfügen und die Anwendung für alle möglich sein, die dieses Wissen benötigen.
 
 \subsection{Anwendungsbereiche}
-Die Anwendungsbereiche für diese Anwendung sind sehr vielfältig. Die ursprüngliche Intention war die Aufstellung von Prüflisten für wiederkehrende komplexe Tätigkeit\-en, die in vielen einzelnen Aspekten variieren können, sodass jeweils nur bestimmte Auswahl von Prüfpunkten relevant ist. Eine Gesamtprüfliste, bei der immer ein Großteil der Punkte hätte ignoriert werden müssen, wäre sowohl aufwendig, als auch fehlerträchtig, und daher nicht effektiv. \textit{FlowProtocol} kann hier durch sein Fragekonzept die für jeden Einzelfall relevanten Aspekte herausfiltern, und auf diese Weise sogar beliebig stark ins Detail gehen. Gleichzeitig hilft dem Anwender die Beantwortung der Fragen auch, sich gedanklich ausführlich mit seiner Aufgabe auseinanderzusetzen. Durch die Vermeidung offener Fragen wird gleichzeitig das Risiko minimiert, dass Dinge vergessen werden. Das Ergebnis ist ein zu 100~\% relevantes und vollständiges Protokoll.
+Die Anwendungsbereiche für diese Anwendung sind sehr vielfältig. Die ursprüngliche Intention war die Aufstellung von Prüflisten für wiederkehrende komplexe Tätigkeit\-en, die in vielen einzelnen Aspekten variieren können, sodass jeweils nur bestimmte Auswahl von Prüfpunkten relevant ist. Eine Gesamtprüfliste, bei der immer ein Großteil der Punkte hätte ignoriert werden müssen, wäre sowohl aufwendig, als auch fehlerträchtig, und daher nicht effektiv. \FlowProtocol kann hier durch sein Fragekonzept die für jeden Einzelfall relevanten Aspekte herausfiltern, und auf diese Weise sogar beliebig stark ins Detail gehen. Gleichzeitig hilft dem Anwender die Beantwortung der Fragen auch, sich gedanklich ausführlich mit seiner Aufgabe auseinanderzusetzen. Durch die Vermeidung offener Fragen wird gleichzeitig das Risiko minimiert, dass Dinge vergessen werden. Das Ergebnis ist ein zu 100~\% relevantes und vollständiges Protokoll.
 
-Ein besonders positiver Nebeneffekt dieser Vorgehensweise besteht darin, dass durch einfaches Auswählen von Antworten am Ende ein Ergebnisdokument erstellt wird, das nicht mehr manuell erstellt werden muss. Das Anwendungsgebiet dehnt sich damit auf alle Arten von Dokumenten aus, die sich aus einer Aufzählung von Textbausteinen zusammensetzen, deren Zusammenstellung über eine Reihe iterierter Fragen erfolgen kann. Dies umfasst beispielsweise Bestandsaufnahmen, Analyseprotokolle, Zusammenfassungen, Aufgabenlisten und vieles andere mehr. Für kleinere Systeme lassen sich sogar mit überschaubarem Aufwand Vorlagen erstellen, die nicht nur das Ergebnis einer Analyse zusammenfassen, sondern ergänzend dazu auch schon Lösungsansätze und mögliche weitere Schritte. Man kann so vom Prinzip her ein kleines Expertensystem erstellen, das wertvolles Spezialwissen eines Experten in sehr einfacher Form für andere Mitarbeiter verfügbar macht, ähnlich wie ein Chatbot. Das schont wertvolle Unternehmensressourcen und beugt Verfügbarkeitsengpässen vor. Auch kleinere personalisierte Umfragen lassen sich damit durchführen, wenn man die Rücksendung des Ergebnisses instruiert. Aber insbesondere dort, wo man sich im Rahmen von Normen wie ISO9001 oder ISO27001 dazu verpflichtet hat, klare Qualitätsstandards im Bereich der Unternehmensprozesse einzuhalten, kann \textit{FlowProtocol} gute Unterstützung leisten!
+Ein besonders positiver Nebeneffekt dieser Vorgehensweise besteht darin, dass durch einfaches Auswählen von Antworten am Ende ein Ergebnisdokument erstellt wird, das nicht mehr manuell erstellt werden muss. Das Anwendungsgebiet dehnt sich damit auf alle Arten von Dokumenten aus, die sich aus einer Aufzählung von Textbausteinen zusammensetzen, deren Zusammenstellung über eine Reihe iterierter Fragen erfolgen kann. Dies umfasst beispielsweise Bestandsaufnahmen, Analyseprotokolle, Zusammenfassungen, Aufgabenlisten und vieles andere mehr. Für kleinere Systeme lassen sich sogar mit überschaubarem Aufwand Vorlagen erstellen, die nicht nur das Ergebnis einer Analyse zusammenfassen, sondern ergänzend dazu auch schon Lösungsansätze und mögliche weitere Schritte. Man kann so vom Prinzip her ein kleines Expertensystem erstellen, das wertvolles Spezialwissen eines Experten in sehr einfacher Form für andere Mitarbeiter verfügbar macht, ähnlich wie ein Chatbot. Das schont wertvolle Unternehmensressourcen und beugt Verfügbarkeitsengpässen vor. Auch kleinere personalisierte Umfragen lassen sich damit durchführen, wenn man die Rücksendung des Ergebnisses instruiert. Aber insbesondere dort, wo man sich im Rahmen von Normen wie ISO9001 oder ISO27001 dazu verpflichtet hat, klare Qualitätsstandards im Bereich der Unternehmensprozesse einzuhalten, kann \FlowProtocol gute Unterstützung leisten!
 
 \subsection{Konfiguration}
-\textit{FlowProtocol} ist bewusst einfach gehalten und soll es auch bleiben. Als Web-Anwendung kann der Dienst innerhalb einer Einrichtung zentral zur Verfügung gestellt werden. Die einzige notwendige Konfiguration ist die Angabe eines serverseitig verfügbaren Vorlagenordners, in dem sich die Vorlagen befinden (einstellbar über die Eigenschaft TemplatePath in der Datei appsettings.json). Es werden weder Datenbank noch zusätzliche Dienste benötigt. Die Vorlage-Dateien sind normale Textdateien (in UTF-8-Codierung), die die eigentliche Logik enthalten, und die über die Anwendung ausgeführt werden. Die Syntax der Vorlage-Dateien ist ebenfalls sehr einfach und bewusst für die manuelle Erstellung in einem Editor vorgesehen. Der Aufbau ist zeilenbasiert und verwendet Einrückung zur Abbildung der Verschachtelung. Die Erstellung einer ersten eigenen Vorlage ist innerhalb von 2 Minuten möglich. Eine ausführliche Beschreibung des Sprachumfangs wird in der Befehlsreferenz gegeben. Das Ergebnis einer Bearbeitung wird am Ende auf dem Bildschirm ausgegeben, von wo aus es in die Zwischenablage übernommen werden kann. Tatsächlich wird in den meisten Fällen eine Weiterverarbeitung in einem anderen System (E-Mail, CRM, Projektverwaltung) erfolgen, wo noch Begriffe ergänzt und Prozesse angestoßen werden können und eine revisionssichere Verwaltung möglich ist.
+\FlowProtocol ist bewusst einfach gehalten und soll es auch bleiben. Als Web-An\-wen\-dung kann der Dienst innerhalb einer Einrichtung zentral zur Verfügung gestellt werden. Die einzige notwendige Konfiguration ist die Angabe eines serverseitig verfügbaren Vorlagenordners, in dem sich die Vorlagen befinden (einstellbar über die Eigenschaft TemplatePath in der Datei appsettings.json). Es werden weder Datenbank noch zusätzliche Dienste benötigt. Die Vorlage-Dateien sind normale Textdateien (in UTF-8-Codierung), die die eigentliche Logik enthalten, und die über die Anwendung ausgeführt werden. Die Syntax der Vorlage-Dateien ist ebenfalls sehr einfach und bewusst für die manuelle Erstellung in einem Editor vorgesehen. Der Aufbau ist zeilenbasiert und verwendet Einrückung zur Abbildung der Verschachtelung. Die Erstellung einer ersten eigenen Vorlage ist innerhalb von 2 Minuten möglich. Eine ausführliche Beschreibung des Sprachumfangs wird in der Befehlsreferenz gegeben. Das Ergebnis einer Bearbeitung wird am Ende auf dem Bildschirm ausgegeben, von wo aus es in die Zwischenablage übernommen werden kann. Tatsächlich wird in den meisten Fällen eine Weiterverarbeitung in einem anderen System (E-Mail, CRM, Projektverwaltung) erfolgen, wo noch Begriffe ergänzt und Prozesse angestoßen werden können und eine revisionssichere Verwaltung möglich ist.
 
-Die Organisation der Vorlagen erfolgt auf zwei Ebenen. Auf unterster Ebene ist eine Unterteilung in Anwendergruppen vorgesehen, die jeweils ihre eigenen Vorlagen verwenden. In einem Unternehmen oder einer Einrichtung wird sich diese Aufteilung normalerweise am Mitarbeiterorganigramm orientieren. Ein Beispiel wäre die Aufteilung in Vertrieb, Marketing, Entwicklung, Administration. Jeder Ordner im Vorlagenordner wird in \textit{FlowProtocol} als Anwendergruppe auf der Seite Anwendergruppen angezeigt. Innerhalb dieser Ordner kann man die Vorlagen entweder direkt ablegen oder in weitere Unterordner unterteilen, um fachliche Gruppen zu bilden. Der Pfad einer Vorlage innerhalb dieser Struktur findet sich auch in der URL wieder, die innerhalb der Anwendung erzeugt wird, und kann so auch direkt als Link in einer E-Mail, einem Vorgang, im Wiki oder an einer anderen Stelle im Intranet bereitgestellt werden.
+Die Organisation der Vorlagen erfolgt auf zwei Ebenen. Auf unterster Ebene ist eine Unterteilung in Anwendergruppen vorgesehen, die jeweils ihre eigenen Vorlagen verwenden. In einem Unternehmen oder einer Einrichtung wird sich diese Aufteilung normalerweise am Mitarbeiterorganigramm orientieren. Ein Beispiel wäre die Aufteilung in Vertrieb, Marketing, Entwicklung, Administration. Jeder Ordner im Vorlagenordner wird in \FlowProtocol als Anwendergruppe auf der Seite Anwendergruppen angezeigt. Innerhalb dieser Ordner kann man die Vorlagen entweder direkt ablegen oder in weitere Unterordner unterteilen, um fachliche Gruppen zu bilden. Der Pfad einer Vorlage innerhalb dieser Struktur findet sich auch in der URL wieder, die innerhalb der Anwendung erzeugt wird, und kann so auch direkt als Link in einer E-Mail, einem Vorgang, im Wiki oder an einer anderen Stelle im Intranet bereitgestellt werden.
 
 \subsection{Technische Ergänzungen}
-\textit{FlowProtocol} arbeitet vollständig zustandslos in dem Sinne, dass bei der Benutzung keinerlei Daten durch die Anwendung gespeichert werden. Es gibt weder eine Datenbank, noch eine Benutzerverwaltung und der Zugriff auf das Dateisystem erfolgt nur lesend. Die Verwaltung der gegebenen Antworten erfolgt vollständig in der URL, was die Möglichkeit bietet, zurückzuspringen oder einen Zwischenstand als Lesezeichen zu speichern oder zu versenden, allerdings werden Aufrufe von URLs in Unternehmen teilweise durch die IT-Infrastruktur protokolliert, sodass eine Verarbeitung schützenswerter Daten auf jeden Fall dahingehend betrachtet werden sollte.
 
-\textit{FlowProtocol} steht unter der MIT Lizenz und ist unter 
+\FlowProtocol basiert auf den .NET-Framework 6.01 und kann sowohl unter Windows, als auch Linux ausgeführt werden. Der Umgang mit Dateipfaden und Zeilenumbruchzeichen wurde für beide Systeme kompatibel gehalten.
+Die Anwendung arbeitet vollständig zustandslos in dem Sinne, dass bei der Benutzung keinerlei Daten durch die Anwendung gespeichert werden. Es gibt weder eine Datenbank, noch eine Benutzerverwaltung und der Zugriff auf das Dateisystem erfolgt nur lesend. Die Verwaltung der gegebenen Antworten erfolgt vollständig in der URL, was die Möglichkeit bietet, zurückzuspringen oder einen Zwischenstand als Lesezeichen zu speichern oder zu versenden, allerdings werden Aufrufe von URLs in Unternehmen teilweise durch die IT-Infrastruktur protokolliert, sodass eine Verarbeitung schützenswerter Daten auf jeden Fall dahingehend betrachtet werden sollte.
+
+\FlowProtocol steht unter der MIT Lizenz und ist unter 
 \begin{quote}
 \texttt{https://github.com/maier-san/FlowProtocol} 
 \end{quote}
 frei verfügbar.
-
+\par\vspace{7mm}
 Viel Freude beim Erstellen von Vorlagen und deren Anwendung!
 
+\newpage
 \section{Befehlsreferenz}
 \subsection{Grundlagen des Dateiaufbaus}
 Vorlagendateien können in einem beliebigen Texteditor erstellt werden. Die sehr einfache Sprache verlangt weder Syntax-Hervorhebung, noch Auto-Ergänzung, wobei letzteres bei dem von mir für das Windows-Betriebssystem empfohlenen Editor Notepad++ schon in einem sehr komfortablen Maße gegeben ist.
 Als Dateiendung für eine Vorlagendatei muss \glqq .qfp\grqq\  (Quick Flow Protocol) gewählt werden, damit die Datei über die Anwendung aufrufbar ist.
 
-Bei der Verwendung von Text mit Umlauten sollte darauf geachtet werden, dass diese innerhalb der Anwendung korrekt dargestellt werden. In meiner Umgebung war dies mit der Kodierung UFT-8 der Fall.
+Im Allgemeinen wird die Groß-Klein-Schreibung berücksichtigt, z.B. bei Schlüsseln, Befehlen und Variablen. Bei der Verwendung von Text mit Umlauten sollte darauf geachtet werden, dass diese innerhalb der Anwendung korrekt dargestellt werden. In meiner Umgebung war dies mit der Kodierung UFT-8 der Fall.
 
 Die Verschachtelung der Struktur wird durch Einrückung abgebildet. Hier kann wahlweise mit Tabulator- oder Leerzeichen gearbeitet werden, jedoch sollte dies einheitlich geschehen, da die Struktur bei einer Durchmischung unter Umständen nicht mehr korrekt aufgelöst wird. Die Anwendung ersetzt Tabulatorzeichen durch vier Leezeichen, unabhängig von ihrer Position.
 Die Interpretation einer Datei erfolgt zeilenweise, d.h. jeder Zeilenumbruch schließt einen Befehl ab. Der Einsatz von Zeilenumbrüchen zur Formatierung ist damit nicht möglich.
@@ -94,9 +113,9 @@ Wie soll \dq Hallo Welt\dq ausgegeben werden?
 \item Rückwärts
 \end{circlist}
 }
-Der Anwender kann und eine der drei Optionen wählen, und die Bearbeitung mit der Weiter-Taste fortsetzen, bzw.\ in diesem Fall abschließen. 
+Der Anwender kann und eine der drei Ant\-wort\-mög\-lich\-kei\-ten wählen, und die Bearbeitung mit der Weiter-Taste fortsetzen, bzw.\ in diesem Fall abschließen. 
 
-Wenn man zum Beispiel die zweite Option \glqq In Großbuchstaben\grqq\ , so sieht das Ergebnis wie folgt aus:
+Wenn man zum Beispiel die zweite Antwortmöglichkeit \glqq In Großbuchstaben\grqq\ , so sieht das Ergebnis wie folgt aus:
 \webbox{
 \webheadR{Vorlage Demo, 01 HalloWelt}
 \begin{numlist}
@@ -105,7 +124,6 @@ Wenn man zum Beispiel die zweite Option \glqq In Großbuchstaben\grqq\ , so sieht
 }
 
 \subsection{Beschreibungstexte}
-Syntax:
 \begin{verbatim}
 /// <Beschreibungstext>
 \end{verbatim}
@@ -115,14 +133,14 @@ Der angegebene Beschreibungstext wird bei der Darstellung von Fragen im Kopfbere
 Damit lässt sich einem oder mehreren Sätzen kurz beschreiben, wozu die Vorlage dient, zu welchem Zweck sie eingesetzt werden kann.
 
 \subsection{Kommentare}
-Syntax:
+\Syntax
 \begin{verbatim}
 // <Kommentar>
 \end{verbatim}
-Diese Kommentare werden bei der Verarbeitung durch die Anwendung vollständig ignoriert und dienen ausschließlich zur Kommentierung des Vorlagencodes.
+Diese Kommentare werden bei der Verarbeitung durch die Anwendung vollständig ignoriert und dienen ausschließlich zur Kommentierung des Vorlagencodes und werden bei der Ausführung ignoriert.
 
-\subsection{Frage mit Antwortmöglichkeit}
-Syntax:
+\subsection{Frage, Antworten und Ausgaben}
+\Syntax
 \begin{verbatim}
 ?<Frageschlüssel>: <Fragetext>
     #<Schlüssel Antwortmöglichkeit 1>: <Text Antwortmöglichkeit 1>
@@ -131,16 +149,16 @@ Syntax:
         >> <Text Ausgabe 2>
     . . .
 \end{verbatim}
-Das Kernelement der Vorlagen sind Fragen. Diese bestehen aus einem Frageschlüssel und einem Frage Text. Die Schlüssel für Fragen und Antwortmöglichkeiten werden verwendet, um die gegebenen Antworten innerhalb der URL zu verwalten. Sie dürfen nur aus Buchstaben und Zahlen bestehen und sollten möglichst kurz gewählt werden. Die Schlüssel der Fragen müssen über die komplette Vorlage eindeutig sein, die der Antworten nur innerhalb einer Frage.
+Das Kernelement der Vorlagen sind Fragen. Diese bestehen aus einem Frageschlüssel und einem Frage Text. Die Schlüssel für Fragen und Ant\-wort\-mög\-lich\-kei\-ten werden verwendet, um die gegebenen Antworten innerhalb der URL zu verwalten. Sie dürfen nur aus Buchstaben und Zahlen bestehen und sollten möglichst kurz gewählt werden. Die Schlüssel der Fragen müssen über die komplette Vorlage eindeutig sein, die der Antworten nur innerhalb einer Frage.
 
-An der Oberfläche dargestellt wird nur der Fragetext und die Texte der Antwortmöglichkeiten.
+An der Oberfläche dargestellt wird nur der Fragetext und die Texte der Ant\-wort\-mög\-lich\-kei\-ten.
 
-Durch\texttt{ >>} wird eine Ausgabe erzeugt, wenn die entsprechende Antwortmöglichkeit gewählt wurde. Die Ausgaben werden als nummerierte Liste zu einem Ergebnis zusammengefasst.
+Durch\texttt{ >>} wird ein Ausgabeeintrag erzeugt, wenn die entsprechende Antwortmöglichkeit gewählt wurde. Die Ausgaben werden als nummerierte Liste zu einem Ergebnis zusammengefasst.
 
 \subsection{Sequenzen}
-Mehrere Fragen können hintereinander aufgelistet werden. Diese werden standardmäßig untereinander auf einer Seite aufgelistet und können zusammen bearbeitet werden.
+Mehrere Fragen können hintereinander aufgelistet werden. Diese werden stan\-dard\-mä\-ßig untereinander auf einer Seite aufgelistet und können zusammen bearbeitet werden.
 
-Beispiel:
+\Beispiel
 \begin{verbatim}
 Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
@@ -173,7 +191,7 @@ Welcher Zusatz soll ergänzt werden?
 Die Benutzerführung erlaubt es, auch nur einen Teil der angezeigten Fragen zu beantworten und dann die Weiter-Schaltfläche zu betätigen. In diesem Fall werden die nicht beantworteten Fragen einfach auf der Folgeseite erneut angezeigt.
 
 \subsection{Verschachtelungen}
-Beispiel:
+\Beispiel
 \begin{verbatim}
 Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
@@ -181,7 +199,7 @@ Formatierte Hallo-Welt-Ausgabe
     #a1: Ganz normal
         >> Hallo Welt
     #a2: In Großbuchstaben
-        ?F1a: Soll "Hallo Welt" zusätzlich rückwärts ausgegeben werden?
+        ?F1a: Text zusätzlich rückwärts ausgeben?
             #j: Ja
                 >> TLEW OLLAH
             #n: Nein
@@ -189,7 +207,7 @@ Formatierte Hallo-Welt-Ausgabe
     #a3: Rückwärts
         >> tleW ollaH
 \end{verbatim}
-Die Darstellung ist zunächst identisch mit der des Ausgangsbeispiels. Die innere Frage wird erst und nur dann angezeigt, wenn in der ersten Ebene die Option \glqq In Großbuchstaben\grqq\  gewählt wird.
+Die Darstellung ist zunächst identisch mit der des Ausgangsbeispiels. Die innere Frage wird erst und nur dann angezeigt, wenn in der ersten Ebene die Antwortmöglichkeit \glqq In Großbuchstaben\grqq\  gewählt wird.
 \webbox{
 Soll \dq Hallo Welt\dq zusätzlich rückwärts ausgegeben werden?
 \begin{circlist}
@@ -199,13 +217,13 @@ Soll \dq Hallo Welt\dq zusätzlich rückwärts ausgegeben werden?
 }
 
 \subsection{Gruppierungen}
-Das Ergebnis einer Bearbeitung kann in vielen Fällen mehr als eine Liste sein. Eine Vorlage zur Analyse kann beispielsweise zum einen den ist-Stand erfassen, mögliche Lösungsansätze formulieren und die noch ausstehenden Analyse-Maßnahmen auflisten. Zu diesem Zweck können die Ausgaben in einer sehr einfachen Form kopiert werden.
+Das Ergebnis einer Bearbeitung kann in vielen Fällen mehr als eine Liste sein. Eine Vorlage zur Analyse kann beispielsweise zum einen den ist-Stand erfassen, mögliche Lösungsansätze formulieren und die noch ausstehenden Analyse-Maßnahmen Auf"|listen. Zu diesem Zweck können die Ausgaben in einer sehr einfachen Form kopiert werden.
 
-Syntax:
+\Syntax
 \begin{verbatim}
 >> <Gruppe> >> <Text Ausgabe>
 \end{verbatim}
-Beispiel:
+\Beispiel
 \begin{verbatim}
 Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
@@ -237,16 +255,16 @@ Die Alternativen
 \end{numlist}
 }
 \subsection{Unterpunkte}
-Ausgaben können je nach Vorlage selbst wieder Tätigkeiten oder Aufgaben beschreiben, die sich aus verschiedenen Schritten zusammensetzen, oder bei denen mehrere Teilaspekte zu berücksichtigen sind. Diese lassen sich in Form von Unterpunkten auflisten. Ein Unterpunkt, der mit der Protokollkennung \glqq https://\grqq\  beginnt und als Link erkannt wird, wird dabei in der Ausgabe als ausführbarer Link dargestellt.
+Ausgaben können je nach Vorlage selbst wieder Tätigkeiten oder Aufgaben beschreiben, die sich aus verschiedenen Schritten zusammensetzen, oder bei denen mehrere Teilaspekte zu berücksichtigen sind. Diese lassen sich in Form von Unterpunkten Auf"|listen. Ein Unterpunkt, der mit der Protokollkennung \glqq https://\grqq\  beginnt und als Link erkannt wird, wird dabei in der Ausgabe als ausführbarer Link dargestellt.
 
-Syntax:
+\Syntax
 \begin{verbatim}
 >> <Ausgabe Text>
 > <Unterpunkt Text 1>
     > <Unterpunkt Text 2>
     . . . 
 \end{verbatim}
-Beispiel:
+\Beispiel
 \begin{verbatim}
 Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
@@ -274,7 +292,7 @@ Wählt man die Antwortmöglichkeit \glqq In Großbuchstaben\grqq\ , so erhält man d
 \subsection{Wiederholungen}
 Eine Frage kann an anderer Stelle wiederholt gestellt werden. Ausschlaggebend dafür ist, dass der Schlüssel der Frage identisch mit einem bereits verwendeten Schlüssel ist. Ist die Antwort auf die Frage bei der Bearbeitung zu diesem Zeitpunkt bereits gegeben, so wird die Fragestellung nicht mehr angezeigt und direkt der jeweilige Antwortzweig verarbeitet. Wenn das aufgrund der Anordnung zwingend der Fall ist, können die Texte abgekürzt werden, da sie ja nicht ausgegeben werden. In diesem Fall empfiehlt es sich zur Verbesserung der Übersichtlichkeit, in den Texten kenntlich zu machen, dass es sich um eine Wiederholung handelt.
 
-Beispiel:
+\Beispiel
 \begin{verbatim}
 Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
@@ -295,16 +313,16 @@ Formatierte Hallo-Welt-Ausgabe
     #z2: "Ich grüße dich!"
         >> Ich grüße dich!
 \end{verbatim}
-Bei der Wiederholung einer Frage können auch nur Teile der ursprünglichen Antwortmöglichkeiten gegeben werden. Wird darunter die zuerst gegebene Antwort nicht gefunden, so wird keiner der Antwortzweige verarbeitet. Zur Vereinfachung kann jedoch mit dem Antwortschlüssel \texttt{\#x} eine Antwortmöglichkeit gegeben werden, die stellvertretend für alle anderen Antwortmöglichkeiten steht. Wird im obigen Beispiel also für F1 die Antwortmöglichkeit \texttt{\#a3} gewählt, so wird diese mit der Wiederholung der Frage dem Antwortschlüssel \texttt{\#x} zugeordnet.
+Bei der Wiederholung einer Frage können auch nur Teile der ursprünglichen Ant\-wort\-mög\-lich\-kei\-ten gegeben werden. Wird darunter die zuerst gegebene Antwort nicht gefunden, so wird keiner der Antwortzweige verarbeitet. Zur Vereinfachung kann jedoch mit dem Antwortschlüssel \texttt{\#x} eine Antwortmöglichkeit gegeben werden, die stellvertretend für alle anderen Ant\-wort\-mög\-lich\-kei\-ten steht. Wird im obigen Beispiel also für F1 die Antwortmöglichkeit \texttt{\#a3} gewählt, so wird diese mit der Wiederholung der Frage dem Antwortschlüssel \texttt{\#x} zugeordnet.
 
 \subsection{Implikationen}
 Die Antwort auf eine Frage kann in manchen Fällen die Antwort auf eine andere implizieren. Dies kann mit dem Implies-Befehl abgebildet werden.
 
-Syntax:
+\Syntax
 \begin{verbatim}
 ~Implies <Frageschlüssel 1>=<Antwortschlüssel 1>;  . . .
 \end{verbatim}
-Beispiel:
+\Beispiel
 \begin{verbatim}
 Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
@@ -327,15 +345,15 @@ Formatierte Hallo-Welt-Ausgabe
         >> Ich grüße dich!
 \end{verbatim}
 Bei Auswahl der Antwort \glqq In Großbuchstaben\grqq\  Frage \texttt{F1} wird für die Frage \texttt{F2a} die 
-Antwort \glqq Ja\grqq\  impliziert. Diese wird dann nicht mehr gestellt, sondern automatisch beantwortet. Im Falle der anderen Antwortmöglichkeiten wird keine Antwort impliziert, sodass die Frage \texttt{F2a} in diesem Fall ganz normal gestellt und verarbeitet wird.
+Antwort \glqq Ja\grqq\  impliziert. Diese wird dann nicht mehr gestellt, sondern automatisch beantwortet. Im Falle der anderen Ant\-wort\-mög\-lich\-kei\-ten wird keine Antwort impliziert, sodass die Frage \texttt{F2a} in diesem Fall ganz normal gestellt und verarbeitet wird.
 
 \subsection{Ausführungen}
 Bei längeren Sequenzen und insbesondere bei der Verwendung von Wiederholungen und Implikationen ist es wünschenswert, zunächst einen Teil der Fragen vollständig abzuarbeiten, bevor die Fragen aus dem nachfolgenden Teil angezeigt werden. Dies ist mit dem Execute-Befehl möglich.
-Syntax:
+\Syntax
 \begin{verbatim}
 ~Execute
 \end{verbatim}
-Beispiel:
+\Beispiel
 \begin{verbatim}
 Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
@@ -360,11 +378,11 @@ Vorlagen können mitunter sehr umfangreich und tief verschachtelt sein. Verwaltet
 
 Die Funktionsdatei muss auf der gleichen Ebene liegen wie die Vorlage, die sie aufruft und der Name darf nur aus Buchstaben und Ziffern bestehen.
 
-Syntax:
+\Syntax
 \begin{verbatim}
 ~Include <Name der Funktion>
 \end{verbatim}
-Beispiel:
+\Beispiel
 \begin{verbatim}
 Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
@@ -386,11 +404,11 @@ Neben der Erhöhung der Übersichtlichkeit hat die Verwendung von Funktionen viele
 \subsection{Parametrisiert Funktionen}
 Möchte man eine Funktion innerhalb einer Vorlage mehrfach ausführen, so stößt man auf das Problem, dass die dort eingetragenen Frage-Schlüssel für beide Aufrufe identisch sind, und so der zweite Aufruf automatisch die Antworten des ersten Aufrufs übernehmen würde. Zudem wäre die Anzeige der Fragen identisch, sodass man diese beim Beantworten nicht den jeweiligen Aufrufen zuordnen könnte. Und dieses Problem zu lösen, lassen sich Aufrufe parametrisieren.
 
-Syntax:
+\Syntax
 \begin{verbatim}
 ~Include <Name der Funktion> <Parameter 1>=<Wert 1>; . . .
 \end{verbatim}
-Beispiel:
+\Beispiel
 \begin{verbatim}
 Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
@@ -416,7 +434,7 @@ Es wird empfohlen die Parameter einer Funktion in Form von Kommentaren im Kopfbe
 
 Das obige Beispiel wird wie folgt angezeigt:
 \webbox{
-\webhead{Vorlage Demo, 01 HalloWelt}{Formatierte Hallo-Welt-Ausgabe}
+\webhead{Vorlage Demo, 10 Funktionen2}{Formatierte Hallo-Welt-Ausgabe}
 Wie soll Meine Welt begrüßt werden?
 \begin{circlist}
 \item Mit \dq Hallo\dq
@@ -435,11 +453,11 @@ Eine eindeutige Benennung der Schlüssel wäre auch automatisch möglich gewesen, j
 \subsection{Variablen}
 Variablen können auch unabhängig von Funktionsparametern gesetzt und in Fragen, Antworten und Ausgaben verwendet werden. 
 
-Syntax:
+\Syntax
 \begin{verbatim}
 ~Set <Variable 1>=<Wert 1>; <Variable 2>=<Wert 2>; . . .
 \end{verbatim}
-Beispiel:
+\Beispiel
 \begin{verbatim}
 Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
@@ -460,16 +478,17 @@ Formatierte Hallo-Welt-Ausgabe
     #n: Nein
 \end{verbatim}
 Wird eine Variable in einer Frage oder Antwort verwendet, sollte durch die Struktur sichergestellt werden, dass die Frage, die für das Setzen der Variablen zuständig ist, zuvor ausgeführt wurde. Dies kann z.B. mit dem oben beschriebenen Execute-Befehl geschehen.
-Additionen
-Über Variablen lassen sich auch einfache Additionen durchführen, beispielsweise um Kosten, Aufwände oder Komplexität zu ermitteln, die sich aus den gewählten Optionen zusammensetzen. Dies ist ebenfalls über den Set-Befehl möglich.
 
-Syntax:
+\subsection{Additionen}
+Über Variablen lassen sich auch einfache Additionen durchführen, beispielsweise um Kosten, Aufwände oder Komplexität zu ermitteln, die sich aus den gewählten Ant\-wort\-mög\-lich\-kei\-ten zusammensetzen. Dies ist ebenfalls über den Set-Befehl möglich.
+
+\Syntax
 \begin{verbatim}
 ~Set <Variable 1>+=<Inkrement 1>;  . . .
 \end{verbatim}
 Additionen und Variablenzuweisungen können auch im gleichen Set-Befehl gemischt werden. Bei ihrer ersten Verwendung in einer Addition wird der Variablen zuvor ein Wert von 0 zugewiesen. Hat eine Variable bei der Verwendung in einer Addition bereits einen Wert, der nicht als natürliche Zahl interpretierbar ist, so wird die Addition ignoriert.
 
-Beispiel:
+\Beispiel
 \begin{verbatim}
 Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
@@ -496,4 +515,111 @@ Formatierte Hallo-Welt-Ausgabe
     #n: Nein
 \end{verbatim}
 
+\subsection{Schleifen}
+In machen Fällen möchte man eine Funktion wiederholt für eine beliebige Menge an Elementen aufrufen. Dies ist möglich, indem man das Hochzählen von Variablen mit den Parameterzuweisungen eines rekursiven Funktionsaufrufes kombiniert.
+
+\Beispiel
+\begin{verbatim}
+/// Formatierte Hallo-Welt-Ausgabe
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Include HalloWelt3 weltindex=1; weltbezeichnung=Meine Welt
+\end{verbatim}
+Mit der Funktionsdatei HalloWelt3.qff
+\begin{verbatim}
+// Hallo-Welt-Funktion
+// Parameter $weltindex: Schlüsselindex
+?F$weltindex1: Wie soll Welt $weltindex begrüßt werden?
+    #a1: Mit "Hallo"
+        >> Hallo Welt $weltindex
+    #a2: Mit "Guten Morgen"
+        >> Guten Morgen Welt $weltindex
+    #a3: Mit Aloah
+        >> Aloah Welt $weltindex
+?F$weltindex2: Wollen Sie noch eine Welt erfassen?
+    #j: Ja
+        ~Set dummy=$weltindex; dummy+=1
+        ~Include HalloWelt3 weltindex=$dummy
+    #n: Nein
+\end{verbatim}
+Man beachte, dass Additionen wie im Set-Befehl in den Zuweisungen des Include-Befehls selbst nicht möglich sind, da Include-Parameter anders verarbeitet werden als Variablen.
+
+Das obige Beispiel wird wie folgt angezeigt:
+\webbox{
+\webhead{Vorlage Demo, 13 Schleifen}{Formatierte Hallo-Welt-Ausgabe}
+Wie soll Meine Welt begrüßt werden?
+\begin{circlist}
+\item Mit \dq Hallo\dq
+\item Mit \dq Guten Morgen\dq
+\item Mit \dq Aloah\dq 
+\end{circlist}
+Wollen Sie noch eine Welt erfassen?
+\begin{circlist}
+\item Ja
+\item Nein
+\end{circlist}
+}
+Wählt man nacheinander Antworten und bestätigt die zweite Frage in den ersten beiden Durchläufen mit ja, bekommt man ein Ergebnis wie folgt:
+\webbox{
+\webheadR{Ergebnisliste (Demo, 13 Schleifen)}
+\begin{numlist}
+\item Guten Morgen Welt 1
+\item Hallo Welt 2
+\item Aloah Welt 3
+\end{numlist}
+}
+\newpage
+\section{Fehlermeldungen}
+Die Möglichkeit, Vorlagen von Hand zu schreiben birgt ein gewisses Fehlerrisiko. Die Fehler werden bei der Ausführung weitestgehend erkannt und im Kopfbereich mit allen notwendigen Informationen angezeigt. 
+\Beispiel
+\begin{verbatim}
+/// Fehler-Beispiel
+//  Anwendungsbeispiel für die Befehlsreferenz
+#d: Hallo Fehler!
+~Tralala abc
+?F1: Ist ein Fehler schlimm?
+    #j: Ja
+        >> Stimmt, muss man korrigieren.
+    #n: Nein
+        >> Stimmt, Ausführung geht weiter.
+\end{verbatim}
+Der Aufruf dieser Vorlage führt direkt zur Anzeige der beiden Fehler:
+\webbox{
+\webhead{Vorlage Demo, 14 HalloFehler}{Fehler-Beispiel}
+\textbf{Hinweis:} Beim Ausführen der Vorlage sind Fehler aufgetreten. Bitte wenden Sie sich an den Autoren der Vorlage oder einen Administrator, um die Korrekturen zu veranlassen:
+\begin{numlist}
+\ZeigeFehlerItem{Fehler R04, Antwort kann keinem Fragekontext zugeordnet werden.}{Zeile 3}{FlowProtocol/Templates/Demo/14 HalloFehler.qfp}{\#d: Hallo Fehler!}
+\ZeigeFehlerItem{Fehler C02,Der Befehl Tralala ist nicht bekannt und kann nicht ausgeführt werden.}{Zeile 4}{FlowProtocol/Templates/Demo/14 HalloFehler.qfp}{\~{}Tralala abc}
+\end{numlist}
+\rule{\linewidth}{1pt}\\[3mm]
+Ist ein Fehler schlimm?
+\begin{circlist}
+\item Ja
+\item Nein
+\end{circlist}
+}
+Wie man erkennt, wird der nach dem Fehler stehende Vorlagencode trotz der Fehler interpretiert und ausgeführt, was die Notwendigkeit einer Korrektur natürlich nicht mindert.
+
+\subsection{Einlesefehler}
+Einlesefehler treten direkt beim Einlesen einer Vorlage- oder Funktionsdatei auf. Da Funktionsdateien erst bei Bedarf eingelesen werden, werden auch die darin enthaltenen Fehler erst angezeigt, wenn der entsprechende Zweig durchlaufen wird.
+\begin{description}
+\FehlerBeschreibungItem{R01}{Vorlagendatei nicht gefunden.} Kann auftreten, wenn eine als Lesezeichen gespeicherte URL auf eine nicht (mehr) vorhandene Vorlagendatei verweist, oder kein Lesezugriff auf das Verzeichnis besteht.
+\FehlerBeschreibungItem{R02}{Beschreibungskommentar auf untergeordneter Ebene wird ignoriert.} Tritt auf, wenn ein Beschreibungskommentar nicht auf oberster Ebene der Vorlage angegeben ist. Dieser wird ignoriert.
+\FehlerBeschreibungItem{R03}{Frage kann keinem Kontext zugeordnet werden.} Tritt auf, wenn eine Frage keinem Vorlagenkontext zugeordnet werden kann, wenn also die Struktur aus Fragen und Antworten unstimmig ist. Ursache kann eine fehlerhafte Einrückung sein, z.B.\ weil dabei Leerzeichen und Tabulatorzeichen gemischt wurden.
+\FehlerBeschreibungItem{R04}{Antwort kann keinem Fragekontext zugeordnet werden.} Tritt auf, wenn eine Antwort keinem Fragekontext zugeordnet werden kann, wenn also die Struktur aus Fragen und Antworten unstimmig ist. Ursache kann eine fehlerhafte Einrückung sein, z.B.\ weil dabei Leerzeichen und Tabulatorzeichen gemischt wurden.
+\FehlerBeschreibungItem{R05}{Gruppierter Ausgabeeintrag kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein gruppierter Ausgabeeintrag keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
+\FehlerBeschreibungItem{R06}{Ausgabeeintrag kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein nicht gruppierter Ausgabeeintrag keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
+\FehlerBeschreibungItem{R07}{Unterpunkt  kann keinen Ausgabeeintrag zugeordnet werden.} Tritt auf, wenn ein Unterpunkt für einen Ausgabeeintrag keinem Ausgabeeintrag zugeordnet werden kann. Unterpunkte müssen immer unmittelbar auf Ausgabeeinträge folgen und dürfen nicht durch Fragen und Antworten unterbrochen werden.
+\FehlerBeschreibungItem{R08}{Execute-Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn der Execute-Befehl keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
+\FehlerBeschreibungItem{R09}{Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein Befehl keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
+\FehlerBeschreibungItem{R10}{Zeile nicht interpretierbar} Tritt auf, wenn eine Zeile nicht als Anweisung interpretiert werden kann, sie also keiner innerhalb einer Vorlage bekannten Syntax entspricht.
+\end{description}
+
+\subsection{Ausführungsfehler}
+Ausführungsfehler treten im Zusammenhang mit der Ausführung von Befehlen auf und sind teilweise vom Ausführungsverlauf abhängig. Auch sie werden erst dann angezeigt, wenn der entsprechende Zweig durchlaufen wird.
+\begin{description}
+\FehlerBeschreibungItem{C00}{Beim Ausführen eines Befehls ist ein unbehandelter Fehler aufgetreten.} Tritt auf, wenn bei der Ausführung ein Fehler auftritt, der durch die Anwendung nicht weiter eingegrenzt werden konnte.
+\FehlerBeschreibungItem{C02}{Der Befehl $\dots$ ist nicht bekannt und kann nicht ausgeführt werden.} Tritt auf, wenn eine Befehlsanweisung keinem bekannten Befehl entspricht. Eine Abweichung in der Groß-Klein-Schreibung kann als Ursache ausgeschlossen werden.
+\FehlerBeschreibungItem{C03}{Die Funktionsdatei $\dots$ konnte nicht geladen werden.} Tritt auf, wenn in einem Include-Befehl angegebene Funktionsdatei nicht gefunden werden konnte.
+\FehlerBeschreibungItem{C04}{Der Wert der Variablen $\dots$ konnte nicht als ganze Zahl interpretiert werden.} Tritt auf, wenn für eine Variable im Set-Befehl ein Wert addiert werden soll, und diese zum entsprechenden Zeitpunkt einen nichtnumerischen Wert enthält.
+\end{description}
 \end{document}

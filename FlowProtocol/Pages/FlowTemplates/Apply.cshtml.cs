@@ -126,7 +126,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                 case "Implies": RunCmd_Implies(cmd); break;
                 case "Include": RunCmd_Include(cmd); break;
                 case "Set": RunCmd_Set(cmd); break;
-                default: AddCommandError($"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
+                default: AddCommandError("C02", $"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
             }
          }
       }
@@ -157,7 +157,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             Template? subTemplate = LoadTemplate(templateFileName, assignments);
             if (subTemplate == null)
             {
-               AddCommandError($"Die Datei {templateFileName} konnte nicht geladen werden.", cmd);
+               AddCommandError("C03", $"Die Funktionsdatei {templateFileName} konnte nicht geladen werden.", cmd);
                 return;
             }
             ExtractRestrictions(subTemplate);
@@ -186,13 +186,18 @@ namespace FlowProtocol.Pages.FlowTemplates
             {
                GlobalVars[a.Key] = (baseValue + a.Value).ToString();
             }
+            else
+            {
+                AddCommandError("C04", $"Der Wert der Variablen ${a.Key} konnte nicht als ganze Zahl interpretiert werden.", cmd);
+            }
          }
       }
 
       // Fügt einen Fehler beim ausführend eines Commandos hinzu
-      private void AddCommandError(string errorText, Command cmd)
+      private void AddCommandError(string errorCode, string errorText, Command cmd)
       {
          ReadErrorItem errorTemplate = cmd.ErrorTemplate;
+         errorTemplate.ErrorCode = errorCode;
          errorTemplate.ErrorText = errorText;
          ReadErrors.Add(errorTemplate);
       }

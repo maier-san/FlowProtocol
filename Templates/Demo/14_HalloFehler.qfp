@@ -1,0 +1,9 @@
+/// Fehler-Beispiel
+//  Anwendungsbeispiel für die Befehlsreferenz
+#d: Hallo Fehler!
+~Tralala abc
+?F1: Ist ein Fehler schlimm?
+	#j: Ja
+		>> Stimmt, muss man korrigieren.		
+	#n: Nein
+		>> Stimmt, Ausführung geht weiter.
