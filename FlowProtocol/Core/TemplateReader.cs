@@ -24,9 +24,9 @@ namespace FlowProtocol.Core
         public Template? ReadTemplate(string filepath, Dictionary<string, string>? assignments = null)
         {
             ReadErrors.Clear();
-            if (!File.Exists(filepath.Replace("\\","/"))) 
+            if (!File.Exists(filepath)) 
             {
-                AddReadError("Vorlagendatei nicht gefunden.", filepath.Replace("\\","/"), 0, string.Empty);
+                AddReadError("R01", "Vorlagendatei nicht gefunden.", filepath, 0, string.Empty);
                 return null;
             }
             Template main = new Template();
@@ -44,7 +44,7 @@ namespace FlowProtocol.Core
                 Regex regSubItem = new Regex("^>(.*)");
                 Regex regGroupedResultItem = new Regex("^>>(.*)>>(.*)");
                 Regex regResultItem = new Regex("^>>(.*)");
-                Regex regExecute = new Regex(@"^~Execute");
+                Regex regExecute = new Regex(@"^~Execute");   
                 Regex regCommand = new Regex(@"^~([A-Za-z0-9]*)\s*(.*)");                      
                 ResultItem? currentResultItem = null;
                 int linenumber = 0;
@@ -72,7 +72,7 @@ namespace FlowProtocol.Core
                                 {
                                     if (!string.IsNullOrWhiteSpace(main.Description)) 
                                     {
-                                        main.Description += "\n" + descriptionLine;
+                                        main.Description += Environment.NewLine + descriptionLine;
                                     }
                                     else 
                                     {
@@ -80,7 +80,7 @@ namespace FlowProtocol.Core
                                     }
                                 }
                             }
-                            else AddReadError("Beschreibungskommentar auf untergeordneter Ebene wird ignoriert.", filepath, linenumber, codeline);
+                            else AddReadError("R02", "Beschreibungskommentar auf untergeordneter Ebene wird ignoriert.", filepath, linenumber, codeline);
                         }
                         else if (regComment.IsMatch(codeline))
                         {
@@ -96,7 +96,7 @@ namespace FlowProtocol.Core
                                 parent.Restrictions.Add(r);
                                 ResttrictionStack.Push(new Tuple<int, Restriction>(indent, r));
                             }
-                            else AddReadError("Frage kann nicht zugeordnet werden.", filepath, linenumber, codeline);
+                            else AddReadError("R03", "Frage kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
                             currentResultItem = null;
                         }
                         else if (regOption.IsMatch(codeline))
@@ -109,7 +109,7 @@ namespace FlowProtocol.Core
                                 parent.Options.Add(o);
                                 TemplateStack.Push(new Tuple<int, Template>(indent, o));
                             }
-                            else AddReadError("Antwort kann nicht zugeordnet werden.", filepath, linenumber, codeline);
+                            else AddReadError("R04", "Antwort kann keinem Fragekontext zugeordnet werden.", filepath, linenumber, codeline);
                             currentResultItem = null;
                         }
                         else if (regGroupedResultItem.IsMatch(codeline))
@@ -122,7 +122,7 @@ namespace FlowProtocol.Core
                                 parent.ResultItems.Add(t);
                                 currentResultItem = t;
                             }
-                            else AddReadError("Gruppierter Ausgabeeintrag kann nicht zugeordnet werden.", filepath, linenumber, codeline);
+                            else AddReadError("R05", "Gruppierter Ausgabeeintrag kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
                         }
                         else if (regResultItem.IsMatch(codeline))
                         {
@@ -134,7 +134,7 @@ namespace FlowProtocol.Core
                                 parent.ResultItems.Add(t);
                                 currentResultItem = t;
                             }
-                            else AddReadError("Ausgabeeintrag kann nicht zugeordnet werden.", filepath, linenumber, codeline);
+                            else AddReadError("R06", "Ausgabeeintrag kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
                         }
                         else if (regSubItem.IsMatch(codeline))
                         {
@@ -143,7 +143,7 @@ namespace FlowProtocol.Core
                                 var m = regSubItem.Match(codeline);
                                 currentResultItem.SubItems.Add(m.Groups[1].Value.Trim());
                             }
-                            else AddReadError("Ergänzungseintrag kann keinen Ausgabeeintrag zugeordnet werden.", filepath, linenumber, codeline);
+                            else AddReadError("R07", "Unterpunkt kann keinen Ausgabeeintrag zugeordnet werden.", filepath, linenumber, codeline);
                         }
                         else if (regExecute.IsMatch(codeline))
                         {
@@ -154,7 +154,7 @@ namespace FlowProtocol.Core
                                 parent.FollowTemplate = t;                                
                                 TemplateStack.Push(new Tuple<int, Template>(indent, t));
                             }
-                            else AddReadError("Befehl kann nicht zugeordnet werden.", filepath, linenumber, codeline);                            
+                            else AddReadError("R08", "Execute-Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);                            
                             currentResultItem = null;
                         }
                         else if (regCommand.IsMatch(codeline))
@@ -162,9 +162,11 @@ namespace FlowProtocol.Core
                             Template? parent = GetMatchingParentTemplate(indent, TemplateStack);
                             if (parent != null)
                             {
+                                // Fehler-Objekt erstellen für den Fall, dass bei der späteren Ausführung ein Fehler auftritt.
                                 ReadErrorItem errortemplate =  new ReadErrorItem()
                                 {
-                                    ErrorText = "Beim Ausführend eines Kommandos ist ein Fehler aufgetreten", 
+                                    ErrorCode = "C01",
+                                    ErrorText = "Beim Ausführen eines Befehls ist ein unbehandelter Fehler aufgetreten.", 
                                     FilePath = filepath,
                                     LineNumber = linenumber,
                                     Codeline = codeline.Trim()
@@ -173,10 +175,10 @@ namespace FlowProtocol.Core
                                 Command c = new Command(errortemplate){ComandName = m.Groups[1].Value.Trim(), Arguments = m.Groups[2].Value.Trim()};
                                 parent.Commands.Add(c);
                             }
-                            else AddReadError("Befehl kann nicht zugeordnet werden.", filepath, linenumber, codeline);                            
+                            else AddReadError("R09", "Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);                            
                             currentResultItem = null;
                         }
-                        else AddReadError("Zeile nicht interpretierbar", filepath, linenumber, codeline);                        
+                        else AddReadError("R10", "Zeile nicht interpretierbar", filepath, linenumber, codeline);                        
                     }
                 }    
             }     
@@ -184,10 +186,11 @@ namespace FlowProtocol.Core
         }
 
         // Fügt einen Einlesefehler hinzu
-        private void AddReadError(string errorText, string filepath, int linenumber, string codeline)
+        private void AddReadError(string errorCode, string errorText, string filepath, int linenumber, string codeline)
         {
             ReadErrorItem rei =  new ReadErrorItem()
                 {
+                    ErrorCode = errorCode,
                     ErrorText = errorText, 
                     FilePath = filepath,
                     LineNumber = linenumber,
@@ -205,6 +208,7 @@ namespace FlowProtocol.Core
         private T? GetMatchingParent<T>(int indent, Stack<Tuple<int, T>> list) where T : class
         {
             T? ret = null;
+            if (!list.Any()) return null;
             Tuple<int, T> p = list.Peek();
             while (list.Any() && p.Item1 >= indent) 
             {

@@ -36,20 +36,21 @@ namespace FlowProtocol.Pages.FlowTemplates
       }
       public IActionResult OnGet(string template)
       {
-         string templateFileName = TemplatePath + "/" + template + ".qfp";
-         System.IO.FileInfo fi = new System.IO.FileInfo(templateFileName.Replace("\\","/"));
+         char separator = Path.DirectorySeparatorChar;
+         string templateFileName = TemplatePath + separator + template + ".qfp";
+         System.IO.FileInfo fi = new System.IO.FileInfo(templateFileName);
          if (fi == null || fi.DirectoryName == null)
          {
             return RedirectToPage("./NoTemplate");
          }
          TemplateDetailPath = fi.DirectoryName;
-         TemplateBreadcrumb = template.Replace("/", ", ").Replace("\\", ", ");
+         TemplateBreadcrumb = template.Replace(separator.ToString(), ", ");
          Template? currentTemplate = LoadTemplate(templateFileName);         
          if (currentTemplate == null)
          {
             return RedirectToPage("./NoTemplate");
          }
-         TemplateDescription = currentTemplate?.Description?.Split("\n").ToList();
+         TemplateDescription = currentTemplate?.Description?.Split(Environment.NewLine).ToList();
          if (currentTemplate != null) ExtractRestrictions(currentTemplate);
          return Page();
       }
@@ -125,7 +126,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                 case "Implies": RunCmd_Implies(cmd); break;
                 case "Include": RunCmd_Include(cmd); break;
                 case "Set": RunCmd_Set(cmd); break;
-                default: AddCommandError($"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
+                default: AddCommandError("C02", $"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
             }
          }
       }
@@ -150,12 +151,13 @@ namespace FlowProtocol.Pages.FlowTemplates
          {
             var m = regFileArgument.Match(arguments);                        
             string template= m.Groups[1].Value.Trim();
-            string templateFileName = TemplateDetailPath + "/" + template.Trim().Replace(".qff", string.Empty) + ".qff";
+            char separator = Path.DirectorySeparatorChar;
+            string templateFileName = TemplateDetailPath + separator + template.Trim().Replace(".qff", string.Empty) + ".qff";
             Dictionary<string, string> assignments = ReadAssignments(m.Groups[2].Value);
             Template? subTemplate = LoadTemplate(templateFileName, assignments);
             if (subTemplate == null)
             {
-               AddCommandError($"Die Datei {templateFileName} konnte nicht geladen werden.", cmd);
+               AddCommandError("C03", $"Die Funktionsdatei {templateFileName} konnte nicht geladen werden.", cmd);
                 return;
             }
             ExtractRestrictions(subTemplate);
@@ -184,13 +186,18 @@ namespace FlowProtocol.Pages.FlowTemplates
             {
                GlobalVars[a.Key] = (baseValue + a.Value).ToString();
             }
+            else
+            {
+                AddCommandError("C04", $"Der Wert der Variablen ${a.Key} konnte nicht als ganze Zahl interpretiert werden.", cmd);
+            }
          }
       }
 
       // Fügt einen Fehler beim ausführend eines Commandos hinzu
-      private void AddCommandError(string errorText, Command cmd)
+      private void AddCommandError(string errorCode, string errorText, Command cmd)
       {
          ReadErrorItem errorTemplate = cmd.ErrorTemplate;
+         errorTemplate.ErrorCode = errorCode;
          errorTemplate.ErrorText = errorText;
          ReadErrors.Add(errorTemplate);
       }

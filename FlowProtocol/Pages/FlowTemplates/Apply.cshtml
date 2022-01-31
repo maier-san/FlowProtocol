@@ -20,13 +20,13 @@
         }
         @if(Model.ReadErrors.Any())
         {
-            <p><strong>Hinweis:</strong> Bei Einlesen der Datei(en) wurden nachfolgende Fehler festgestellt. 
+            <p><strong>Hinweis:</strong> Beim Ausführen der Vorlage sind Fehler aufgetreten.
                 Bitte wenden Sie sich an den Autoren der Vorlage oder einen Administrator, um die Korrekturen zu veranlassen:</p>
                 <ol>
                     @foreach(var eitem in Model.ReadErrors)
                     {
                         <li>
-                            <strong>@eitem.ErrorText</strong><br />
+                            <strong>Fehler @eitem.ErrorCode,  @eitem.ErrorText</strong><br />
                             Zeile @eitem.LineNumber in <i>@eitem.FilePath</i><br />
                             <span style="color: #ff0000;">@eitem.Codeline</span>
                         </li>

@@ -7,6 +7,7 @@ namespace FlowProtocol.Pages
    {
       private readonly ILogger<IndexModel> _logger;
 
+
       public IndexModel(ILogger<IndexModel> logger)
       {
          _logger = logger;
@@ -14,7 +15,7 @@ namespace FlowProtocol.Pages
 
       public void OnGet()
       {
-
+         
       }
    }
 }
