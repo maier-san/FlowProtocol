@@ -12,7 +12,8 @@ namespace FlowProtocol.Core
         // Stack der übergeordnete Restriction-Ebenen zusammen mit ihrer Einrückung       
         private Stack<Tuple<int, Restriction>> ResttrictionStack = new Stack<Tuple<int, Restriction>>();
         // Fehler beim Einlesen
-        public List<ReadErrorItem> ReadErrors {get; private set;}
+        public List<ReadErrorItem> ReadErrors { get; private set; }
+        private int keyindex = 0;
        
         public TemplateReader()
         {
@@ -39,7 +40,7 @@ namespace FlowProtocol.Core
             {
                 Regex regDescription = new Regex("^///(.*)");
                 Regex regComment = new Regex("^//.*");
-                Regex regRestriction = new Regex(@"^\?([A-Za-z0-9]*):(.*)");
+                Regex regRestriction = new Regex(@"^\?([A-Za-z0-9]*[']?):(.*)");
                 Regex regOption = new Regex("^#([A-Za-z0-9]*):(.*)");
                 Regex regSubItem = new Regex("^>(.*)");
                 Regex regGroupedResultItem = new Regex("^>>(.*)>>(.*)");
@@ -92,7 +93,13 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regRestriction.Match(codeline);
-                                Restriction r = new Restriction(){Key = m.Groups[1].Value.Trim(), QuestionText = m.Groups[2].Value.Trim()};
+                                string key = m.Groups[1].Value.Trim();
+                                if (key.EndsWith("'"))
+                                {
+                                    keyindex++;
+                                    key = key.Replace("'","_" + keyindex.ToString());
+                                }
+                                Restriction r = new Restriction(){Key = key, QuestionText = m.Groups[2].Value.Trim()};
                                 parent.Restrictions.Add(r);
                                 ResttrictionStack.Push(new Tuple<int, Restriction>(indent, r));
                             }
