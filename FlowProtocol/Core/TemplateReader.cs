@@ -35,7 +35,7 @@ namespace FlowProtocol.Core
                 assignments = new Dictionary<string, string>();
             }
             TemplateStack.Push(new Tuple<int, Template>(-1, main));
-            using (StreamReader sr = new StreamReader(filepath.Replace("\\","/")))
+            using (StreamReader sr = new StreamReader(filepath))
             {
                 Regex regDescription = new Regex("^///(.*)");
                 Regex regComment = new Regex("^//.*");
