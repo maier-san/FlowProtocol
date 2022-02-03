@@ -1,7 +1,7 @@
 using FlowProtocol.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
+using System.Web;
 using System.Text.RegularExpressions;
 
 namespace FlowProtocol.Pages.FlowTemplates
@@ -36,15 +36,16 @@ namespace FlowProtocol.Pages.FlowTemplates
       }
       public IActionResult OnGet(string template)
       {
+         string templateDec = HttpUtility.UrlDecode(template);
          char separator = Path.DirectorySeparatorChar;
-         string templateFileName = TemplatePath + separator + template + ".qfp";
+         string templateFileName = TemplatePath + separator + templateDec + ".qfp";
          System.IO.FileInfo fi = new System.IO.FileInfo(templateFileName);
          if (fi == null || fi.DirectoryName == null)
          {
             return RedirectToPage("./NoTemplate");
          }
          TemplateDetailPath = fi.DirectoryName;
-         TemplateBreadcrumb = template.Replace(separator.ToString(), ", ");
+         TemplateBreadcrumb = templateDec.Replace(separator.ToString(), ", ");
          Template? currentTemplate = LoadTemplate(templateFileName);         
          if (currentTemplate == null)
          {
