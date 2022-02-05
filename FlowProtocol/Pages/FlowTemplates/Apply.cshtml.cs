@@ -1,4 +1,5 @@
 using FlowProtocol.Core;
+using FlowProtocol.SpecialCommands;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Web;
@@ -62,7 +63,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       /// <param name="t">Die aktuelle Template-Ebene</param>
       private void ExtractRestrictions(Template t)
       {
-         RunCommand(t.Commands);
+         RunCommand(t.Commands, ref t);
          AddResultItems(t.ResultItems);          
          foreach (var r in t.Restrictions)
          {
@@ -117,17 +118,27 @@ namespace FlowProtocol.Pages.FlowTemplates
       }
 
       // Führt die Laufzeitbefehle aus
-      private void RunCommand(List<Command> commandlist)
+      private void RunCommand(List<Command> commandlist, ref Template t)
       {
          foreach(var cmd in commandlist)
          {
             cmd.ApplyTextOperation(ReplaceGlobalVars);
+            ISpecialCommand? sc = null;
             switch (cmd.ComandName)
             {
                 case "Implies": RunCmd_Implies(cmd); break;
                 case "Include": RunCmd_Include(cmd); break;
                 case "Set": RunCmd_Set(cmd); break;
+                case "Vote": sc = new VoteCommand() ; break;
                 default: AddCommandError("C02", $"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
+            }
+            if (sc != null)
+            {
+               List<ResultItem> erg = sc.RunCommand(cmd, ref t, SelectedOptions, ReadErrors.Add);
+               if (erg != null)
+               {
+                  t.ResultItems.AddRange(erg);
+               }
             }
          }
       }
