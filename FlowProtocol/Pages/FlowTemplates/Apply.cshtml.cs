@@ -134,7 +134,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             }
             if (sc != null)
             {
-               List<ResultItem> erg = sc.RunCommand(cmd, ref t, SelectedOptions, ReadErrors.Add);
+               List<ResultItem> erg = sc.RunCommand(cmd, t, SelectedOptions, ReadErrors.Add);
                if (erg != null)
                {
                   t.ResultItems.AddRange(erg);
