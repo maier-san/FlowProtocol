@@ -12,6 +12,7 @@ namespace FlowProtocol.Pages.FlowTemplates
         
         public ObjectArray<string> UserGroupArray {get; set; }        
         public string TemplatePath { get; set; }
+        public bool TemplatePathFound { get; set; }
                 
         public UserGroupsModel(IConfiguration configuration)
         {
@@ -21,9 +22,13 @@ namespace FlowProtocol.Pages.FlowTemplates
         
         public void OnGet()
         {
-            DirectoryInfo di = new DirectoryInfo(TemplatePath);
-            List<string> userGroups = di.GetDirectories().Select(x => x.Name).Where(x=>!x.StartsWith(".")).OrderBy(x=>x).ToList();
-            UserGroupArray.ReadList(userGroups);
+            TemplatePathFound = Directory.Exists(TemplatePath);
+            if (TemplatePathFound)
+            {
+                DirectoryInfo di = new DirectoryInfo(TemplatePath);
+                List<string> userGroups = di.GetDirectories().Select(x => x.Name).Where(x=>!x.StartsWith(".")).OrderBy(x=>x).ToList();
+                UserGroupArray.ReadList(userGroups);
+            }                    
         }
     } 
 }
