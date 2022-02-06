@@ -8,9 +8,10 @@ namespace FlowProtocol.SpecialCommands
         public List<ResultItem> RunCommand(Command cmd, Template template, Dictionary<string, string> selectedOptions, Action<ReadErrorItem> addError)
         {
             Restriction? res = GetRestriction(cmd, template, addError);
-            int groupsize = GetParameter(cmd, "GroupSize", 3, addError);
+            int groupsize = GetIntParameter(cmd, "GroupSize", 3, addError);
+            string groupname = GetTextParameter(cmd, "GroupName", "Ergebnis");
             Dictionary<Option, int> votingsum = SetCrossTemplates(template, res, groupsize, selectedOptions);
-            List<ResultItem> result = CreateResultlist(votingsum);
+            List<ResultItem> result = CreateResultlist(votingsum, groupname);
             return result;
        }
 
@@ -24,14 +25,14 @@ namespace FlowProtocol.SpecialCommands
             {
                 string key = match.Groups[1].Value.Trim();
                 res = template.Restrictions.Find(t => t.Key == key);
-                if (res == null) CreateError(addError, "V02", $"Frage-Schlüssel {key} nicht gefunden", cmd);                
+                if (res == null) CreateError(addError, "V02", $"Frageschlüssel {key} nicht gefunden.", cmd);                
             }
-            else CreateError(addError, "V01", "Vote-Befehl ohne Key-Argument", cmd);
+            else CreateError(addError, "V01", "Vote-Befehl ohne Key-Argument.", cmd);
             return res;
-       }
+        }
 
-       private int GetParameter(Command cmd, string name, int defaultvalue, Action<ReadErrorItem> addError)
-       {
+        private int GetIntParameter(Command cmd, string name, int defaultvalue, Action<ReadErrorItem> addError)
+        {
             int ret = defaultvalue;
             Regex reg = new Regex(name + "=([0-9]*)");
             string arguments = cmd.Arguments;
@@ -43,11 +44,24 @@ namespace FlowProtocol.SpecialCommands
                 if (!ok)
                 {
                     ret = defaultvalue;
-                    CreateError(addError, "V03", $"Vote-Befehl ohne gültiges {name}-Argument", cmd);
+                    CreateError(addError, "V03", $"Vote-Befehl ohne gültiges {name}-Argument.", cmd);
                 }
             }
             return ret;
-       }
+        }    
+
+        private string GetTextParameter(Command cmd, string name, string defaultvalue)
+        {
+            string ret = defaultvalue;
+            Regex reg = new Regex(name + "=(.*);");
+            string arguments = cmd.Arguments;
+            Match match = reg.Match(arguments);
+            if (match.Success)
+            {
+                ret = match.Groups[1].Value.Trim();
+            }
+            return ret;
+        }
 
        private Dictionary<Option, int> SetCrossTemplates(Template template, Restriction? res, int groupsize, Dictionary<string, string> selectedOptions)
        {           
@@ -66,7 +80,7 @@ namespace FlowProtocol.SpecialCommands
                {
                    if (string.Compare(i1.Key, i2.Key) < 0)
                    {
-                       Restriction ncres = new Restriction(){Key = i1.Key + i2.Key, QuestionText = res.QuestionText};
+                       Restriction ncres = new Restriction(){Key = res.Key + "_" + i1.Key + i2.Key, QuestionText = res.QuestionText};
                        ncres.Options.Add(new Option(){Key = i1.Key, OptionText = i1.OptionText});
                        ncres.Options.Add(new Option(){Key = i2.Key, OptionText = i2.OptionText});                    
                        if (selectedOptions.ContainsKey(ncres.Key))
@@ -92,7 +106,7 @@ namespace FlowProtocol.SpecialCommands
            return votingsum;
        }
 
-       private List<ResultItem> CreateResultlist(Dictionary<Option, int> votingsum)
+       private List<ResultItem> CreateResultlist(Dictionary<Option, int> votingsum, string groupname)
        {
             List<ResultItem> result = new List<ResultItem>();
             int ranking = 0;
@@ -106,7 +120,7 @@ namespace FlowProtocol.SpecialCommands
                 }
                 ResultItem ri = new ResultItem()
                 {
-                        ResultItemGroup = "Ergebnis", 
+                        ResultItemGroup = groupname, 
                         ResultItemText = $"Platz {ranking} ({idx.Value} Punkte) {idx.Key.OptionText}"
                 };
                 result.Add(ri);

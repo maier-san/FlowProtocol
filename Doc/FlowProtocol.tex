@@ -503,13 +503,11 @@ Wird eine Variable in einer Frage oder Antwort verwendet, sollte durch die Struk
 
 \subsection{Additionen}
 Über Variablen lassen sich auch einfache Additionen durchführen, beispielsweise um Kosten, Aufwände oder Komplexität zu ermitteln, die sich aus den gewählten Ant\-wort\-mög\-lich\-kei\-ten zusammensetzen. Dies ist ebenfalls über den Set-Befehl möglich.
-
 \Syntax
 \begin{verbatim}
 ~Set <Variable 1>+=<Inkrement 1>;  . . .
 \end{verbatim}
 Additionen und Variablenzuweisungen können auch im gleichen Set-Befehl gemischt werden. Bei ihrer ersten Verwendung in einer Addition wird der Variablen zuvor ein Wert von 0 zugewiesen. Hat eine Variable bei der Verwendung in einer Addition bereits einen Wert, der nicht als natürliche Zahl interpretierbar ist, so wird die Addition ignoriert.
-
 \Beispiel
 \begin{verbatim}
 /// Formatierte Hallo-Welt-Ausgabe
@@ -643,5 +641,61 @@ Ausführungsfehler treten im Zusammenhang mit der Ausführung von Befehlen auf und
 \FehlerBeschreibungItem{C02}{Der Befehl $\dots$ ist nicht bekannt und kann nicht ausgeführt werden.} Tritt auf, wenn eine Befehlsanweisung keinem bekannten Befehl entspricht. Eine Abweichung in der Groß-Klein-Schreibung kann als Ursache ausgeschlossen werden.
 \FehlerBeschreibungItem{C03}{Die Funktionsdatei $\dots$ konnte nicht geladen werden.} Tritt auf, wenn in einem Include-Befehl angegebene Funktionsdatei nicht gefunden werden konnte.
 \FehlerBeschreibungItem{C04}{Der Wert der Variablen $\dots$ konnte nicht als ganze Zahl interpretiert werden.} Tritt auf, wenn für eine Variable im Set-Befehl ein Wert addiert werden soll, und diese zum entsprechenden Zeitpunkt einen nichtnumerischen Wert enthält.
+\end{description}
+\newpage
+\section{Spezialbefehle}
+Spezialbefehle sind spezielle Befehle, die die Struktur einer Vorlage verändern, und die darauf erfolgten Eingaben in eigener Weise interpretieren und zu einem Ergebnis umsetzen können.
+
+\subsection{Rangfolgenbestimmung}
+Die Rangfolgenbestimmung ist die Implementierung einer Methode, bei der man eine Rangfolge von Dingen wie z.B. Projekten dadurch bestimmt, dass man diese paarweise vergleicht. Bei jedem Vergleich bekommt der Gewinner einen Punkt und am Ende sortiert man die Einträge entsprechend ihrer Punktezahl. Die Reduzierung auf 2er-Vergleiche vereinfacht zwar die Entscheidung pro Frage, macht die Beantwortung jedoch auch deutlich umfangreicher. Für $n$ Elemente ergeben sich $\frac{n(n-1)}{2}$ Einzelfragen, also für $n=8$ also schon 28 Fragen.
+\Syntax
+\begin{verbatim}
+~Vote Key=<F-Schlüssel>; [GroupSize=<G-Größe>;] [GroupName=<G-Name>;]
+\end{verbatim}
+Zu beachten ist, dass die \texttt{GroupName}-Angabe mit Strichpunkt abgeschlossen werden muss.
+\Beispiel
+\begin{verbatim}
+/// Es wird eine Rangfolgenbestimmung durchgeführt
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Vote Key=V; GroupSize=3; GroupName=Die besten Welten;
+?V: Welche Welt gefällt dir besser?
+    #w1: Waldwelt
+    #w2: Wasserwelt
+    #w3: Bergwelt
+\end{verbatim}
+Der Aufruf dieser Vorlage führt dazu, dass die Frage mit dem Schlüssel \texttt{V} zu einer Reihe von Einzelfragen umgestaltet wird. Genauer: Die Frage wird für jede der drei 2er-Kombinationen abgefragt. Die Fragen werden zur 3er-Gruppen zusammengefasst, was hier eine Gruppe ergibt. Das Ergebnis wird unter der Gruppenüberschrift \textit{Die besten Welten} aufgelistet. 
+\webbox{
+\webhead{Vorlage Demo, 16 Vote}{Es wird eine Abstimmungsbewertung durchgeführt}
+Welche Welt gefällt dir besser? 
+\begin{circlist}
+\item Waldwelt
+\item Wasserwelt
+\end{circlist}
+Welche Welt gefällt dir besser? 
+\begin{circlist}
+\item Waldwelt
+\item Bergwelt
+\end{circlist}
+Welche Welt gefällt dir besser? 
+\begin{circlist}
+\item Wasserwelt
+\item Bergwelt
+\end{circlist}
+}
+Das Ergebnis wird dann wie folgt präsentiert:
+\webbox{
+\webheadR{Ergebnisliste (Demo, 16 Vote)}\\[3mm]
+Die besten Welten
+\begin{numlist}
+\item Platz 1 (2 Punkte) Bergwelt
+\item Platz 2 (1 Punkte) Waldwelt
+\item Platz 3 (0 Punkte) Wasserwelt
+\end{numlist}
+}
+\subsubsection*{Mögliche Fehlermeldungen}
+\begin{description}
+\FehlerBeschreibungItem{V01}{Vote-Befehl ohne Key-Argument.} Tritt auf, wenn das zwingende \texttt{Key}-Argument nicht angegeben wurde.
+\FehlerBeschreibungItem{V02}{Frageschlüssel $\dots$ nicht gefunden.} Tritt auf, wenn der über das \texttt{Key}-Argument angegebene Frageschlüsselnicht angegeben wurde.
+\FehlerBeschreibungItem{V03}{Vote-Befehl ohne gültiges $\dots$-Argument.} Tritt auf, wenn ein ungültiger Parameterwert angegeben wurde, z.B.\ eine \texttt{GroupSize}-Angabe, die nicht als Zahl interpretiert werden kann.
 \end{description}
 \end{document}

@@ -25,3 +25,5 @@
 \contentsline {section}{\numberline {3}Fehlermeldungen}{19}{}%
 \contentsline {subsection}{\numberline {3.1}Einlesefehler}{20}{}%
 \contentsline {subsection}{\numberline {3.2}Ausf\"uhrungsfehler}{21}{}%
+\contentsline {section}{\numberline {4}Spezialbefehle}{22}{}%
+\contentsline {subsection}{\numberline {4.1}Rangfolgenbestimmung}{22}{}%
