@@ -7,12 +7,11 @@ namespace FlowProtocol.SpecialCommands
    {
         public List<ResultItem> RunCommand(Command cmd, Template template, Dictionary<string, string> selectedOptions, Action<ReadErrorItem> addError)
         {
-            List<ResultItem> ril = new List<ResultItem>();
             Restriction? res = GetRestriction(cmd, template, addError);
             int groupsize = GetParameter(cmd, "GroupSize", 3, addError);
-            SetCrossTemplates(template, res, groupsize);
-            
-            return ril;
+            Dictionary<Option, int> votingsum = SetCrossTemplates(template, res, groupsize, selectedOptions);
+            List<ResultItem> result = CreateResultlist(votingsum);
+            return result;
        }
 
        private Restriction? GetRestriction(Command cmd, Template template, Action<ReadErrorItem> addError)
@@ -50,12 +49,17 @@ namespace FlowProtocol.SpecialCommands
             return ret;
        }
 
-       private void SetCrossTemplates(Template template, Restriction? res, int groupsize)
-       {
-           if (res == null) return;
+       private Dictionary<Option, int> SetCrossTemplates(Template template, Restriction? res, int groupsize, Dictionary<string, string> selectedOptions)
+       {           
            Template t = template;
            Template? orgfollow = template.FollowTemplate;
+           Dictionary<Option, int> votingsum = new Dictionary<Option, int>();
+           if (res == null) return votingsum;
            int groupcount = 0;
+           foreach (var idx in res.Options)
+           {
+               votingsum[idx] = 0;
+           }
            foreach (var i1 in res.Options)
            {
                foreach(var i2 in res.Options)
@@ -64,7 +68,14 @@ namespace FlowProtocol.SpecialCommands
                    {
                        Restriction ncres = new Restriction(){Key = i1.Key + i2.Key, QuestionText = res.QuestionText};
                        ncres.Options.Add(new Option(){Key = i1.Key, OptionText = i1.OptionText});
-                       ncres.Options.Add(new Option(){Key = i2.Key, OptionText = i2.OptionText});                       
+                       ncres.Options.Add(new Option(){Key = i2.Key, OptionText = i2.OptionText});                    
+                       if (selectedOptions.ContainsKey(ncres.Key))
+                       {
+                            Option? winner = null;
+                            if (selectedOptions[ncres.Key] == i1.Key) winner = i1;
+                            else if (selectedOptions[ncres.Key] == i2.Key) winner = i2;
+                            if (winner != null) votingsum[winner]++;
+                       }
                        if (groupcount >= groupsize)
                        {
                            t.FollowTemplate = new Template();
@@ -78,6 +89,29 @@ namespace FlowProtocol.SpecialCommands
            }
            template.Restrictions.Remove(res);
            t.FollowTemplate = orgfollow;
+           return votingsum;
+       }
+
+       private List<ResultItem> CreateResultlist(Dictionary<Option, int> votingsum)
+       {
+            List<ResultItem> result = new List<ResultItem>();
+            int ranking = 0;
+            int previousvalue = -1;
+            foreach(var idx in votingsum.OrderBy(x => -x.Value))
+            {
+                if (previousvalue < 0 || idx.Value < previousvalue)
+                {
+                    ranking++;
+                    previousvalue = idx.Value;
+                }
+                ResultItem ri = new ResultItem()
+                {
+                        ResultItemGroup = "Ergebnis", 
+                        ResultItemText = $"Platz {ranking} ({idx.Value} Punkte) {idx.Key.OptionText}"
+                };
+                result.Add(ri);
+            }
+            return result;
        }
 
        private void CreateError(Action<ReadErrorItem> addError, string errorCode, string errorText, Command cmd)
