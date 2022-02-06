@@ -1,7 +1,10 @@
 /// Es wird eine Abstimmungsbewertung durchgeführt
 //  Anwendungsbeispiel für die Befehlsreferenz
-~Vote Key=V1
+~Vote Key=V1 GroupSize=4
 ?V1: Welche Welt gefällt dir besser?
 	#w1: Waldwelt
 	#w2: Wasserwelt
 	#w3: Bergwelt
+	#w4: Schneewelt
+	#w5: Seewelt
+	#w6: Schlammwelt
