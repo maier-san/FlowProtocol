@@ -220,14 +220,18 @@ namespace FlowProtocol.Pages.FlowTemplates
          Dictionary<string, string> assignments = new Dictionary<string, string>();
          if (!string.IsNullOrWhiteSpace(varExpression))
          {                   
-               Regex regSetAssignment = new Regex(@"([A-Za-z0-9]*)=(.*)");               
+               Regex regSetAssignment = new Regex(@"^([A-Za-z0-9]*)=(.*)");               
                foreach(var idx in varExpression.Split(";"))
                {
                   string assignment = idx.Trim();
                   if (regSetAssignment.IsMatch(assignment))
                   {
                      var m = regSetAssignment.Match(assignment);
-                     assignments[m.Groups[1].Value.Trim()] = m.Groups[2].Value.Trim();
+                     string key = m.Groups[1].Value.Trim();
+                     if (!string.IsNullOrWhiteSpace(key))
+                     {
+                        assignments[key] = m.Groups[2].Value.Trim();
+                     }
                   }
                }
          }
@@ -240,7 +244,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          Dictionary<string, int> assignments = new Dictionary<string, int>();
          if (!string.IsNullOrWhiteSpace(varExpression))
          {
-            Regex regAddAssignment = new Regex(@"([A-Za-z0-9]*)\+=([0-9]*)");                         
+            Regex regAddAssignment = new Regex(@"^([A-Za-z0-9]*)\+=([0-9]*)");                         
             foreach(var idx in varExpression.Split(";"))
             {
                string assignment = idx.Trim();
@@ -249,10 +253,11 @@ namespace FlowProtocol.Pages.FlowTemplates
                   var m = regAddAssignment.Match(assignment);                     
                   
                   int incValue = 0;
-                  bool incOK = int.TryParse(m.Groups[2].Value.Trim(), out  incValue);
-                  if (incOK)
+                  string key = m.Groups[1].Value.Trim();
+                  bool incOK = int.TryParse(m.Groups[2].Value.Trim(), out  incValue);                  
+                  if (!string.IsNullOrWhiteSpace(key) && incOK)
                   {
-                     assignments[m.Groups[1].Value.Trim()] = incValue;
+                     assignments[key] = incValue;
                   }
                }                  
             }
