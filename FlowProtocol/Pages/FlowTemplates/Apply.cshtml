@@ -49,8 +49,8 @@
                     @foreach (var idx in r.Options)
                     {
                         <div class="formbuilder-radio">
-                            <input value="@idx.Key" type="radio" asp-for="SelectedOptions[r.Key]" id="@idx.Key">
-                            <label for="@idx.Key">@idx.OptionText</label>
+                            <input value="@idx.Key" type="radio" asp-for="SelectedOptions[r.Key]" id="@idx.UniqueKey">
+                            <label for="@idx.UniqueKey">@idx.OptionText</label>
                         </div>
                     }
                 </div>

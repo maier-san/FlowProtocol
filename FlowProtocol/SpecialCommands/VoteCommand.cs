@@ -81,8 +81,8 @@ namespace FlowProtocol.SpecialCommands
                    if (string.Compare(i1.Key, i2.Key) < 0)
                    {
                        Restriction ncres = new Restriction(){Key = res.Key + "_" + i1.Key + i2.Key, QuestionText = res.QuestionText};
-                       ncres.Options.Add(new Option(){Key = i1.Key, OptionText = i1.OptionText});
-                       ncres.Options.Add(new Option(){Key = i2.Key, OptionText = i2.OptionText});                    
+                       ncres.Options.Add(new Option(ncres.Key){Key = i1.Key, OptionText = i1.OptionText});
+                       ncres.Options.Add(new Option(ncres.Key){Key = i2.Key, OptionText = i2.OptionText});                    
                        if (selectedOptions.ContainsKey(ncres.Key))
                        {
                             Option? winner = null;
