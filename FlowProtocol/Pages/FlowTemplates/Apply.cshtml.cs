@@ -129,7 +129,8 @@ namespace FlowProtocol.Pages.FlowTemplates
                 case "Implies": RunCmd_Implies(cmd); break;
                 case "Include": RunCmd_Include(cmd); break;
                 case "Set": RunCmd_Set(cmd); break;
-                case "Vote": sc = new VoteCommand() ; break;
+                case "Vote": sc = new VoteCommand(); break;
+                case "Cite": sc = new CiteCommand(); break;
                 default: AddCommandError("C02", $"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
             }
             if (sc != null)
@@ -293,7 +294,7 @@ namespace FlowProtocol.Pages.FlowTemplates
 
       public bool IsURL(string text)
       {
-         return text.StartsWith("http://") && Uri.IsWellFormedUriString(text, UriKind.RelativeOrAbsolute);
+         return (text.StartsWith("https://") || text.StartsWith("http://")) && Uri.IsWellFormedUriString(text, UriKind.RelativeOrAbsolute);
       }
    }
 }
