@@ -1,6 +1,6 @@
-/// Der Textbaustein "Hallo Welt" wird in einer Form deiner Wahl ausgegeben
+/// Es wird gefragt, wie  "Hallo Welt" ausgegeben werden soll
 //  Anwendungsbeispiel für die Befehlsreferenz
-~Cite Group=Antwortprotokoll
+~Cite GroupName=Antwortprotokoll
 ?F1: Wie soll "Hallo Welt" ausgegeben werden?
 	#a1: Ganz normal
 	#a2: In Großbuchstaben

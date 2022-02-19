@@ -1,5 +1,4 @@
 using FlowProtocol.Core;
-using System.Text.RegularExpressions;
 
 namespace FlowProtocol.SpecialCommands
 {
@@ -7,61 +6,13 @@ namespace FlowProtocol.SpecialCommands
    {
         public List<ResultItem> RunCommand(Command cmd, Template template, Dictionary<string, string> selectedOptions, Action<ReadErrorItem> addError)
         {
-            Restriction? res = GetRestriction(cmd, template, addError);
-            int groupsize = GetIntParameter(cmd, "GroupSize", 3, addError);
-            string groupname = GetTextParameter(cmd, "GroupName", "Ergebnis");
+            Restriction? res = CommandHelper.GetRestriction(cmd, "Key", template, addError);
+            int groupsize = CommandHelper.GetIntParameter(cmd, "GroupSize", 3, addError, false);
+            string groupname = CommandHelper.GetTextParameter(cmd, "GroupName", "Ergebnis", addError, false);
             Dictionary<Option, int> votingsum = SetCrossTemplates(template, res, groupsize, selectedOptions);
             List<ResultItem> result = CreateResultlist(votingsum, groupname);
             return result;
        }
-
-       private Restriction? GetRestriction(Command cmd, Template template, Action<ReadErrorItem> addError)
-       {
-            Restriction? res = null;
-            Regex regTemplateKey = new Regex(@"Key=([A-Za-z0-9]*)");
-            string arguments = cmd.Arguments;
-            Match match = regTemplateKey.Match(arguments);
-            if (match.Success)
-            {
-                string key = match.Groups[1].Value.Trim();
-                res = template.Restrictions.Find(t => t.Key == key);
-                if (res == null) CreateError(addError, "V02", $"Frageschlüssel {key} nicht gefunden.", cmd);                
-            }
-            else CreateError(addError, "V01", "Vote-Befehl ohne Key-Argument.", cmd);
-            return res;
-        }
-
-        private int GetIntParameter(Command cmd, string name, int defaultvalue, Action<ReadErrorItem> addError)
-        {
-            int ret = defaultvalue;
-            Regex reg = new Regex(name + "=([0-9]*)");
-            string arguments = cmd.Arguments;
-            Match match = reg.Match(arguments);
-            if (match.Success)
-            {
-                string value = match.Groups[1].Value.Trim();
-                bool ok = int.TryParse(value, out ret);
-                if (!ok)
-                {
-                    ret = defaultvalue;
-                    CreateError(addError, "V03", $"Vote-Befehl ohne gültiges {name}-Argument.", cmd);
-                }
-            }
-            return ret;
-        }    
-
-        private string GetTextParameter(Command cmd, string name, string defaultvalue)
-        {
-            string ret = defaultvalue;
-            Regex reg = new Regex(name + "=(.*);");
-            string arguments = cmd.Arguments;
-            Match match = reg.Match(arguments);
-            if (match.Success)
-            {
-                ret = match.Groups[1].Value.Trim();
-            }
-            return ret;
-        }
 
        private Dictionary<Option, int> SetCrossTemplates(Template template, Restriction? res, int groupsize, Dictionary<string, string> selectedOptions)
        {           
@@ -126,14 +77,6 @@ namespace FlowProtocol.SpecialCommands
                 result.Add(ri);
             }
             return result;
-       }
-
-       private void CreateError(Action<ReadErrorItem> addError, string errorCode, string errorText, Command cmd)
-       {
-            ReadErrorItem errorTemplate = cmd.ErrorTemplate;
-            errorTemplate.ErrorCode = errorCode;
-            errorTemplate.ErrorText = errorText;
-            addError(errorTemplate);
-       }
+       }       
    }
 }

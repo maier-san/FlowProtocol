@@ -644,15 +644,20 @@ Ausführungsfehler treten im Zusammenhang mit der Ausführung von Befehlen auf und
 \end{description}
 \newpage
 \section{Spezialbefehle}
-Spezialbefehle sind spezielle Befehle, die die Struktur einer Vorlage verändern, und die darauf erfolgten Eingaben in eigener Weise interpretieren und zu einem Ergebnis umsetzen können.
+Spezialbefehle sind spezielle Befehle, die die Struktur einer Vorlage verändern, und die darauf erfolgten Eingaben in eigener Weise interpretieren und zu einem Ergebnis umsetzen können. Diese Befehle wirken innerhalb des Vorlageteils, wo sie stehen, also auf einer Verschachtelungsebene bis zu den jeweils angrenzenden \verb|~Execute|-Befehlen.
+\subsubsection*{Befehlsübergreifende Fehlermeldungen}
+\begin{description}
+\FehlerBeschreibungItem{S01}{Befehl ohne $\dots$-Argument.} Tritt auf, wenn das zwingende $\dots$-Argument nicht angegeben wurde.
+\FehlerBeschreibungItem{S02}{Frageschlüssel $\dots$ ($\dots$-Argument) nicht gefunden.} Tritt auf, wenn der über das $\dots$-Argument angegebene Frageschlüssel nicht gefunden wurde.
+\FehlerBeschreibungItem{S03}{Befehl ohne gültiges $\dots$-Argument.} Tritt auf, wenn ein ungültiger Parameterwert angegeben wurde, z.B.\ eine \texttt{GroupSize}-Angabe, die nicht als Zahl interpretiert werden kann.
+\end{description}
 
 \subsection{Rangfolgenbestimmung}
 Die Rangfolgenbestimmung ist die Implementierung einer Methode, bei der man eine Rangfolge von Dingen wie z.B. Projekten dadurch bestimmt, dass man diese paarweise vergleicht. Bei jedem Vergleich bekommt der Gewinner einen Punkt und am Ende sortiert man die Einträge entsprechend ihrer Punktezahl. Die Reduzierung auf 2er-Vergleiche vereinfacht zwar die Entscheidung pro Frage, macht die Beantwortung jedoch auch deutlich umfangreicher. Für $n$ Elemente ergeben sich $\frac{n(n-1)}{2}$ Einzelfragen, also für $n=8$ also schon 28 Fragen.
 \Syntax
 \begin{verbatim}
-~Vote Key=<F-Schlüssel>; [GroupSize=<G-Größe>;] [GroupName=<G-Name>;]
+~Vote Key=<F-Schlüssel> [;GroupSize=<G-Größe>] [;GroupName=<G-Name>;]
 \end{verbatim}
-Zu beachten ist, dass die \texttt{GroupName}-Angabe mit Strichpunkt abgeschlossen werden muss.
 \Beispiel
 \begin{verbatim}
 /// Es wird eine Rangfolgenbestimmung durchgeführt
@@ -692,10 +697,31 @@ Die besten Welten
 \item Platz 3 (0 Punkte) Wasserwelt
 \end{numlist}
 }
-\subsubsection*{Mögliche Fehlermeldungen}
-\begin{description}
-\FehlerBeschreibungItem{V01}{Vote-Befehl ohne Key-Argument.} Tritt auf, wenn das zwingende \texttt{Key}-Argument nicht angegeben wurde.
-\FehlerBeschreibungItem{V02}{Frageschlüssel $\dots$ nicht gefunden.} Tritt auf, wenn der über das \texttt{Key}-Argument angegebene Frageschlüsselnicht angegeben wurde.
-\FehlerBeschreibungItem{V03}{Vote-Befehl ohne gültiges $\dots$-Argument.} Tritt auf, wenn ein ungültiger Parameterwert angegeben wurde, z.B.\ eine \texttt{GroupSize}-Angabe, die nicht als Zahl interpretiert werden kann.
-\end{description}
+\subsection{Zitatmodus}
+Sofern es bei einer Vorlage nur darum geht, die gewählten Antworten auf die Fragen zu notieren, kann man sich die Arbeit stark vereinfachen. Mit den standardmäßigen Sprachmitteln müsste man in jedem Antwortzweig Ausgaben erzeugen, die sowohl Frage, als auch Antwort beinhalten, was eine prinzipiell unnötige Wiederholung einer schon vorhandenen Information ist. Der Zitatmodus erledigt genau das für einen kompletten Vorlageteil.
+\Syntax
+\begin{verbatim}
+~Cite [GroupName=<Gruppe>]
+\end{verbatim}
+\Beispiel
+\begin{verbatim}
+/// Es wird gefragt, wie  "Hallo Welt" ausgegeben werden soll
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Cite GroupName=Antwortprotokoll
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+    #a1: Ganz normal
+    #a2: In Großbuchstaben
+    #a3: Rückwärts
+\end{verbatim}
+Der Aufruf dieser Vorlage führt dazu, dass die Frage als Ausgabe mit der gewählten Antwort als Unterpunkt ausgegeben wird. Das Ergebnis wird unter der Grup\-pen\-über\-schrift \textit{Antwortprotokoll} aufgelistet. 
+\webbox{
+\webheadR{Ergebnisliste (Demo, 17 Cite)}\\[3mm]
+Antwortprotokoll
+\begin{numlist}
+\item Wie soll \glqq Hallo Welt\grqq ausgegeben werden?
+\begin{itemize}
+\item In Großbuchstaben
+\end{itemize}
+\end{numlist}
+}
 \end{document}
