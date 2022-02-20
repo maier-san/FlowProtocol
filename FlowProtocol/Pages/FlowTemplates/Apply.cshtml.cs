@@ -147,7 +147,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       // Impiles-Commando auführen
       private void RunCmd_Implies(Command cmd)
       {
-         Dictionary<string, string> assignments = ReadAssignments(cmd.Arguments);
+         Dictionary<string, string> assignments = CommandHelper.ReadAssignments(cmd.Arguments);
          foreach(var a in assignments)
          {
             SelectedOptions[a.Key] = a.Value;
@@ -166,7 +166,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             string template= m.Groups[1].Value.Trim();
             char separator = Path.DirectorySeparatorChar;
             string templateFileName = TemplateDetailPath + separator + template.Trim().Replace(".qff", string.Empty) + ".qff";
-            Dictionary<string, string> assignments = ReadAssignments(m.Groups[2].Value);
+            Dictionary<string, string> assignments = CommandHelper.ReadAssignments(m.Groups[2].Value);
             Template? subTemplate = LoadTemplate(templateFileName, assignments);
             if (subTemplate == null)
             {
@@ -181,7 +181,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       private void RunCmd_Set(Command cmd)
       {         
          string arguments = cmd.Arguments;
-         Dictionary<string, string> sets = ReadAssignments(arguments);         
+         Dictionary<string, string> sets = CommandHelper.ReadAssignments(arguments);         
          foreach(var s in sets)
          {
             GlobalVars[s.Key] = s.Value;
@@ -213,31 +213,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          errorTemplate.ErrorCode = errorCode;
          errorTemplate.ErrorText = errorText;
          ReadErrors.Add(errorTemplate);
-      }
-
-      // Liest aus einem Ausdruck "F1=W1; F2=W2" die Variablenzuweisungen aus und gibt diese zurück.
-      private Dictionary<string, string> ReadAssignments(string? varExpression)
-      {
-         Dictionary<string, string> assignments = new Dictionary<string, string>();
-         if (!string.IsNullOrWhiteSpace(varExpression))
-         {                   
-               Regex regSetAssignment = new Regex(@"^([A-Za-z0-9]*)\s*=(.*)");               
-               foreach(var idx in varExpression.Split(";"))
-               {
-                  string assignment = idx.Trim();
-                  if (regSetAssignment.IsMatch(assignment))
-                  {
-                     var m = regSetAssignment.Match(assignment);
-                     string key = m.Groups[1].Value.Trim();
-                     if (!string.IsNullOrWhiteSpace(key))
-                     {
-                        assignments[key] = m.Groups[2].Value.Trim();
-                     }
-                  }
-               }
-         }
-         return assignments;
-      }
+      }      
 
       // Liest aus einem Ausdruck "F1+=W1; F2+=W2" die Variablen-Addier-Zuweisungen aus und gibt diese zurück.
       private Dictionary<string, int> ReadAddAssignments(string? varExpression)

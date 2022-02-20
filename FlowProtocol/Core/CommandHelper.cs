@@ -61,5 +61,29 @@ namespace FlowProtocol.Core
             errorTemplate.ErrorText = errorText;
             addError(errorTemplate);
         }
+
+        // Liest aus einem Ausdruck "F1=W1; F2=W2" die Variablenzuweisungen aus und gibt diese zurück.
+        public static Dictionary<string, string> ReadAssignments(string? varExpression)
+        {
+            Dictionary<string, string> assignments = new Dictionary<string, string>();
+            if (!string.IsNullOrWhiteSpace(varExpression))
+            {                   
+                Regex regSetAssignment = new Regex(@"^([A-Za-z0-9]*)\s*=(.*)");               
+                foreach(var idx in varExpression.Split(";"))
+                {
+                     string assignment = idx.Trim();
+                    if (regSetAssignment.IsMatch(assignment))
+                    {
+                        var m = regSetAssignment.Match(assignment);
+                        string key = m.Groups[1].Value.Trim();
+                        if (!string.IsNullOrWhiteSpace(key))
+                        {
+                            assignments[key] = m.Groups[2].Value.Trim();
+                        }
+                    }
+                }
+            }
+            return assignments;
+        }
     }
 }
