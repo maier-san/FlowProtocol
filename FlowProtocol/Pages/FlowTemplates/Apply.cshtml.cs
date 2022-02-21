@@ -1,4 +1,5 @@
 using FlowProtocol.Core;
+using FlowProtocol.SpecialCommands;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Web;
@@ -62,7 +63,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       /// <param name="t">Die aktuelle Template-Ebene</param>
       private void ExtractRestrictions(Template t)
       {
-         RunCommand(t.Commands);
+         RunCommand(t.Commands, ref t);
          AddResultItems(t.ResultItems);          
          foreach (var r in t.Restrictions)
          {
@@ -117,17 +118,28 @@ namespace FlowProtocol.Pages.FlowTemplates
       }
 
       // Führt die Laufzeitbefehle aus
-      private void RunCommand(List<Command> commandlist)
+      private void RunCommand(List<Command> commandlist, ref Template t)
       {
          foreach(var cmd in commandlist)
          {
             cmd.ApplyTextOperation(ReplaceGlobalVars);
+            ISpecialCommand? sc = null;
             switch (cmd.ComandName)
             {
                 case "Implies": RunCmd_Implies(cmd); break;
                 case "Include": RunCmd_Include(cmd); break;
                 case "Set": RunCmd_Set(cmd); break;
+                case "Vote": sc = new VoteCommand(); break;
+                case "Cite": sc = new CiteCommand(); break;
                 default: AddCommandError("C02", $"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
+            }
+            if (sc != null)
+            {
+               List<ResultItem> erg = sc.RunCommand(cmd, t, SelectedOptions, ReadErrors.Add);
+               if (erg != null)
+               {
+                  t.ResultItems.AddRange(erg);
+               }
             }
          }
       }
@@ -135,7 +147,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       // Impiles-Commando auführen
       private void RunCmd_Implies(Command cmd)
       {
-         Dictionary<string, string> assignments = ReadAssignments(cmd.Arguments);
+         Dictionary<string, string> assignments = CommandHelper.ReadAssignments(cmd.Arguments);
          foreach(var a in assignments)
          {
             SelectedOptions[a.Key] = a.Value;
@@ -154,7 +166,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             string template= m.Groups[1].Value.Trim();
             char separator = Path.DirectorySeparatorChar;
             string templateFileName = TemplateDetailPath + separator + template.Trim().Replace(".qff", string.Empty) + ".qff";
-            Dictionary<string, string> assignments = ReadAssignments(m.Groups[2].Value);
+            Dictionary<string, string> assignments = CommandHelper.ReadAssignments(m.Groups[2].Value);
             Template? subTemplate = LoadTemplate(templateFileName, assignments);
             if (subTemplate == null)
             {
@@ -169,7 +181,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       private void RunCmd_Set(Command cmd)
       {         
          string arguments = cmd.Arguments;
-         Dictionary<string, string> sets = ReadAssignments(arguments);         
+         Dictionary<string, string> sets = CommandHelper.ReadAssignments(arguments);         
          foreach(var s in sets)
          {
             GlobalVars[s.Key] = s.Value;
@@ -201,27 +213,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          errorTemplate.ErrorCode = errorCode;
          errorTemplate.ErrorText = errorText;
          ReadErrors.Add(errorTemplate);
-      }
-
-      // Liest aus einem Ausdruck "F1=W1; F2=W2" die Variablenzuweisungen aus und gibt diese zurück.
-      private Dictionary<string, string> ReadAssignments(string? varExpression)
-      {
-         Dictionary<string, string> assignments = new Dictionary<string, string>();
-         if (!string.IsNullOrWhiteSpace(varExpression))
-         {                   
-               Regex regSetAssignment = new Regex(@"([A-Za-z0-9]*)=(.*)");               
-               foreach(var idx in varExpression.Split(";"))
-               {
-                  string assignment = idx.Trim();
-                  if (regSetAssignment.IsMatch(assignment))
-                  {
-                     var m = regSetAssignment.Match(assignment);
-                     assignments[m.Groups[1].Value.Trim()] = m.Groups[2].Value.Trim();
-                  }
-               }
-         }
-         return assignments;
-      }
+      }      
 
       // Liest aus einem Ausdruck "F1+=W1; F2+=W2" die Variablen-Addier-Zuweisungen aus und gibt diese zurück.
       private Dictionary<string, int> ReadAddAssignments(string? varExpression)
@@ -229,7 +221,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          Dictionary<string, int> assignments = new Dictionary<string, int>();
          if (!string.IsNullOrWhiteSpace(varExpression))
          {
-            Regex regAddAssignment = new Regex(@"([A-Za-z0-9]*)\+=([0-9]*)");                         
+            Regex regAddAssignment = new Regex(@"^([A-Za-z0-9]*)\s*\+=\s*([0-9]*)");                         
             foreach(var idx in varExpression.Split(";"))
             {
                string assignment = idx.Trim();
@@ -238,10 +230,11 @@ namespace FlowProtocol.Pages.FlowTemplates
                   var m = regAddAssignment.Match(assignment);                     
                   
                   int incValue = 0;
-                  bool incOK = int.TryParse(m.Groups[2].Value.Trim(), out  incValue);
-                  if (incOK)
+                  string key = m.Groups[1].Value.Trim();
+                  bool incOK = int.TryParse(m.Groups[2].Value.Trim(), out  incValue);                  
+                  if (!string.IsNullOrWhiteSpace(key) && incOK)
                   {
-                     assignments[m.Groups[1].Value.Trim()] = incValue;
+                     assignments[key] = incValue;
                   }
                }                  
             }
@@ -277,7 +270,7 @@ namespace FlowProtocol.Pages.FlowTemplates
 
       public bool IsURL(string text)
       {
-         return text.StartsWith("http://") && Uri.IsWellFormedUriString(text, UriKind.RelativeOrAbsolute);
+         return (text.StartsWith("https://") || text.StartsWith("http://")) && Uri.IsWellFormedUriString(text, UriKind.RelativeOrAbsolute);
       }
    }
 }

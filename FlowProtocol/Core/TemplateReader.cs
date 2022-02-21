@@ -112,7 +112,7 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regOption.Match(codeline);
-                                Option o = new Option(){Key = m.Groups[1].Value.Trim(), OptionText = m.Groups[2].Value.Trim()};
+                                Option o = new Option(parent.Key){Key = m.Groups[1].Value.Trim(), OptionText = m.Groups[2].Value.Trim()};
                                 parent.Options.Add(o);
                                 TemplateStack.Push(new Tuple<int, Template>(indent, o));
                             }

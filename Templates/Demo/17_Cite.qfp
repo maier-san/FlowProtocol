@@ -1,0 +1,7 @@
+/// Es wird gefragt, wie  "Hallo Welt" ausgegeben werden soll
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Cite GroupName=Antwortprotokoll
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+	#a1: Ganz normal
+	#a2: In Großbuchstaben
+	#a3: Rückwärts

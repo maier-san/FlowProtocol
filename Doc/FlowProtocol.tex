@@ -57,7 +57,7 @@
 Die Grundidee der Anwendung besteht darin, ein Medium zu bieten, um Spezialwissen ohne großen Aufwand zu erfassen und es dann in sehr einfacher Form für andere bereitzustellen, ohne dass es dafür vermittelt und erworben werden muss. Die Erstellung der Vorlagen kann und soll direkt durch die Menschen erfolgen, die über das jeweilige Wissen verfügen und die Anwendung für alle möglich sein, die dieses Wissen benötigen.
 
 \subsection{Anwendungsbereiche}
-Die Anwendungsbereiche für diese Anwendung sind sehr vielfältig. Die ursprüngliche Intention war die Aufstellung von Prüflisten für wiederkehrende komplexe Tätigkeit\-en, die in vielen einzelnen Aspekten variieren können, sodass jeweils nur bestimmte Auswahl von Prüfpunkten relevant ist. Eine Gesamtprüfliste, bei der immer ein Großteil der Punkte hätte ignoriert werden müssen, wäre sowohl aufwendig, als auch fehlerträchtig, und daher nicht effektiv. \FlowProtocol kann hier durch sein Fragekonzept die für jeden Einzelfall relevanten Aspekte herausfiltern, und auf diese Weise sogar beliebig stark ins Detail gehen. Gleichzeitig hilft dem Anwender die Beantwortung der Fragen auch, sich gedanklich ausführlich mit seiner Aufgabe auseinanderzusetzen. Durch die Vermeidung offener Fragen wird gleichzeitig das Risiko minimiert, dass Dinge vergessen werden. Das Ergebnis ist ein zu 100~\% relevantes und vollständiges Protokoll.
+Die Anwendungsbereiche für diese Anwendung sind sehr vielfältig. Die ursprüngliche Intention war die Aufstellung von Prüflisten für wiederkehrende komplexe Tätigkeit\-en, die in vielen einzelnen Aspekten variieren können, sodass jeweils nur bestimmte Auswahl von Prüfpunkten relevant ist. Eine Gesamtprüfliste, bei der immer ein Großteil der Punkte hätte ignoriert werden müssen, wäre sowohl aufwendig, als auch fehlerträchtig, und daher nicht effektiv. \FlowProtocol kann hier durch sein Fragekonzept die für jeden Einzelfall relevanten Aspekte herausfiltern, und auf diese Weise sogar beliebig stark ins Detail gehen. Gleichzeitig hilft dem Anwender die Beantwortung der Fragen auch, sich gedanklich ausführlich mit seiner Aufgabe auseinanderzusetzen. Durch die Vermeidung offener Fragen wird gleichzeitig das Risiko minimiert, dass Dinge vergessen werden. Das Ergebnis ist ein zu 100\% relevantes und vollständiges Protokoll.
 
 Ein besonders positiver Nebeneffekt dieser Vorgehensweise besteht darin, dass durch einfaches Auswählen von Antworten am Ende ein Ergebnisdokument erstellt wird, das nicht mehr manuell erstellt werden muss. Das Anwendungsgebiet dehnt sich damit auf alle Arten von Dokumenten aus, die sich aus einer Aufzählung von Textbausteinen zusammensetzen, deren Zusammenstellung über eine Reihe iterierter Fragen erfolgen kann. Dies umfasst beispielsweise Bestandsaufnahmen, Analyseprotokolle, Zusammenfassungen, Aufgabenlisten und vieles andere mehr. Für kleinere Systeme lassen sich sogar mit überschaubarem Aufwand Vorlagen erstellen, die nicht nur das Ergebnis einer Analyse zusammenfassen, sondern ergänzend dazu auch schon Lösungsansätze und mögliche weitere Schritte. Man kann so vom Prinzip her ein kleines Expertensystem erstellen, das wertvolles Spezialwissen eines Experten in sehr einfacher Form für andere Mitarbeiter verfügbar macht, ähnlich wie ein Chatbot. Das schont wertvolle Unternehmensressourcen und beugt Verfügbarkeitsengpässen vor. Auch kleinere personalisierte Umfragen lassen sich damit durchführen, wenn man die Rücksendung des Ergebnisses instruiert. Aber insbesondere dort, wo man sich im Rahmen von Normen wie ISO9001 oder ISO27001 dazu verpflichtet hat, klare Qualitätsstandards im Bereich der Unternehmensprozesse einzuhalten, kann \FlowProtocol gute Unterstützung leisten!
 
@@ -91,7 +91,7 @@ Die Verschachtelung der Struktur wird durch Einrückung abgebildet. Hier kann wah
 Die Interpretation einer Datei erfolgt zeilenweise, d.h. jeder Zeilenumbruch schließt einen Befehl ab. Der Einsatz von Zeilenumbrüchen zur Formatierung ist damit nicht möglich.
 Leerzeilen werden bei der Verarbeitung ignoriert und können in beliebiger Menge eingefügt werden.
 
-Ein erstes Beispiel
+\Beispiel
 \begin{verbatim}
 /// Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
@@ -157,10 +157,9 @@ Durch\texttt{ >>} wird ein Ausgabeeintrag erzeugt, wenn die entsprechende Antwor
 
 \subsection{Sequenzen}
 Mehrere Fragen können hintereinander aufgelistet werden. Diese werden stan\-dard\-mä\-ßig untereinander auf einer Seite aufgelistet und können zusammen bearbeitet werden.
-
 \Beispiel
 \begin{verbatim}
-Formatierte Hallo-Welt-Ausgabe
+/// Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
 ?F1: Wie soll "Hallo Welt" ausgegeben werden?
     #a1: Ganz normal
@@ -193,7 +192,7 @@ Die Benutzerführung erlaubt es, auch nur einen Teil der angezeigten Fragen zu be
 \subsection{Verschachtelungen}
 \Beispiel
 \begin{verbatim}
-Formatierte Hallo-Welt-Ausgabe
+/// Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
 ?F1: Wie soll "Hallo Welt" ausgegeben werden?
     #a1: Ganz normal
@@ -225,7 +224,7 @@ Das Ergebnis einer Bearbeitung kann in vielen Fällen mehr als eine Liste sein. E
 \end{verbatim}
 \Beispiel
 \begin{verbatim}
-Formatierte Hallo-Welt-Ausgabe
+/// Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
 ?F1: Wie soll "Hallo Welt" ausgegeben werden?
     #a1: Ganz normal
@@ -243,7 +242,7 @@ Formatierte Hallo-Welt-Ausgabe
 \end{verbatim}
 Wählt man die Antwortmöglichkeit \glqq In Großbuchstaben\grqq\ , so erhält man die folgende Ausgabe:
 \webbox{
-\webheadR{Ergebnisliste (Demo, 05 Gruppierungen)}
+\webheadR{Ergebnisliste (Demo, 05 Gruppierungen)}\\[3mm]
 Deine Ausgabe
 \begin{numlist}
 \item HALLO WELT
@@ -266,7 +265,7 @@ Ausgaben können je nach Vorlage selbst wieder Tätigkeiten oder Aufgaben beschrei
 \end{verbatim}
 \Beispiel
 \begin{verbatim}
-Formatierte Hallo-Welt-Ausgabe
+/// Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
 ?F1: Wie soll "Hallo Welt" ausgegeben werden?
     #a1: Ganz normal
@@ -294,7 +293,7 @@ Eine Frage kann an anderer Stelle wiederholt gestellt werden. Ausschlaggebend da
 
 \Beispiel
 \begin{verbatim}
-Formatierte Hallo-Welt-Ausgabe
+/// Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
 ?F1: Wie soll "Hallo Welt" ausgegeben werden?
     #a1: Ganz normal
@@ -324,7 +323,7 @@ Die Antwort auf eine Frage kann in manchen Fällen die Antwort auf eine andere im
 \end{verbatim}
 \Beispiel
 \begin{verbatim}
-Formatierte Hallo-Welt-Ausgabe
+/// Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
 ?F1: Wie soll "Hallo Welt" ausgegeben werden?
     #a1: Ganz normal
@@ -347,6 +346,29 @@ Formatierte Hallo-Welt-Ausgabe
 Bei Auswahl der Antwort \glqq In Großbuchstaben\grqq\  Frage \texttt{F1} wird für die Frage \texttt{F2a} die 
 Antwort \glqq Ja\grqq\  impliziert. Diese wird dann nicht mehr gestellt, sondern automatisch beantwortet. Im Falle der anderen Ant\-wort\-mög\-lich\-kei\-ten wird keine Antwort impliziert, sodass die Frage \texttt{F2a} in diesem Fall ganz normal gestellt und verarbeitet wird.
 
+\subsection{Autonummerierung}
+Das Durchnummerieren der Frageschlüssel kann in umfangreichen Dateien sehr müh\-sam werden, da diese zumeist nicht von oben nach unten aufgebaut werden, sondern in die Tiefe. Die Kontrolle über die Schlüssel benötigt man aber nur, wenn man mit Implikationen oder Wiederholungen arbeitet, oder die Gültigkeit von Links auch nach Erweiterungen der Vorlage sicherstellen möchte. Für alle anderen Fälle kann man die Nummerierung automatisch vergeben lassen.
+\Syntax
+\begin{verbatim}
+?<Frageschlüsselanfang>': <Fragetext>
+\end{verbatim}
+\Beispiel
+\begin{verbatim}
+/// Formatierte Hallo-Welt-Ausgabe
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F': Wie soll "Hallo Welt" ausgegeben werden?
+    #a1: Ganz normal
+        >> Hallo Welt
+    #a2: In Großbuchstaben
+        >> HALLO WELT
+?F': Welcher Zusatz soll ergänzt werden?
+    #z1: "Wie geht es dir?"
+        >> Wie geht es dir?
+    #z2: "Ich grüße dich!"
+        >> Ich grüße dich!
+\end{verbatim}
+Die Apostrophzeichen in den Schlüsseln werden pro Datei durchnummeriert und im obigen Beispiel zu \verb|F_1| und \verb|F_2| ersetzt. Schlüssel ohne das \verb|'|-Zeichen bleiben unverändert und können für Implikationen oder Wiederholungen genutzt werden. Implikationen für automatisch nummerierte Schlüssel sind zwar ebenfalls möglich, aber aufgrund der fehlenden Transparenz keine gute Idee. Die Nummerierung erfolgt pro Datei, was bei der Verwendung von Funktionen (siehe Abschnitt~\ref{Funktionen}) berücksichtigt werden muss.
+
 \subsection{Ausführungen}
 Bei längeren Sequenzen und insbesondere bei der Verwendung von Wiederholungen und Implikationen ist es wünschenswert, zunächst einen Teil der Fragen vollständig abzuarbeiten, bevor die Fragen aus dem nachfolgenden Teil angezeigt werden. Dies ist mit dem Execute-Befehl möglich.
 \Syntax
@@ -355,7 +377,7 @@ Bei längeren Sequenzen und insbesondere bei der Verwendung von Wiederholungen un
 \end{verbatim}
 \Beispiel
 \begin{verbatim}
-Formatierte Hallo-Welt-Ausgabe
+/// Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
 ?F1: Wie soll "Hallo Welt" ausgegeben werden?
     #a1: Ganz normal
@@ -373,7 +395,7 @@ Formatierte Hallo-Welt-Ausgabe
 \end{verbatim}
 Die beiden Fragen aus dem Sequenzen-Beispiel werden in diesem Fall einzelnen angezeigt.
 
-\subsection{Funktionen}
+\subsection{Funktionen}\label{Funktionen}
 Vorlagen können mitunter sehr umfangreich und tief verschachtelt sein. Verwaltet man solche Vorlagen in einer einzigen Datei, kann das insbesondere aufgrund der Einrückungen sehr unübersichtlich werden, sodass sich Anpassungen und Erweiterungen schwierig gestalten. Hier ist es empfehlenswert Teile des Codes als Funktionen in jeweils eigene Dateien auszulagern. Eine Funktion ist vom Prinzip und vom Aufbau her das gleiche wie eine Vorlage und wird über eine Datei der Endung \glqq *.qff\grqq\  (Quick Flow Function) bereitgestellt. Aufgrund der abweichenden Dateiendung werden Funktionen nicht als Vorlagen in der Anwendung zur Auswahl angeboten.
 
 Die Funktionsdatei muss auf der gleichen Ebene liegen wie die Vorlage, die sie aufruft und der Name darf nur aus Buchstaben und Ziffern bestehen.
@@ -384,7 +406,7 @@ Die Funktionsdatei muss auf der gleichen Ebene liegen wie die Vorlage, die sie a
 \end{verbatim}
 \Beispiel
 \begin{verbatim}
-Formatierte Hallo-Welt-Ausgabe
+/// Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
 ~Include HalloWelt1
 \end{verbatim}
@@ -410,7 +432,7 @@ Möchte man eine Funktion innerhalb einer Vorlage mehrfach ausführen, so stößt ma
 \end{verbatim}
 \Beispiel
 \begin{verbatim}
-Formatierte Hallo-Welt-Ausgabe
+/// Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
 ~Include HalloWelt2 weltindex=1; weltbezeichnung=Meine Welt
 ~Include HalloWelt2 weltindex=2; weltbezeichnung=Deine Welt
@@ -434,7 +456,7 @@ Es wird empfohlen die Parameter einer Funktion in Form von Kommentaren im Kopfbe
 
 Das obige Beispiel wird wie folgt angezeigt:
 \webbox{
-\webhead{Vorlage Demo, 10 Funktionen2}{Formatierte Hallo-Welt-Ausgabe}
+\webhead{Vorlage Demo, 11 Funktionen2}{Formatierte Hallo-Welt-Ausgabe}
 Wie soll Meine Welt begrüßt werden?
 \begin{circlist}
 \item Mit \dq Hallo\dq
@@ -459,7 +481,7 @@ Variablen können auch unabhängig von Funktionsparametern gesetzt und in Fragen, 
 \end{verbatim}
 \Beispiel
 \begin{verbatim}
-Formatierte Hallo-Welt-Ausgabe
+/// Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
 ?F1: Wie soll "Hallo Welt" ausgegeben werden?
     #a1: Ganz normal
@@ -481,16 +503,14 @@ Wird eine Variable in einer Frage oder Antwort verwendet, sollte durch die Struk
 
 \subsection{Additionen}
 Über Variablen lassen sich auch einfache Additionen durchführen, beispielsweise um Kosten, Aufwände oder Komplexität zu ermitteln, die sich aus den gewählten Ant\-wort\-mög\-lich\-kei\-ten zusammensetzen. Dies ist ebenfalls über den Set-Befehl möglich.
-
 \Syntax
 \begin{verbatim}
 ~Set <Variable 1>+=<Inkrement 1>;  . . .
 \end{verbatim}
 Additionen und Variablenzuweisungen können auch im gleichen Set-Befehl gemischt werden. Bei ihrer ersten Verwendung in einer Addition wird der Variablen zuvor ein Wert von 0 zugewiesen. Hat eine Variable bei der Verwendung in einer Addition bereits einen Wert, der nicht als natürliche Zahl interpretierbar ist, so wird die Addition ignoriert.
-
 \Beispiel
 \begin{verbatim}
-Formatierte Hallo-Welt-Ausgabe
+/// Formatierte Hallo-Welt-Ausgabe
 //  Anwendungsbeispiel für die Befehlsreferenz
 ?F1: Wie soll "Hallo Welt" ausgegeben werden?
     #a1: Ganz normal
@@ -545,7 +565,7 @@ Man beachte, dass Additionen wie im Set-Befehl in den Zuweisungen des Include-Be
 
 Das obige Beispiel wird wie folgt angezeigt:
 \webbox{
-\webhead{Vorlage Demo, 13 Schleifen}{Formatierte Hallo-Welt-Ausgabe}
+\webhead{Vorlage Demo, 14 Schleifen}{Formatierte Hallo-Welt-Ausgabe}
 Wie soll Welt 1 begrüßt werden?
 \begin{circlist}
 \item Mit \dq Hallo\dq
@@ -584,7 +604,7 @@ Die Möglichkeit, Vorlagen von Hand zu schreiben birgt ein gewisses Fehlerrisiko.
 \end{verbatim}
 Der Aufruf dieser Vorlage führt direkt zur Anzeige der beiden Fehler:
 \webbox{
-\webhead{Vorlage Demo, 14 HalloFehler}{Fehler-Beispiel}
+\webhead{Vorlage Demo, 15 HalloFehler}{Fehler-Beispiel}
 \textbf{Hinweis:} Beim Ausführen der Vorlage sind Fehler aufgetreten. Bitte wenden Sie sich an den Autoren der Vorlage oder einen Administrator, um die Korrekturen zu veranlassen:
 \begin{numlist}
 \ZeigeFehlerItem{Fehler R04, Antwort kann keinem Fragekontext zugeordnet werden.}{Zeile 3}{FlowProtocol/Templates/Demo/14 HalloFehler.qfp}{\#d: Hallo Fehler!}
@@ -622,4 +642,86 @@ Ausführungsfehler treten im Zusammenhang mit der Ausführung von Befehlen auf und
 \FehlerBeschreibungItem{C03}{Die Funktionsdatei $\dots$ konnte nicht geladen werden.} Tritt auf, wenn in einem Include-Befehl angegebene Funktionsdatei nicht gefunden werden konnte.
 \FehlerBeschreibungItem{C04}{Der Wert der Variablen $\dots$ konnte nicht als ganze Zahl interpretiert werden.} Tritt auf, wenn für eine Variable im Set-Befehl ein Wert addiert werden soll, und diese zum entsprechenden Zeitpunkt einen nichtnumerischen Wert enthält.
 \end{description}
+\newpage
+\section{Spezialbefehle}
+Spezialbefehle sind spezielle Befehle, die die Struktur einer Vorlage verändern, und die darauf erfolgten Eingaben in eigener Weise interpretieren und zu einem Ergebnis umsetzen können. Diese Befehle wirken innerhalb des Vorlageteils, wo sie stehen, also auf einer Verschachtelungsebene bis zu den jeweils angrenzenden \verb|~Execute|-Befehlen.
+\subsubsection*{Befehlsübergreifende Fehlermeldungen}
+\begin{description}
+\FehlerBeschreibungItem{S01}{Befehl ohne $\dots$-Argument.} Tritt auf, wenn das zwingende $\dots$-Argument nicht angegeben wurde.
+\FehlerBeschreibungItem{S02}{Frageschlüssel $\dots$ ($\dots$-Argument) nicht gefunden.} Tritt auf, wenn der über das $\dots$-Argument angegebene Frageschlüssel nicht gefunden wurde.
+\FehlerBeschreibungItem{S03}{Befehl ohne gültiges $\dots$-Argument.} Tritt auf, wenn ein ungültiger Parameterwert angegeben wurde, z.B.\ eine \texttt{GroupSize}-Angabe, die nicht als Zahl interpretiert werden kann.
+\end{description}
+
+\subsection{Rangfolgenbestimmung}
+Die Rangfolgenbestimmung ist die Implementierung einer Methode, bei der man eine Rangfolge von Dingen wie z.B. Projekten dadurch bestimmt, dass man diese paarweise vergleicht. Bei jedem Vergleich bekommt der Gewinner einen Punkt und am Ende sortiert man die Einträge entsprechend ihrer Punktezahl. Die Reduzierung auf 2er-Vergleiche vereinfacht zwar die Entscheidung pro Frage, macht die Beantwortung jedoch auch deutlich umfangreicher. Für $n$ Elemente ergeben sich $\frac{n(n-1)}{2}$ Einzelfragen, also für $n=8$ also schon 28 Fragen.
+\Syntax
+\begin{verbatim}
+~Vote Key=<F-Schlüssel> [;GroupSize=<G-Größe>] [;GroupName=<G-Name>;]
+\end{verbatim}
+\Beispiel
+\begin{verbatim}
+/// Es wird eine Rangfolgenbestimmung durchgeführt
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Vote Key=V; GroupSize=3; GroupName=Die besten Welten;
+?V: Welche Welt gefällt dir besser?
+    #w1: Waldwelt
+    #w2: Wasserwelt
+    #w3: Bergwelt
+\end{verbatim}
+Der Aufruf dieser Vorlage führt dazu, dass die Frage mit dem Schlüssel \texttt{V} zu einer Reihe von Einzelfragen umgestaltet wird. Genauer: Die Frage wird für jede der drei 2er-Kombinationen abgefragt. Die Fragen werden zur 3er-Gruppen zusammengefasst, was hier eine Gruppe ergibt. Das Ergebnis wird unter der Gruppenüberschrift \textit{Die besten Welten} aufgelistet. 
+\webbox{
+\webhead{Vorlage Demo, 16 Vote}{Es wird eine Abstimmungsbewertung durchgeführt}
+Welche Welt gefällt dir besser? 
+\begin{circlist}
+\item Waldwelt
+\item Wasserwelt
+\end{circlist}
+Welche Welt gefällt dir besser? 
+\begin{circlist}
+\item Waldwelt
+\item Bergwelt
+\end{circlist}
+Welche Welt gefällt dir besser? 
+\begin{circlist}
+\item Wasserwelt
+\item Bergwelt
+\end{circlist}
+}
+Das Ergebnis wird dann wie folgt präsentiert:
+\webbox{
+\webheadR{Ergebnisliste (Demo, 16 Vote)}\\[3mm]
+Die besten Welten
+\begin{numlist}
+\item Platz 1 (2 Punkte) Bergwelt
+\item Platz 2 (1 Punkte) Waldwelt
+\item Platz 3 (0 Punkte) Wasserwelt
+\end{numlist}
+}
+\subsection{Zitatmodus}
+Sofern es bei einer Vorlage nur darum geht, die gewählten Antworten auf die Fragen zu notieren, kann man sich die Arbeit stark vereinfachen. Mit den standardmäßigen Sprachmitteln müsste man in jedem Antwortzweig Ausgaben erzeugen, die sowohl Frage, als auch Antwort beinhalten, was eine prinzipiell unnötige Wiederholung einer schon vorhandenen Information ist. Der Zitatmodus erledigt genau das für einen kompletten Vorlageteil.
+\Syntax
+\begin{verbatim}
+~Cite [GroupName=<Gruppe>]
+\end{verbatim}
+\Beispiel
+\begin{verbatim}
+/// Es wird gefragt, wie  "Hallo Welt" ausgegeben werden soll
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Cite GroupName=Antwortprotokoll
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+    #a1: Ganz normal
+    #a2: In Großbuchstaben
+    #a3: Rückwärts
+\end{verbatim}
+Der Aufruf dieser Vorlage führt dazu, dass die Frage als Ausgabe mit der gewählten Antwort als Unterpunkt ausgegeben wird. Das Ergebnis wird unter der Grup\-pen\-über\-schrift \textit{Antwortprotokoll} aufgelistet. 
+\webbox{
+\webheadR{Ergebnisliste (Demo, 17 Cite)}\\[3mm]
+Antwortprotokoll
+\begin{numlist}
+\item Wie soll \glqq Hallo Welt\grqq ausgegeben werden?
+\begin{itemize}
+\item In Großbuchstaben
+\end{itemize}
+\end{numlist}
+}
 \end{document}
