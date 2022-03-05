@@ -171,7 +171,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             if (subTemplate == null)
             {
                AddCommandError("C03", $"Die Funktionsdatei {templateFileName} konnte nicht geladen werden.", cmd);
-                return;
+               return;
             }
             ExtractRestrictions(subTemplate);
          }
