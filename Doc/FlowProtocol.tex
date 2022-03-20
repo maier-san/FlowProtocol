@@ -641,6 +641,7 @@ Ausführungsfehler treten im Zusammenhang mit der Ausführung von Befehlen auf und
 \FehlerBeschreibungItem{C02}{Der Befehl $\dots$ ist nicht bekannt und kann nicht ausgeführt werden.} Tritt auf, wenn eine Befehlsanweisung keinem bekannten Befehl entspricht. Eine Abweichung in der Groß-Klein-Schreibung kann als Ursache ausgeschlossen werden.
 \FehlerBeschreibungItem{C03}{Die Funktionsdatei $\dots$ konnte nicht geladen werden.} Tritt auf, wenn in einem Include-Befehl angegebene Funktionsdatei nicht gefunden werden konnte.
 \FehlerBeschreibungItem{C04}{Der Wert der Variablen $\dots$ konnte nicht als ganze Zahl interpretiert werden.} Tritt auf, wenn für eine Variable im Set-Befehl ein Wert addiert werden soll, und diese zum entsprechenden Zeitpunkt einen nichtnumerischen Wert enthält.
+\FehlerBeschreibungItem{C05}{Der Aufruf der Funktionsdatei $\dots$ überschreitet das Rekursionsmaximum von 100.} Tritt auf, wenn mehr als 100 Mal eine Funktionsdatei aufgerufen wird. Diese einfache Sicherung verhindert Endlosrekursionen, die zum Absturz der Anwendung führen würden.
 \end{description}
 \newpage
 \section{Spezialbefehle}

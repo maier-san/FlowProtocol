@@ -1,0 +1,7 @@
+/// Der Textbaustein "Hallo Welt" wird in einer Form deiner Wahl ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Include HalloWelt4 weltindex=1
+~Execute
+?FX: Wurde eine Endlosrekursion erkannt?
+	#j: Ja
+	#n: Nein
