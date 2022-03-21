@@ -18,7 +18,7 @@
 \contentsline {subsection}{\numberline {2.11}Autonummerierung}{11}{}%
 \contentsline {subsection}{\numberline {2.12}Ausf\"uhrungen}{12}{}%
 \contentsline {subsection}{\numberline {2.13}Funktionen}{13}{}%
-\contentsline {subsection}{\numberline {2.14}Parametrisiert Funktionen}{13}{}%
+\contentsline {subsection}{\numberline {2.14}Parametrisierte Funktionen}{13}{}%
 \contentsline {subsection}{\numberline {2.15}Variablen}{15}{}%
 \contentsline {subsection}{\numberline {2.16}Additionen}{16}{}%
 \contentsline {subsection}{\numberline {2.17}Schleifen}{17}{}%

@@ -16,7 +16,8 @@ namespace FlowProtocol.Pages.FlowTemplates
       private string TemplatePath { get; set; }
       private string TemplateDetailPath { get; set; }
       private Template? CurrentTemplate { get; set; }
-      public List<ReadErrorItem> ReadErrors {get; set;}
+      public List<ReadErrorItem> ReadErrors {get; set;}   
+      private int RecursionCount = 0;
 
       [BindProperty(SupportsGet = true)]
       public Dictionary<string, string> SelectedOptions { get; set; }
@@ -67,8 +68,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          AddResultItems(t.ResultItems);          
          foreach (var r in t.Restrictions)
          {
-            r.ApplyTextOperation(ReplaceGlobalVars);
-            
+            r.ApplyTextOperation(ReplaceGlobalVars);            
             if (!SelectedOptions.ContainsKey(r.Key))
             {
                // Frage noch unbeantwortet auf Seite übernehmen
@@ -167,13 +167,19 @@ namespace FlowProtocol.Pages.FlowTemplates
             char separator = Path.DirectorySeparatorChar;
             string templateFileName = TemplateDetailPath + separator + template.Trim().Replace(".qff", string.Empty) + ".qff";
             Dictionary<string, string> assignments = CommandHelper.ReadAssignments(m.Groups[2].Value);
+            RecursionCount++;
+            if (RecursionCount > 100)
+            {
+               AddCommandError("C05", $"Der Aufruf der Funktionsdatei {templateFileName} überschreitet das Rekursionsmaximum von 100.", cmd);
+               return;
+            }            
             Template? subTemplate = LoadTemplate(templateFileName, assignments);
             if (subTemplate == null)
             {
                AddCommandError("C03", $"Die Funktionsdatei {templateFileName} konnte nicht geladen werden.", cmd);
-                return;
+               return;
             }
-            ExtractRestrictions(subTemplate);
+            ExtractRestrictions(subTemplate);                        
          }
       }
 
@@ -253,6 +259,7 @@ namespace FlowProtocol.Pages.FlowTemplates
 
       private Template? LoadTemplate(string templatefile, Dictionary<string, string>? assignments = null)
       {         
+         
          TemplateReader tr = new TemplateReader();
          Template? currentTemplate = tr.ReadTemplate(templatefile, assignments);          
          ReadErrors.AddRange(tr.ReadErrors);

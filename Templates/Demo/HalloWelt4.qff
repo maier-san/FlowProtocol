@@ -1,0 +1,13 @@
+// Hallo-Welt-Funktion
+// Parameter $weltindex: Schlüsselindex
+?F$weltindex1: Wie soll Welt $weltindex begrüßt werden?
+	#a1: Mit "Hallo" und Endlosrekursion
+		>> Hallo Welt $weltindex
+		~Set dummy=$weltindex; dummy+=1
+	#a2: Mit Aloah und Endlosrekursion
+		>> Aloah Welt $weltindex
+		~Set dummy=$weltindex;
+?FS: Wollen Sie noch eine Welt erfassen?
+	#j: Ja		
+		~Include HalloWelt4 weltindex=$dummy
+	#n: Nein

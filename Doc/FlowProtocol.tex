@@ -59,7 +59,7 @@ Die Grundidee der Anwendung besteht darin, ein Medium zu bieten, um Spezialwisse
 \subsection{Anwendungsbereiche}
 Die Anwendungsbereiche für diese Anwendung sind sehr vielfältig. Die ursprüngliche Intention war die Aufstellung von Prüflisten für wiederkehrende komplexe Tätigkeit\-en, die in vielen einzelnen Aspekten variieren können, sodass jeweils nur bestimmte Auswahl von Prüfpunkten relevant ist. Eine Gesamtprüfliste, bei der immer ein Großteil der Punkte hätte ignoriert werden müssen, wäre sowohl aufwendig, als auch fehlerträchtig, und daher nicht effektiv. \FlowProtocol kann hier durch sein Fragekonzept die für jeden Einzelfall relevanten Aspekte herausfiltern, und auf diese Weise sogar beliebig stark ins Detail gehen. Gleichzeitig hilft dem Anwender die Beantwortung der Fragen auch, sich gedanklich ausführlich mit seiner Aufgabe auseinanderzusetzen. Durch die Vermeidung offener Fragen wird gleichzeitig das Risiko minimiert, dass Dinge vergessen werden. Das Ergebnis ist ein zu 100\% relevantes und vollständiges Protokoll.
 
-Ein besonders positiver Nebeneffekt dieser Vorgehensweise besteht darin, dass durch einfaches Auswählen von Antworten am Ende ein Ergebnisdokument erstellt wird, das nicht mehr manuell erstellt werden muss. Das Anwendungsgebiet dehnt sich damit auf alle Arten von Dokumenten aus, die sich aus einer Aufzählung von Textbausteinen zusammensetzen, deren Zusammenstellung über eine Reihe iterierter Fragen erfolgen kann. Dies umfasst beispielsweise Bestandsaufnahmen, Analyseprotokolle, Zusammenfassungen, Aufgabenlisten und vieles andere mehr. Für kleinere Systeme lassen sich sogar mit überschaubarem Aufwand Vorlagen erstellen, die nicht nur das Ergebnis einer Analyse zusammenfassen, sondern ergänzend dazu auch schon Lösungsansätze und mögliche weitere Schritte. Man kann so vom Prinzip her ein kleines Expertensystem erstellen, das wertvolles Spezialwissen eines Experten in sehr einfacher Form für andere Mitarbeiter verfügbar macht, ähnlich wie ein Chatbot. Das schont wertvolle Unternehmensressourcen und beugt Verfügbarkeitsengpässen vor. Auch kleinere personalisierte Umfragen lassen sich damit durchführen, wenn man die Rücksendung des Ergebnisses instruiert. Aber insbesondere dort, wo man sich im Rahmen von Normen wie ISO9001 oder ISO27001 dazu verpflichtet hat, klare Qualitätsstandards im Bereich der Unternehmensprozesse einzuhalten, kann \FlowProtocol gute Unterstützung leisten!
+Ein besonders positiver Nebeneffekt dieser Vorgehensweise besteht darin, dass durch einfaches Auswählen von Antworten am Ende ein Ergebnisdokument entsteht, das nicht mehr manuell erstellt werden muss. Das Anwendungsgebiet dehnt sich damit auf alle Arten von Dokumenten aus, die sich aus einer Aufzählung von Textbausteinen zusammensetzen, deren Zusammenstellung über eine Reihe iterierter Fragen erfolgen kann. Dies umfasst beispielsweise Bestandsaufnahmen, Analyseprotokolle, Zusammenfassungen, Aufgabenlisten und vieles andere mehr. Für kleinere Systeme lassen sich sogar mit überschaubarem Aufwand Vorlagen erstellen, die nicht nur das Ergebnis einer Analyse zusammenfassen, sondern ergänzend dazu auch schon Lösungsansätze und mögliche weitere Schritte. Man kann so vom Prinzip her ein kleines Expertensystem erstellen, das wertvolles Spezialwissen eines Experten in sehr einfacher Form für andere Mitarbeiter verfügbar macht, ähnlich wie ein Chatbot. Das schont wertvolle Unternehmensressourcen und beugt Verfügbarkeitsengpässen vor. Auch kleinere personalisierte Umfragen lassen sich damit durchführen, wenn man die Rücksendung des Ergebnisses instruiert. Aber insbesondere dort, wo man sich im Rahmen von Normen wie ISO9001 oder ISO27001 dazu verpflichtet hat, klare Qualitätsstandards im Bereich der Unternehmensprozesse einzuhalten, kann \FlowProtocol gute Unterstützung leisten!
 
 \subsection{Konfiguration}
 \FlowProtocol ist bewusst einfach gehalten und soll es auch bleiben. Als Web-An\-wen\-dung kann der Dienst innerhalb einer Einrichtung zentral zur Verfügung gestellt werden. Die einzige notwendige Konfiguration ist die Angabe eines serverseitig verfügbaren Vorlagenordners, in dem sich die Vorlagen befinden (einstellbar über die Eigenschaft TemplatePath in der Datei appsettings.json). Es werden weder Datenbank noch zusätzliche Dienste benötigt. Die Vorlage-Dateien sind normale Textdateien (in UTF-8-Codierung), die die eigentliche Logik enthalten, und die über die Anwendung ausgeführt werden. Die Syntax der Vorlage-Dateien ist ebenfalls sehr einfach und bewusst für die manuelle Erstellung in einem Editor vorgesehen. Der Aufbau ist zeilenbasiert und verwendet Einrückung zur Abbildung der Verschachtelung. Die Erstellung einer ersten eigenen Vorlage ist innerhalb von 2 Minuten möglich. Eine ausführliche Beschreibung des Sprachumfangs wird in der Befehlsreferenz gegeben. Das Ergebnis einer Bearbeitung wird am Ende auf dem Bildschirm ausgegeben, von wo aus es in die Zwischenablage übernommen werden kann. Tatsächlich wird in den meisten Fällen eine Weiterverarbeitung in einem anderen System (E-Mail, CRM, Projektverwaltung) erfolgen, wo noch Begriffe ergänzt und Prozesse angestoßen werden können und eine revisionssichere Verwaltung möglich ist.
@@ -115,7 +115,7 @@ Wie soll \dq Hallo Welt\dq ausgegeben werden?
 }
 Der Anwender kann und eine der drei Ant\-wort\-mög\-lich\-kei\-ten wählen, und die Bearbeitung mit der Weiter-Taste fortsetzen, bzw.\ in diesem Fall abschließen. 
 
-Wenn man zum Beispiel die zweite Antwortmöglichkeit \glqq In Großbuchstaben\grqq\ , so sieht das Ergebnis wie folgt aus:
+Wenn man zum Beispiel die zweite Antwortmöglichkeit \glqq In Großbuchstaben\grqq, so sieht das Ergebnis wie folgt aus:
 \webbox{
 \webheadR{Vorlage Demo, 01 HalloWelt}
 \begin{numlist}
@@ -240,7 +240,7 @@ Das Ergebnis einer Bearbeitung kann in vielen Fällen mehr als eine Liste sein. E
         >> Die Alternativen >> Hallo Welt
         >> Die Alternativen >> HALLO WELT
 \end{verbatim}
-Wählt man die Antwortmöglichkeit \glqq In Großbuchstaben\grqq\ , so erhält man die folgende Ausgabe:
+Wählt man die Antwortmöglichkeit \glqq In Großbuchstaben\grqq, so erhält man die folgende Ausgabe:
 \webbox{
 \webheadR{Ergebnisliste (Demo, 05 Gruppierungen)}\\[3mm]
 Deine Ausgabe
@@ -277,7 +277,7 @@ Ausgaben können je nach Vorlage selbst wieder Tätigkeiten oder Aufgaben beschrei
     #a3: Rückwärts
         >> tleW ollaH
 \end{verbatim}
-Wählt man die Antwortmöglichkeit \glqq In Großbuchstaben\grqq\ , so erhält man die folgende Ausgabe:
+Wählt man die Antwortmöglichkeit \glqq In Großbuchstaben\grqq, so erhält man die folgende Ausgabe:
 \webbox{
 \webheadR{Ergebnisliste (Demo, 06 Unterpunkte)}
 \begin{numlist}
@@ -423,7 +423,7 @@ Mit der Funktionsdatei HalloWelt1.qff
 \end{verbatim}
 Neben der Erhöhung der Übersichtlichkeit hat die Verwendung von Funktionen viele weitere Vorteile. Auf technischer Ebene vereinfacht es die Verarbeitung, da eine Funktion erst dann geladen wird, wenn der entsprechende Pfad auch tatsächlich erreicht wird. Aus Anwendersicht ergibt sich der große Vorteil, dass man eine Funktion in verschiedenen Antwortzweigen aufrufen kann, und damit keinen doppelten Code pflegen muss. Entsprechend lassen sich Funktionen auch aus verschiedenen Vorlagen heraus aufrufen, sodass fachliche Einheiten ausgelagert und mehrfach wieder verwendet werden können.
 
-\subsection{Parametrisiert Funktionen}
+\subsection{Parametrisierte Funktionen}
 Möchte man eine Funktion innerhalb einer Vorlage mehrfach ausführen, so stößt man auf das Problem, dass die dort eingetragenen Frage-Schlüssel für beide Aufrufe identisch sind, und so der zweite Aufruf automatisch die Antworten des ersten Aufrufs übernehmen würde. Zudem wäre die Anzeige der Fragen identisch, sodass man diese beim Beantworten nicht den jeweiligen Aufrufen zuordnen könnte. Und dieses Problem zu lösen, lassen sich Aufrufe parametrisieren.
 
 \Syntax
@@ -641,6 +641,7 @@ Ausführungsfehler treten im Zusammenhang mit der Ausführung von Befehlen auf und
 \FehlerBeschreibungItem{C02}{Der Befehl $\dots$ ist nicht bekannt und kann nicht ausgeführt werden.} Tritt auf, wenn eine Befehlsanweisung keinem bekannten Befehl entspricht. Eine Abweichung in der Groß-Klein-Schreibung kann als Ursache ausgeschlossen werden.
 \FehlerBeschreibungItem{C03}{Die Funktionsdatei $\dots$ konnte nicht geladen werden.} Tritt auf, wenn in einem Include-Befehl angegebene Funktionsdatei nicht gefunden werden konnte.
 \FehlerBeschreibungItem{C04}{Der Wert der Variablen $\dots$ konnte nicht als ganze Zahl interpretiert werden.} Tritt auf, wenn für eine Variable im Set-Befehl ein Wert addiert werden soll, und diese zum entsprechenden Zeitpunkt einen nichtnumerischen Wert enthält.
+\FehlerBeschreibungItem{C05}{Der Aufruf der Funktionsdatei $\dots$ überschreitet das Rekursionsmaximum von 100.} Tritt auf, wenn mehr als 100 Mal eine Funktionsdatei aufgerufen wird. Diese einfache Sicherung verhindert Endlosrekursionen, die zum Absturz der Anwendung führen würden.
 \end{description}
 \newpage
 \section{Spezialbefehle}
