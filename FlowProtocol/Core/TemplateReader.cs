@@ -39,13 +39,14 @@ namespace FlowProtocol.Core
             using (StreamReader sr = new StreamReader(filepath))
             {
                 Regex regDescription = new Regex("^///(.*)");
-                Regex regComment = new Regex("^//.*");
+                Regex regComment = new Regex("^//.*");                
                 Regex regRestriction = new Regex(@"^\?([A-Za-z0-9]*[']?):(.*)");
                 Regex regOption = new Regex("^#([A-Za-z0-9]*):(.*)");
                 Regex regSubItem = new Regex("^>(.*)");
                 Regex regGroupedResultItem = new Regex("^>>(.*)>>(.*)");
                 Regex regResultItem = new Regex("^>>(.*)");
-                Regex regExecute = new Regex(@"^~Execute");   
+                Regex regExecute = new Regex(@"^~Execute");
+                Regex regInputItem = new Regex(@"^~Input ([A-Za-z0-9]*[']?):(.*)");
                 Regex regCommand = new Regex(@"^~([A-Za-z0-9]*)\s*(.*)");                      
                 ResultItem? currentResultItem = null;
                 int linenumber = 0;
@@ -93,13 +94,7 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regRestriction.Match(codeline);
-                                string key = m.Groups[1].Value.Trim();
-                                if (key.EndsWith("'"))
-                                {
-                                    keyindex++;
-                                    key = key.Replace("'","_" + keyindex.ToString());
-                                }
-                                Restriction r = new Restriction(){Key = key, QuestionText = m.Groups[2].Value.Trim()};
+                                Restriction r = new Restriction(){Key = AddKeyNumber(m.Groups[1].Value.Trim(), ref keyindex), QuestionText = m.Groups[2].Value.Trim()};
                                 parent.Restrictions.Add(r);
                                 ResttrictionStack.Push(new Tuple<int, Restriction>(indent, r));
                             }
@@ -164,6 +159,17 @@ namespace FlowProtocol.Core
                             else AddReadError("R08", "Execute-Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);                            
                             currentResultItem = null;
                         }
+                        else if (regInputItem.IsMatch(codeline))
+                        {
+                            Template? parent = GetMatchingParentTemplate(indent, TemplateStack);
+                            if (parent != null)
+                            {
+                                var m = regInputItem.Match(codeline);
+                                InputItem q = new InputItem(){ Key = AddKeyNumber(m.Groups[1].Value.Trim(), ref keyindex), QuestionText = m.Groups[2].Value.Trim()};
+                                parent.InputItems.Add(q);                                
+                            }
+                            else AddReadError("R11", "Input-Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);                            
+                        }
                         else if (regCommand.IsMatch(codeline))
                         {
                             Template? parent = GetMatchingParentTemplate(indent, TemplateStack);
@@ -190,6 +196,17 @@ namespace FlowProtocol.Core
                 }    
             }     
             return main;      
+        }
+
+        // Ergänzt einen Key der mir ' endet um einen eindeutigen Index
+        private string AddKeyNumber(string key, ref int keyindex)
+        {;
+            if (key.EndsWith("'"))
+            {
+                keyindex++;
+                key = key.Replace("'","_" + keyindex.ToString());
+            }
+            return key;
         }
 
         // Fügt einen Einlesefehler hinzu

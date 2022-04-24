@@ -13,6 +13,7 @@ namespace FlowProtocol.Pages.FlowTemplates
       public List<string>? TemplateDescription {get; set; }      
       public List<Restriction> ShowRestrictions { get; set; }
       public Dictionary<string, List<ResultItem>> ShowResultGroups {get; set;}
+      public List<InputItem> ShowInputs { get; set; }
       private string TemplatePath { get; set; }
       private string TemplateDetailPath { get; set; }
       private Template? CurrentTemplate { get; set; }
@@ -35,6 +36,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          TemplateDetailPath = string.Empty;
          TemplateBreadcrumb = "Unbekannte Vorlage";
          GlobalVars = new Dictionary<string, string>();
+         ShowInputs = new List<InputItem>();
       }
       public IActionResult OnGet(string template)
       {
@@ -65,10 +67,11 @@ namespace FlowProtocol.Pages.FlowTemplates
       private void ExtractRestrictions(Template t)
       {
          RunCommand(t.Commands, ref t);
-         AddResultItems(t.ResultItems);          
+         AddInputItems(t.InputItems);
+         AddResultItems(t.ResultItems);         
          foreach (var r in t.Restrictions)
          {
-            r.ApplyTextOperation(ReplaceGlobalVars);            
+            r.ApplyTextOperation(ReplaceGlobalVars);
             if (!SelectedOptions.ContainsKey(r.Key))
             {
                // Frage noch unbeantwortet auf Seite übernehmen
@@ -101,6 +104,25 @@ namespace FlowProtocol.Pages.FlowTemplates
             // Alle Fragen sind beantwortet und es gibt ein Folge-Template: ausführen
             ExtractRestrictions(t.FollowTemplate);
          }
+      }
+
+      // Fügt die noch offenen erreichbaren Eingaben hinzu
+      private void AddInputItems(List<InputItem> inputlist)
+      {
+         foreach(var q in inputlist)
+         {
+            q.ApplyTextOperation(ReplaceGlobalVars);
+            if (!SelectedOptions.ContainsKey(q.Key))
+            {
+               // Eingabe noch nicht ausgefüllt: auf Seite übernehmen
+               SelectedOptions[q.Key] = string.Empty;
+               ShowInputs.Add(q);
+            }
+            else
+            {
+               GivenKeys.Add(q.Key);               
+            }
+         }      
       }
 
       // Fügt die Ergebnispunkte in die Ergebnisgruppen hinzu
@@ -269,6 +291,10 @@ namespace FlowProtocol.Pages.FlowTemplates
       private string ReplaceGlobalVars(string input)
       {
          foreach (var v in GlobalVars)
+         {
+            input = input.Replace("$" + v.Key, v.Value);
+         }
+         foreach (var v in SelectedOptions)
          {
             input = input.Replace("$" + v.Key, v.Value);
          }
