@@ -1,0 +1,9 @@
+/// Es wird ein Wert abgefragt
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F1: Möchtest du eine besondere Welt grüßen?
+	#j: Ja
+		~Input F2: Welche Welt möchtest du grüßen?
+	#n: Nein
+		~Implies F2=Welt
+~Execute
+>> Hallo $F2!

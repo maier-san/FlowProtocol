@@ -315,7 +315,7 @@ Eine Frage kann an anderer Stelle wiederholt gestellt werden. Ausschlaggebend da
 Bei der Wiederholung einer Frage können auch nur Teile der ursprünglichen Ant\-wort\-mög\-lich\-kei\-ten gegeben werden. Wird darunter die zuerst gegebene Antwort nicht gefunden, so wird keiner der Antwortzweige verarbeitet. Zur Vereinfachung kann jedoch mit dem Antwortschlüssel \texttt{\#x} eine Antwortmöglichkeit gegeben werden, die stellvertretend für alle anderen Ant\-wort\-mög\-lich\-kei\-ten steht. Wird im obigen Beispiel also für F1 die Antwortmöglichkeit \texttt{\#a3} gewählt, so wird diese mit der Wiederholung der Frage dem Antwortschlüssel \texttt{\#x} zugeordnet.
 
 \subsection{Implikationen}
-Die Antwort auf eine Frage kann in manchen Fällen die Antwort auf eine andere implizieren. Dies kann mit dem Implies-Befehl abgebildet werden.
+Die Antwort auf eine Frage kann in manchen Fällen die Antwort auf eine andere implizieren. Dies kann mit dem \verb|~Implies|-Befehl abgebildet werden.
 
 \Syntax
 \begin{verbatim}
@@ -370,7 +370,7 @@ Das Durchnummerieren der Frageschlüssel kann in umfangreichen Dateien sehr müh\-
 Die Apostrophzeichen in den Schlüsseln werden pro Datei durchnummeriert und im obigen Beispiel zu \verb|F_1| und \verb|F_2| ersetzt. Schlüssel ohne das \verb|'|-Zeichen bleiben unverändert und können für Implikationen oder Wiederholungen genutzt werden. Implikationen für automatisch nummerierte Schlüssel sind zwar ebenfalls möglich, aber aufgrund der fehlenden Transparenz keine gute Idee. Die Nummerierung erfolgt pro Datei, was bei der Verwendung von Funktionen (siehe Abschnitt~\ref{Funktionen}) berücksichtigt werden muss.
 
 \subsection{Ausführungen}
-Bei längeren Sequenzen und insbesondere bei der Verwendung von Wiederholungen und Implikationen ist es wünschenswert, zunächst einen Teil der Fragen vollständig abzuarbeiten, bevor die Fragen aus dem nachfolgenden Teil angezeigt werden. Dies ist mit dem Execute-Befehl möglich.
+Bei längeren Sequenzen und insbesondere bei der Verwendung von Wiederholungen und Implikationen ist es wünschenswert, zunächst einen Teil der Fragen vollständig abzuarbeiten, bevor die Fragen aus dem nachfolgenden Teil angezeigt werden. Dies ist mit dem \verb|~Execute|-Befehl möglich.
 \Syntax
 \begin{verbatim}
 ~Execute
@@ -499,15 +499,15 @@ Variablen können auch unabhängig von Funktionsparametern gesetzt und in Fragen, 
         >> Der Preis beträgt $Preis.
     #n: Nein
 \end{verbatim}
-Wird eine Variable in einer Frage oder Antwort verwendet, sollte durch die Struktur sichergestellt werden, dass die Frage, die für das Setzen der Variablen zuständig ist, zuvor ausgeführt wurde. Dies kann z.B. mit dem oben beschriebenen Execute-Befehl geschehen.
+Wird eine Variable in einer Frage oder Antwort verwendet, sollte durch die Struktur sichergestellt werden, dass die Frage, die für das Setzen der Variablen zuständig ist, zuvor ausgeführt wurde. Dies kann z.B. mit dem oben beschriebenen \verb|~Execute|-Befehl geschehen.
 
 \subsection{Additionen}
-Über Variablen lassen sich auch einfache Additionen durchführen, beispielsweise um Kosten, Aufwände oder Komplexität zu ermitteln, die sich aus den gewählten Ant\-wort\-mög\-lich\-kei\-ten zusammensetzen. Dies ist ebenfalls über den Set-Befehl möglich.
+Über Variablen lassen sich auch einfache Additionen durchführen, beispielsweise um Kosten, Aufwände oder Komplexität zu ermitteln, die sich aus den gewählten Ant\-wort\-mög\-lich\-kei\-ten zusammensetzen. Dies ist ebenfalls über den \verb|~Set|-Befehl möglich.
 \Syntax
 \begin{verbatim}
 ~Set <Variable 1>+=<Inkrement 1>;  . . .
 \end{verbatim}
-Additionen und Variablenzuweisungen können auch im gleichen Set-Befehl gemischt werden. Bei ihrer ersten Verwendung in einer Addition wird der Variablen zuvor ein Wert von 0 zugewiesen. Hat eine Variable bei der Verwendung in einer Addition bereits einen Wert, der nicht als natürliche Zahl interpretierbar ist, so wird die Addition ignoriert.
+Additionen und Variablenzuweisungen können auch im gleichen \verb|~Set|-Befehl gemischt werden. Bei ihrer ersten Verwendung in einer Addition wird der Variablen zuvor ein Wert von 0 zugewiesen. Hat eine Variable bei der Verwendung in einer Addition bereits einen Wert, der nicht als natürliche Zahl interpretierbar ist, so wird die Addition ignoriert.
 \Beispiel
 \begin{verbatim}
 /// Formatierte Hallo-Welt-Ausgabe
@@ -561,7 +561,7 @@ Mit der Funktionsdatei HalloWelt3.qff
         ~Include HalloWelt3 weltindex=$dummy
     #n: Nein
 \end{verbatim}
-Man beachte, dass Additionen wie im Set-Befehl in den Zuweisungen des Include-Befehls selbst nicht möglich sind, da Include-Parameter anders verarbeitet werden als Variablen.
+Man beachte, dass Additionen wie im \verb|~Set|-Befehl in den Zuweisungen des \verb|~Include|-Befehls selbst nicht möglich sind, da Include-Parameter anders verarbeitet werden als Variablen.
 
 Das obige Beispiel wird wie folgt angezeigt:
 \webbox{
@@ -587,6 +587,37 @@ Wählt man nacheinander Antworten und bestätigt die zweite Frage in den ersten be
 \item Aloah Welt 3
 \end{numlist}
 }
+
+\subsection{Eingaben}
+In manchen Fällen kann es sinnvoll sein, kurze Texte oder einzelne Begriffe abzufragen, um diese als Bestandteil der Ausgabe zu verwenden. Insbesondere wenn man über eine Schleife eine Sequenz von Elementen abfragt, die man in der Ausgabe nicht nur als nummerierte, sondern benannte Aufzählung haben möchte. Dafür gibt es den \verb|~Input|-Befehl.
+
+\Syntax
+\begin{verbatim}
+/// Formatierte Hallo-Welt-Ausgabe
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Input  <Eingabeschlüssel>: <Fragetext>
+\end{verbatim}
+Der Schlüssel dient wie bei den Fragen zur Verwaltung der Eingabe in der URL, und der Fragetext wird an der Oberfläche angezeigt. Der Zugriff auf die Eingabe erfolgt wie bei Variablen über den Eingabeschlüssel, indem man das \$-Zeichen voranstellt. Eine Eingabe kann ebenso wie die Antwort auf eine Frage mit dem \verb|~Implies|-Befehl impliziert werden. Die Zeichenzahl ist pro Antwort auf maximal 50 Zeichen beschränkt, und aufgrund der beschränkten Zeichenzahl in der URL sollte diese Funktion nicht überstrapaziert werden.
+
+\Beispiel
+\begin{verbatim}
+/// Es wird ein Wert abgefragt
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F1: Möchtest du eine besondere Welt grüßen?    
+    #j: Ja
+        ~Input F2: Welche Welt möchtest du grüßen?
+    #n: Nein
+        ~Implies F2=Welt
+~Execute
+>> Hallo $F2!
+\end{verbatim}
+Wird im obigen Beispiel die Antwort  Ja gewählt, so wird im nächsten Schritt die Frage gestellt, welche Welt man grüßen möchte, mit der Möglichkeit einen Text einzugeben. Wählt man Nein, so wird die Frage implizit mit \glqq Welt\grqq\ beantwortet.
+\webbox{
+\webhead{Vorlage Demo, 19 Eingaben}{Es wird ein Wert abgefragt}
+Welche Welt möchtest du grüßen?\\
+\fbox{\rule[-1mm]{0mm}{4mm}\hspace*{6cm}}
+}
+
 \newpage
 \section{Fehlermeldungen}
 Die Möglichkeit, Vorlagen von Hand zu schreiben birgt ein gewisses Fehlerrisiko. Die Fehler werden bei der Ausführung weitestgehend erkannt und im Kopfbereich mit allen notwendigen Informationen angezeigt. 
@@ -632,6 +663,7 @@ Einlesefehler treten direkt beim Einlesen einer Vorlage- oder Funktionsdatei auf
 \FehlerBeschreibungItem{R08}{Execute-Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn der Execute-Befehl keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
 \FehlerBeschreibungItem{R09}{Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein Befehl keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
 \FehlerBeschreibungItem{R10}{Zeile nicht interpretierbar} Tritt auf, wenn eine Zeile nicht als Anweisung interpretiert werden kann, sie also keiner innerhalb einer Vorlage bekannten Syntax entspricht.
+\FehlerBeschreibungItem{R11}{Input-Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein Input-Befehl  keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
 \end{description}
 
 \subsection{Ausführungsfehler}
