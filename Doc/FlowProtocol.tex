@@ -687,19 +687,21 @@ Spezialbefehle sind spezielle Befehle, die die Struktur einer Vorlage verändern,
 
 \subsection{Rangfolgenbestimmung}
 Die Rangfolgenbestimmung ist die Implementierung einer Methode, bei der man eine Rangfolge von Dingen wie z.B. Projekten dadurch bestimmt, dass man diese paarweise vergleicht. Bei jedem Vergleich bekommt der Gewinner einen Punkt und am Ende sortiert man die Einträge entsprechend ihrer Punktezahl. Die Reduzierung auf 2er-Vergleiche vereinfacht zwar die Entscheidung pro Frage, macht die Beantwortung jedoch auch deutlich umfangreicher. Für $n$ Elemente ergeben sich $\frac{n(n-1)}{2}$ Einzelfragen, also für $n=8$ also schon 28 Fragen.
+\FlowProtocol unterteilt dabei die Einzelfragen so in Gruppen, dass jedes Element maximal einmal pro Gruppe vorkommt. Für eine gerade Anzahl von $n$ Elementen werden auf diese Weise $n-1$ Gruppen mit $\frac n2$ Vergleichen gebildet und für eine ungerade Anzahl $n$ sind es $n$ Gruppen mit je $\frac{n-1}{2}$ Vergleichen.
 \Syntax
 \begin{verbatim}
-~Vote Key=<F-Schlüssel> [;GroupSize=<G-Größe>] [;GroupName=<G-Name>;]
+~Vote Key=<F-Schlüssel> [;GroupName=<G-Name>;]
 \end{verbatim}
 \Beispiel
 \begin{verbatim}
 /// Es wird eine Rangfolgenbestimmung durchgeführt
 //  Anwendungsbeispiel für die Befehlsreferenz
-~Vote Key=V; GroupSize=3; GroupName=Die besten Welten;
+~Vote Key=V; GroupName=Die besten Welten;
 ?V: Welche Welt gefällt dir besser?
     #w1: Waldwelt
     #w2: Wasserwelt
     #w3: Bergwelt
+    #w4: Wichtelwelt
 \end{verbatim}
 Der Aufruf dieser Vorlage führt dazu, dass die Frage mit dem Schlüssel \texttt{V} zu einer Reihe von Einzelfragen umgestaltet wird. Genauer: Die Frage wird für jede der drei 2er-Kombinationen abgefragt. Die Fragen werden zur 3er-Gruppen zusammengefasst, was hier eine Gruppe ergibt. Das Ergebnis wird unter der Gruppenüberschrift \textit{Die besten Welten} aufgelistet. 
 \webbox{
@@ -711,13 +713,8 @@ Welche Welt gefällt dir besser?
 \end{circlist}
 Welche Welt gefällt dir besser? 
 \begin{circlist}
-\item Waldwelt
 \item Bergwelt
-\end{circlist}
-Welche Welt gefällt dir besser? 
-\begin{circlist}
-\item Wasserwelt
-\item Bergwelt
+\item Wichtelnwelt
 \end{circlist}
 }
 Das Ergebnis wird dann wie folgt präsentiert:
@@ -725,11 +722,13 @@ Das Ergebnis wird dann wie folgt präsentiert:
 \webheadR{Ergebnisliste (Demo, 16 Vote)}\\[3mm]
 Die besten Welten
 \begin{numlist}
-\item Platz 1 (2 Punkte) Bergwelt
-\item Platz 2 (1 Punkte) Waldwelt
-\item Platz 3 (0 Punkte) Wasserwelt
+\item Platz 1 (3 Punkte) Bergwelt
+\item Platz 2 (2 Punkte) Waldwelt
+\item Platz 3 (1 Punkte) Wasserwelt
+\item Platz 4 (0 Punkte) Wichtelwelt
 \end{numlist}
 }
+Man beachte, es kann auch Punktegleichstand geben. Dann teilen sich mehrere Elemente einen Platz.
 \subsection{Zitatmodus}
 Sofern es bei einer Vorlage nur darum geht, die gewählten Antworten auf die Fragen zu notieren, kann man sich die Arbeit stark vereinfachen. Mit den standardmäßigen Sprachmitteln müsste man in jedem Antwortzweig Ausgaben erzeugen, die sowohl Frage, als auch Antwort beinhalten, was eine prinzipiell unnötige Wiederholung einer schon vorhandenen Information ist. Der Zitatmodus erledigt genau das für einen kompletten Vorlageteil.
 \Syntax

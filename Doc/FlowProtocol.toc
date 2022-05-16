@@ -1,4 +1,4 @@
-\babel@toc {german}{}
+\babel@toc {german}{}\relax 
 \contentsline {section}{\numberline {1}Beschreibung und Hintergrund}{3}{}%
 \contentsline {subsection}{\numberline {1.1}Grundidee}{3}{}%
 \contentsline {subsection}{\numberline {1.2}Anwendungsbereiche}{3}{}%
