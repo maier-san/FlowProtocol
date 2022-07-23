@@ -8,14 +8,15 @@ namespace FlowProtocol.SpecialCommands
         {
             Restriction? res = CommandHelper.GetRestriction(cmd, "Key", template, addError);
             string groupname = CommandHelper.GetTextParameter(cmd, "GroupName", "Ergebnis", addError, false);
-            Dictionary<Option, int> votingsum = SetCrossTemplates(template, res, selectedOptions);
+            string drawoption = CommandHelper.GetTextParameter(cmd, "DrawOption", "", addError, true);
+            Dictionary<Option, int> votingsum = SetCrossTemplates(template, res, selectedOptions, drawoption);            
             List<ResultItem> result = CreateResultlist(votingsum, groupname);
             return result;
         }
 
         // Aus den Antworten einer Frage werden Gruppen aus Paar-Vergleichen gemacht.
         // Die Aufteilung in Gruppen erfolgt automatisch.
-        private Dictionary<Option, int> SetCrossTemplates(Template template, Restriction? res, Dictionary<string, string> selectedOptions)
+        private Dictionary<Option, int> SetCrossTemplates(Template template, Restriction? res, Dictionary<string, string> selectedOptions, string drawoption)
         {
             Template t = template;
             Template? orgfollow = template.FollowTemplate;
@@ -48,12 +49,22 @@ namespace FlowProtocol.SpecialCommands
                     Restriction ncres = new Restriction() { Key = res.Key + "_" + i1.Key + i2.Key, QuestionText = res.QuestionText };
                     ncres.Options.Add(new Option(ncres.Key) { Key = i1.Key, OptionText = i1.OptionText });
                     ncres.Options.Add(new Option(ncres.Key) { Key = i2.Key, OptionText = i2.OptionText });
+                    int val = 1;
+                    const string drawKey = "dr";
+                    if (!string.IsNullOrEmpty(drawoption))
+                    {
+                        ncres.Options.Add(new Option(ncres.Key) { Key = drawKey, OptionText = drawoption });
+                        val = 2;
+                    }
                     if (selectedOptions.ContainsKey(ncres.Key))
                     {
-                        Option? winner = null;
-                        if (selectedOptions[ncres.Key] == i1.Key) winner = i1;
-                        else if (selectedOptions[ncres.Key] == i2.Key) winner = i2;
-                        if (winner != null) votingsum[winner]++;
+                        if (selectedOptions[ncres.Key] == i1.Key) votingsum[i1]+=val;
+                        else if (selectedOptions[ncres.Key] == i2.Key) votingsum[i2]+=val;
+                        else if (!string.IsNullOrEmpty(drawoption) && selectedOptions[ncres.Key] == drawKey)
+                        {
+                            votingsum[i1]+=1;
+                            votingsum[i2]+=1;
+                        }
                     }
                     t.Restrictions.Add(ncres);
                 }

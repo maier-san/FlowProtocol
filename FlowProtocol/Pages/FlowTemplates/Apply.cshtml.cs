@@ -16,7 +16,6 @@ namespace FlowProtocol.Pages.FlowTemplates
       public List<InputItem> ShowInputs { get; set; }
       private string TemplatePath { get; set; }
       private string TemplateDetailPath { get; set; }
-      private Template? CurrentTemplate { get; set; }
       public List<ReadErrorItem> ReadErrors {get; set;}   
       private int RecursionCount = 0;
 
