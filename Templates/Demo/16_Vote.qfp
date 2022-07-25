@@ -1,6 +1,6 @@
 /// Es wird eine Rangfolgenbestimmung durchgeführt
 //  Anwendungsbeispiel für die Befehlsreferenz
-~Vote Key=V; GroupSize=3; GroupName=Die besten Welten;
+~Vote Key=V; GroupSize=3; GroupName=Die besten Welten; DrawOption=egal
 ?V: Welche Welt gefällt dir besser?
 	#w1: Waldwelt
 	#w2: Wasserwelt

@@ -1,0 +1,22 @@
+/// Der Textbaustein "Hallo Welt" wird in einer Form deiner Wahl ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+	#a1: Ganz normal
+		>> Hallo Welt
+		~Call Zufrieden
+	#a2: In Großbuchstaben
+		>> HALLO WELT
+		~Call Zufrieden
+	#a3: Rückwärts
+		>> tleW ollaH
+~Execute
+>> Hier kommen wir nicht vorbei
+~Execute
+^Zufrieden
+?F2: Bist du mit dieser Form der Welt zufrieden?
+	#j: Ja
+		>> Bin zufrieden
+	#n: Nein
+		>> Bin nicht zufrieden
+~Execute
+>> Ende erreicht

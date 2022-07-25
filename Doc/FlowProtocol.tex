@@ -690,31 +690,35 @@ Die Rangfolgenbestimmung ist die Implementierung einer Methode, bei der man eine
 \FlowProtocol unterteilt dabei die Einzelfragen so in Gruppen, dass jedes Element maximal einmal pro Gruppe vorkommt. Für eine gerade Anzahl von $n$ Elementen werden auf diese Weise $n-1$ Gruppen mit $\frac n2$ Vergleichen gebildet und für eine ungerade Anzahl $n$ sind es $n$ Gruppen mit je $\frac{n-1}{2}$ Vergleichen.
 \Syntax
 \begin{verbatim}
-~Vote Key=<F-Schlüssel> [;GroupName=<G-Name>;]
+~Vote Key=<F-Schlüssel> [;GroupName=<G-Name>] 
+                        [;DrawOption=<Unentschiedenoption>]
 \end{verbatim}
 \Beispiel
 \begin{verbatim}
 /// Es wird eine Rangfolgenbestimmung durchgeführt
 //  Anwendungsbeispiel für die Befehlsreferenz
-~Vote Key=V; GroupName=Die besten Welten;
+~Vote Key=V; GroupName=Die besten Welten; DrawOption=egal
 ?V: Welche Welt gefällt dir besser?
     #w1: Waldwelt
     #w2: Wasserwelt
     #w3: Bergwelt
     #w4: Wichtelwelt
 \end{verbatim}
-Der Aufruf dieser Vorlage führt dazu, dass die Frage mit dem Schlüssel \texttt{V} zu einer Reihe von Einzelfragen umgestaltet wird. Genauer: Die Frage wird für jede der drei 2er-Kombinationen abgefragt. Die Fragen werden zur 3er-Gruppen zusammengefasst, was hier eine Gruppe ergibt. Das Ergebnis wird unter der Gruppenüberschrift \textit{Die besten Welten} aufgelistet. 
+Der Aufruf dieser Vorlage führt dazu, dass die Frage mit dem Schlüssel \texttt{V} zu einer Reihe von Einzelfragen umgestaltet wird. Genauer: Die Frage wird für jede der drei 2er-Kombinationen abgefragt. Die Fragen werden zur 3er-Gruppen zusammengefasst, was hier eine Gruppe ergibt. Das Ergebnis wird unter der Gruppenüberschrift \textit{Die besten Welten} aufgelistet.
+Die Option \texttt{DrawOption} ermöglicht es, für jede Paarung auch mit unentschieden zu stimmen, wobei der Text für diese Option frei gewählt werden kann. Im Beispiel oben wird als dritte Option jeweils \textit{egal} angezeigt. Die Punktevergabe wird in diesem Fall so angepasst, dass der Sieger einer Paarung 2 Punkte bekommt und im Fall eines Unentschiedens jeder einen Punkt, so dass auch hier die Gesamtpunktzahl immer gleich bleibt.
 \webbox{
 \webhead{Vorlage Demo, 16 Vote}{Es wird eine Abstimmungsbewertung durchgeführt}
 Welche Welt gefällt dir besser? 
 \begin{circlist}
 \item Waldwelt
 \item Wasserwelt
+\item egal
 \end{circlist}
 Welche Welt gefällt dir besser? 
 \begin{circlist}
 \item Bergwelt
 \item Wichtelnwelt
+\item egal
 \end{circlist}
 }
 Das Ergebnis wird dann wie folgt präsentiert:
@@ -722,9 +726,9 @@ Das Ergebnis wird dann wie folgt präsentiert:
 \webheadR{Ergebnisliste (Demo, 16 Vote)}\\[3mm]
 Die besten Welten
 \begin{numlist}
-\item Platz 1 (3 Punkte) Bergwelt
-\item Platz 2 (2 Punkte) Waldwelt
-\item Platz 3 (1 Punkte) Wasserwelt
+\item Platz 1 (6 Punkte) Bergwelt
+\item Platz 2 (4 Punkte) Waldwelt
+\item Platz 3 (2 Punkte) Wasserwelt
 \item Platz 4 (0 Punkte) Wichtelwelt
 \end{numlist}
 }
