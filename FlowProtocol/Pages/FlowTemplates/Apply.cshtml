@@ -108,6 +108,10 @@ else
                             }
                         </ul>
                     }
+                    @if (!string.IsNullOrWhiteSpace(t.CodeBlock))
+                    {
+                        <pre><code>@t.CodeBlock</code></pre>
+                    }
                 </li>
             }
         </ol>
