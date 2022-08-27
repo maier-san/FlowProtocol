@@ -27,7 +27,8 @@
       // Fügt eine Codezeile hinzu
       public void AddCodeLine(string codeline)
       {
-         if (CodeBlock == string.Empty) CodeBlock = codeline; else CodeBlock += Environment.NewLine + codeline;
+         // Hier nicht mit Environment.newline arbeiten, da sonst beim ausschneiden und kopieren des Codes unerwünschte Leerzeilen eingefügt werden.
+         if (CodeBlock == string.Empty) CodeBlock = codeline; else CodeBlock += "\n" + codeline;
       }
 
       // Wendet eine TExtoperation auf eine ganze Liste von Strings an.
