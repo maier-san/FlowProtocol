@@ -57,14 +57,21 @@
 Die Grundidee der Anwendung besteht darin, ein Medium zu bieten, um Spezialwissen ohne großen Aufwand zu erfassen und es dann in sehr einfacher Form für andere bereitzustellen, ohne dass es dafür vermittelt und erworben werden muss. Die Erstellung der Vorlagen kann und soll direkt durch die Menschen erfolgen, die über das jeweilige Wissen verfügen und die Anwendung für alle möglich sein, die dieses Wissen benötigen.
 
 \subsection{Anwendungsbereiche}
-Die Anwendungsbereiche für diese Anwendung sind sehr vielfältig. Die ursprüngliche Intention war die Aufstellung von Prüflisten für wiederkehrende komplexe Tätigkeit\-en, die in vielen einzelnen Aspekten variieren können, sodass jeweils nur bestimmte Auswahl von Prüfpunkten relevant ist. Eine Gesamtprüfliste, bei der immer ein Großteil der Punkte hätte ignoriert werden müssen, wäre sowohl aufwendig, als auch fehlerträchtig, und daher nicht effektiv. \FlowProtocol kann hier durch sein Fragekonzept die für jeden Einzelfall relevanten Aspekte herausfiltern, und auf diese Weise sogar beliebig stark ins Detail gehen. Gleichzeitig hilft dem Anwender die Beantwortung der Fragen auch, sich gedanklich ausführlich mit seiner Aufgabe auseinanderzusetzen. Durch die Vermeidung offener Fragen wird gleichzeitig das Risiko minimiert, dass Dinge vergessen werden. Das Ergebnis ist ein zu 100\% relevantes und vollständiges Protokoll.
+Die Anwendungsbereiche für diese Anwendung sind sehr vielfältig. Die ursprüngliche Intention war die Aufstellung von Prüflisten für wiederkehrende komplexe Tätigkeit\-en, die in vielen einzelnen Aspekten variieren können, sodass jeweils nur eine bestimmte Auswahl von Prüfpunkten relevant ist. Eine Gesamtprüfliste, bei der immer ein Großteil der Punkte hätte ignoriert werden müssen, wäre sowohl aufwendig, als auch fehlerträchtig, und daher nicht effektiv. \FlowProtocol kann hier durch sein Fragekonzept die für jeden Einzelfall relevanten Aspekte herausfiltern, und auf diese Weise sogar beliebig stark ins Detail gehen. Gleichzeitig hilft dem Anwender die Beantwortung der Fragen auch, sich gedanklich ausführlich mit seiner Aufgabe auseinanderzusetzen. Durch die Vermeidung offener Fragen wird gleichzeitig das Risiko minimiert, dass Dinge vergessen werden. Das Ergebnis ist ein zu 100\% relevantes und vollständiges Protokoll.
 
-Ein besonders positiver Nebeneffekt dieser Vorgehensweise besteht darin, dass durch einfaches Auswählen von Antworten am Ende ein Ergebnisdokument entsteht, das nicht mehr manuell erstellt werden muss. Das Anwendungsgebiet dehnt sich damit auf alle Arten von Dokumenten aus, die sich aus einer Aufzählung von Textbausteinen zusammensetzen, deren Zusammenstellung über eine Reihe iterierter Fragen erfolgen kann. Dies umfasst beispielsweise Bestandsaufnahmen, Analyseprotokolle, Zusammenfassungen, Aufgabenlisten und vieles andere mehr. Für kleinere Systeme lassen sich sogar mit überschaubarem Aufwand Vorlagen erstellen, die nicht nur das Ergebnis einer Analyse zusammenfassen, sondern ergänzend dazu auch schon Lösungsansätze und mögliche weitere Schritte. Man kann so vom Prinzip her ein kleines Expertensystem erstellen, das wertvolles Spezialwissen eines Experten in sehr einfacher Form für andere Mitarbeiter verfügbar macht, ähnlich wie ein Chatbot. Das schont wertvolle Unternehmensressourcen und beugt Verfügbarkeitsengpässen vor. Auch kleinere personalisierte Umfragen lassen sich damit durchführen, wenn man die Rücksendung des Ergebnisses instruiert. Aber insbesondere dort, wo man sich im Rahmen von Normen wie ISO9001 oder ISO27001 dazu verpflichtet hat, klare Qualitätsstandards im Bereich der Unternehmensprozesse einzuhalten, kann \FlowProtocol gute Unterstützung leisten!
+Ein besonders positiver Nebeneffekt dieser Vorgehensweise besteht darin, dass durch einfaches Auswählen von Antworten am Ende ein Ergebnisdokument entsteht, das nicht mehr manuell erstellt werden muss. Das Anwendungsgebiet dehnt sich damit auf alle Arten von Dokumenten aus, die sich aus einer Aufzählung von Textbausteinen zusammensetzen, deren Zusammenstellung über eine Reihe iterierter Fragen erfolgen kann. Dies umfasst beispielsweise Bestandsaufnahmen, Analyseprotokolle, Zusammenfassungen, Aufgabenlisten und vieles andere mehr. Für kleinere Systeme lassen sich sogar mit überschaubarem Aufwand Vorlagen erstellen, die nicht nur das Ergebnis einer Analyse zusammenfassen, sondern ergänzend dazu auch schon Lösungsansätze und mögliche weitere Schritte beschreiben. Man kann so vom Prinzip her ein kleines Expertensystem erstellen, das wertvolles Spezialwissen eines Experten in sehr einfacher Form für andere Mitarbeiter verfügbar macht, ähnlich wie ein Chatbot. Das schont wertvolle Unternehmensressourcen und beugt Verfügbarkeitsengpässen vor. 
+
+Eine besonders nützliche Anwendung ist die Erstellung von interaktiven Anleitungen. Hierbei werden ebenfalls Rahmenbedigungen und einzelne Textbausteine im Vorfeld abgefragt, und in Abhängigkeit davon die für den vorliegenden Fall relevanten Schritte der Anleitung ausgegeben. Die Möglichkeit, kontextbezogene und durch Textersetzungen angepasste Codepassagen in die Ausgabe einzufügen, macht \FlowProtocol zu einem besonders nützlichen Werkzeug in der Softwareentwicklung, wo derartige wiederkehrende Muster zum Tagesgeschäft gehören. Die Kombination von Anleitung und Codegenerator erhöht nicht nur die Effizient, sondern auch die Qualität.
+
+Auch kleinere personalisierte Umfragen lassen sich über Vorlagen realisieren, wenn man die Teilnehmer zur Rücksendung der Ergebnisse instruiert. Es gibt sogar einen speziellen Befehl, der bei der Rangfolgenbestimmung von kleineren Listen unterstützt, indem die darin vorkommenden Elemente paarweise gegenübergestellt werden (siehe Abschnitt~\ref{labRangfolgenbestimmung}). 
+Für wichtige Rangfolgen wie beispielsweise Projektprioritäten ist es natürlich besser, man hat detaillierte und bewährte Kriterien, die sich objektiv auf alle Elemente der Liste anwenden lassen, und die am Ende über einen Zahlenwert zu einer Rangfolge oder Auswahl führen. Auch solche Bewertungen lassen sich mit \FlowProtocol sehr leicht umsetzen und für alle verfügbar machen.
 
 \subsection{Konfiguration}
 \FlowProtocol ist bewusst einfach gehalten und soll es auch bleiben. Als Web-An\-wen\-dung kann der Dienst innerhalb einer Einrichtung zentral zur Verfügung gestellt werden. Die einzige notwendige Konfiguration ist die Angabe eines serverseitig verfügbaren Vorlagenordners, in dem sich die Vorlagen befinden (einstellbar über die Eigenschaft TemplatePath in der Datei appsettings.json). Es werden weder Datenbank noch zusätzliche Dienste benötigt. Die Vorlage-Dateien sind normale Textdateien (in UTF-8-Codierung), die die eigentliche Logik enthalten, und die über die Anwendung ausgeführt werden. Die Syntax der Vorlage-Dateien ist ebenfalls sehr einfach und bewusst für die manuelle Erstellung in einem Editor vorgesehen. Der Aufbau ist zeilenbasiert und verwendet Einrückung zur Abbildung der Verschachtelung. Die Erstellung einer ersten eigenen Vorlage ist innerhalb von 2 Minuten möglich. Eine ausführliche Beschreibung des Sprachumfangs wird in der Befehlsreferenz gegeben. Das Ergebnis einer Bearbeitung wird am Ende auf dem Bildschirm ausgegeben, von wo aus es in die Zwischenablage übernommen werden kann. Tatsächlich wird in den meisten Fällen eine Weiterverarbeitung in einem anderen System (E-Mail, CRM, Projektverwaltung) erfolgen, wo noch Begriffe ergänzt und Prozesse angestoßen werden können und eine revisionssichere Verwaltung möglich ist.
 
-Die Organisation der Vorlagen erfolgt auf zwei Ebenen. Auf unterster Ebene ist eine Unterteilung in Anwendergruppen vorgesehen, die jeweils ihre eigenen Vorlagen verwenden. In einem Unternehmen oder einer Einrichtung wird sich diese Aufteilung normalerweise am Mitarbeiterorganigramm orientieren. Ein Beispiel wäre die Aufteilung in Vertrieb, Marketing, Entwicklung, Administration. Jeder Ordner im Vorlagenordner wird in \FlowProtocol als Anwendergruppe auf der Seite Anwendergruppen angezeigt. Innerhalb dieser Ordner kann man die Vorlagen entweder direkt ablegen oder in weitere Unterordner unterteilen, um fachliche Gruppen zu bilden. Der Pfad einer Vorlage innerhalb dieser Struktur findet sich auch in der URL wieder, die innerhalb der Anwendung erzeugt wird, und kann so auch direkt als Link in einer E-Mail, einem Vorgang, im Wiki oder an einer anderen Stelle im Intranet bereitgestellt werden.
+Die Organisation der Vorlagen erfolgt auf zwei Ebenen. Auf unterster Ebene ist eine Unterteilung in Anwendergruppen vorgesehen, die jeweils ihre eigenen Vorlagen verwenden. In einem Unternehmen oder einer Einrichtung wird sich diese Aufteilung normalerweise am Mitarbeiterorganigramm orientieren. Ein Beispiel wäre die Aufteilung in Vertrieb, Marketing, Entwicklung, Administration. Jeder Ordner im Vorlagenordner wird in \FlowProtocol als Anwendergruppe auf der Seite Anwendergruppen angezeigt. Innerhalb dieser Ordner kann man die Vorlagen entweder direkt ablegen oder in weitere Unterordner unterteilen, um fachliche Gruppen zu bilden. Der Pfad einer Vorlage innerhalb dieser Struktur findet sich auch in der URL wieder, die innerhalb der Anwendung erzeugt wird, und kann so auch direkt als Link in einer E-Mail, einem Vorgang, im Wiki oder an einer anderen Stelle im Intranet bereitgestellt werden. Der Aufruf führt somit sofort zur Ausführung der gewünschten Vorlage, ohne dass diese über das Menü ausgewählt werden muss.
+
+Eine weitere Aufteilung kann innerhalb einer Vorlage realisiert werden, z.B.\ indem man dort auf oberster Ebene mit einem Menü oder einer Einstiegsfrage \glqq Was möchten Sie tun?\grqq beginnt. Für jede Auswahl kann wieder praktisch eine eigene Vorlage ausgeführt werden. Auch hier wird die Menüauswahl in der URL verwaltet und kann über Links oder Lesezeichen übermittelt oder gespeichert werden.
 
 \subsection{Technische Ergänzungen}
 
@@ -87,7 +94,7 @@ Als Dateiendung für eine Vorlagendatei muss \glqq .qfp\grqq\  (Quick Flow Protoc
 
 Im Allgemeinen wird die Groß-Klein-Schreibung berücksichtigt, z.B. bei Schlüsseln, Befehlen und Variablen. Bei der Verwendung von Text mit Umlauten sollte darauf geachtet werden, dass diese innerhalb der Anwendung korrekt dargestellt werden. In meiner Umgebung war dies mit der Kodierung UFT-8 der Fall.
 
-Die Verschachtelung der Struktur wird durch Einrückung abgebildet. Hier kann wahlweise mit Tabulator- oder Leerzeichen gearbeitet werden, jedoch sollte dies einheitlich geschehen, da die Struktur bei einer Durchmischung unter Umständen nicht mehr korrekt aufgelöst wird. Die Anwendung ersetzt Tabulatorzeichen durch vier Leezeichen, unabhängig von ihrer Position.
+Die Verschachtelung der Struktur wird durch Einrückung abgebildet. Hier kann wahlweise mit Tabulator- oder Leerzeichen gearbeitet werden, jedoch sollte dies einheitlich geschehen, da die Struktur bei einer Durchmischung unter Umständen nicht mehr korrekt aufgelöst wird. Die Anwendung ersetzt Tabulatorzeichen durch vier Leerzeichen, unabhängig von ihrer Position.
 Die Interpretation einer Datei erfolgt zeilenweise, d.h. jeder Zeilenumbruch schließt einen Befehl ab. Der Einsatz von Zeilenumbrüchen zur Formatierung ist damit nicht möglich.
 Leerzeilen werden bei der Verarbeitung ignoriert und können in beliebiger Menge eingefügt werden.
 
@@ -216,7 +223,7 @@ Soll \dq Hallo Welt\dq zusätzlich rückwärts ausgegeben werden?
 }
 
 \subsection{Gruppierungen}
-Das Ergebnis einer Bearbeitung kann in vielen Fällen mehr als eine Liste sein. Eine Vorlage zur Analyse kann beispielsweise zum einen den ist-Stand erfassen, mögliche Lösungsansätze formulieren und die noch ausstehenden Analyse-Maßnahmen Auf"|listen. Zu diesem Zweck können die Ausgaben in einer sehr einfachen Form kopiert werden.
+Das Ergebnis einer Bearbeitung kann in vielen Fällen mehr als eine Liste sein. Eine Vorlage zur Analyse kann beispielsweise zum einen den ist-Stand erfassen, mögliche Lösungsansätze formulieren und die noch ausstehenden Analyse-Maßnahmen Auf"|listen. Zu diesem Zweck können die Ausgaben in einer sehr einfachen Form gruppiert werden.
 
 \Syntax
 \begin{verbatim}
@@ -253,13 +260,13 @@ Die Alternativen
 \item tleW ollaH
 \end{numlist}
 }
-\subsection{Unterpunkte}
+\subsection{Unterpunkte}\label{labUnterpunkte}
 Ausgaben können je nach Vorlage selbst wieder Tätigkeiten oder Aufgaben beschreiben, die sich aus verschiedenen Schritten zusammensetzen, oder bei denen mehrere Teilaspekte zu berücksichtigen sind. Diese lassen sich in Form von Unterpunkten Auf"|listen. Ein Unterpunkt, der mit der Protokollkennung \glqq https://\grqq\  beginnt und als Link erkannt wird, wird dabei in der Ausgabe als ausführbarer Link dargestellt.
 
 \Syntax
 \begin{verbatim}
 >> <Ausgabe Text>
-> <Unterpunkt Text 1>
+    > <Unterpunkt Text 1>
     > <Unterpunkt Text 2>
     . . . 
 \end{verbatim}
@@ -617,6 +624,58 @@ Wird im obigen Beispiel die Antwort  Ja gewählt, so wird im nächsten Schritt die
 Welche Welt möchtest du grüßen?\\
 \fbox{\rule[-1mm]{0mm}{4mm}\hspace*{6cm}}
 }
+\subsection{Codesequenzen}
+In der Softwareentwicklung und insbesondere bei der Pflege und Weiterentwicklung großer Systeme gibt es zahlreiche Komponenten und Bausteine, die immer nach dem grundsätzlich selben Muster auf-, oder eingebaut werden. Oft gibt es dabei Varianten, bei denen man den einen oder anderen Aufruf mehr oder weniger benötigt, und die Benennung der Elemente muss ebenfalls angepasst werden. 
+Es kann die Arbeit deutlich vereinfachen, wenn man mit \FlowProtocol eine Vorlage für eine Anleitung erstellt, die die relevanten Abhängigkeiten abfragt, und dem Entwickler die notwendigen Implementierungsschritte beschreibt. Noch besser ist es, wenn man eine Stufe weiter geht, und die einzelnen Codefragmente direkt durch die Vorlage erstellen lässt, so dass man diese ausschneiden und in den Produktivcode einfügen kann. Hierfür gibt es die Möglichkeit, ganze Codesequenzen ausgeben zu lassen.
+
+Die Syntax ist ähnlich zu der der Unterpunkte (siehe Abschnitt~\ref{labUnterpunkte}). Codesequenzen und Unterpunkte lassen sich auch innerhalb desselben Ausgabeeintrags kombinieren, die Ausgabe erfolgt jedoch blockweise, d.h.\ zuerst die Unterpunkte und dann der Codeblock.
+
+\Syntax
+\begin{verbatim}
+>> <Ausgabe Text>
+    >| <Codezeile 1>
+    >| <Codezeile 2>
+    . . . 
+\end{verbatim}
+Die Ausgabe erfolgt in einer Festbreitenschriftart und es werden auch führende Leerzeichen mit ausgegeben.
+
+\Beispiel
+\begin{verbatim}
+/// Programmierunterstützung
+/// Erstellungsroutine für einen Entitätsdatensatz
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Input Entity: Wie wird die Entität benannt?
+?F1: Von welchem Typ ist der Primärschlüssel?
+    #i: Int
+        ~Set PTyp=int;
+    #G: Guid
+        ~Set PTyp=Guid;
+~Execute
+>> Anleitung >> Implementiere die Funktion Erstelle$Entity()
+    >|public $PTyp Erstelle$Entity()
+    >|{
+    >|   // Rufe generische Funktion auf
+    >|   return ErstelleElement<$PTyp>()
+    >|}
+>> Anleitung >> Ergänze den Aufruf in der Geschäftslogik
+    >|   $PTyp id = Erstelle$Entity()
+\end{verbatim}
+
+Wird im obigen Beispiel als Entitätsbennung \glqq Fahrzeug\grqq\ eingegeben und als Typ des Primärschlüssels \glqq int\grqq\ gewählt, so bekommt man folgende Ausgabe:
+\webbox{
+\webheadR{Ergebnisliste (Demo, 21 Codegen)}\\[3mm]
+Anleitung
+\begin{numlist}
+\item Implementiere die Funktion ErstelleFahrzeug()\\
+\texttt{public int ErstelleFahrzeug()}\\
+\texttt{\{}\\
+\hspace*{2ex}\texttt{// Rufe generische Funktion auf}\\
+\hspace*{2ex}\texttt{return ErstelleElement<int>()}\\
+\texttt{\}}
+\item Ergänze den Aufruf in der Geschäftslogik\\
+\hspace*{2ex}\texttt{int id = ErstelleFahrzeug()}
+\end{numlist}
+}
 
 \newpage
 \section{Fehlermeldungen}
@@ -659,11 +718,12 @@ Einlesefehler treten direkt beim Einlesen einer Vorlage- oder Funktionsdatei auf
 \FehlerBeschreibungItem{R04}{Antwort kann keinem Fragekontext zugeordnet werden.} Tritt auf, wenn eine Antwort keinem Fragekontext zugeordnet werden kann, wenn also die Struktur aus Fragen und Antworten unstimmig ist. Ursache kann eine fehlerhafte Einrückung sein, z.B.\ weil dabei Leerzeichen und Tabulatorzeichen gemischt wurden.
 \FehlerBeschreibungItem{R05}{Gruppierter Ausgabeeintrag kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein gruppierter Ausgabeeintrag keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
 \FehlerBeschreibungItem{R06}{Ausgabeeintrag kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein nicht gruppierter Ausgabeeintrag keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
-\FehlerBeschreibungItem{R07}{Unterpunkt  kann keinen Ausgabeeintrag zugeordnet werden.} Tritt auf, wenn ein Unterpunkt für einen Ausgabeeintrag keinem Ausgabeeintrag zugeordnet werden kann. Unterpunkte müssen immer unmittelbar auf Ausgabeeinträge folgen und dürfen nicht durch Fragen und Antworten unterbrochen werden.
+\FehlerBeschreibungItem{R07}{Unterpunkt  kann keinem Ausgabeeintrag zugeordnet werden.} Tritt auf, wenn ein Unterpunkt keinem Ausgabeeintrag zugeordnet werden kann. Unterpunkte müssen immer unmittelbar auf Ausgabeeinträge oder andere Unterpunkte oder Codezeilen folgen und dürfen nicht durch Fragen und Antworten unterbrochen werden.
 \FehlerBeschreibungItem{R08}{Execute-Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn der Execute-Befehl keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
 \FehlerBeschreibungItem{R09}{Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein Befehl keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
 \FehlerBeschreibungItem{R10}{Zeile nicht interpretierbar} Tritt auf, wenn eine Zeile nicht als Anweisung interpretiert werden kann, sie also keiner innerhalb einer Vorlage bekannten Syntax entspricht.
 \FehlerBeschreibungItem{R11}{Input-Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein Input-Befehl  keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
+\FehlerBeschreibungItem{R12}{Codezeile kann keinem Ausgabeeintrag zugeordnet werden.} Tritt auf, wenn eine Codezeile keinem Ausgabeeintrag zugeordnet werden kann. Codezeilen müssen immer unmittelbar auf Ausgabeeinträge oder Unterpunkte oder andere Codezeilen folgen und dürfen nicht durch Fragen und Antworten unterbrochen werden.
 \end{description}
 
 \subsection{Ausführungsfehler}
@@ -685,7 +745,7 @@ Spezialbefehle sind spezielle Befehle, die die Struktur einer Vorlage verändern,
 \FehlerBeschreibungItem{S03}{Befehl ohne gültiges $\dots$-Argument.} Tritt auf, wenn ein ungültiger Parameterwert angegeben wurde, z.B.\ eine \texttt{GroupSize}-Angabe, die nicht als Zahl interpretiert werden kann.
 \end{description}
 
-\subsection{Rangfolgenbestimmung}
+\subsection{Rangfolgenbestimmung}\label{labRangfolgenbestimmung}
 Die Rangfolgenbestimmung ist die Implementierung einer Methode, bei der man eine Rangfolge von Dingen wie z.B. Projekten dadurch bestimmt, dass man diese paarweise vergleicht. Bei jedem Vergleich bekommt der Gewinner einen Punkt und am Ende sortiert man die Einträge entsprechend ihrer Punktezahl. Die Reduzierung auf 2er-Vergleiche vereinfacht zwar die Entscheidung pro Frage, macht die Beantwortung jedoch auch deutlich umfangreicher. Für $n$ Elemente ergeben sich $\frac{n(n-1)}{2}$ Einzelfragen, also für $n=8$ also schon 28 Fragen.
 \FlowProtocol unterteilt dabei die Einzelfragen so in Gruppen, dass jedes Element maximal einmal pro Gruppe vorkommt. Für eine gerade Anzahl von $n$ Elementen werden auf diese Weise $n-1$ Gruppen mit $\frac n2$ Vergleichen gebildet und für eine ungerade Anzahl $n$ sind es $n$ Gruppen mit je $\frac{n-1}{2}$ Vergleichen.
 \Syntax

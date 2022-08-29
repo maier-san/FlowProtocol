@@ -1,0 +1,18 @@
+/// Programmierunterstützung
+/// Erstellungsroutine für eine Entitätsdatensatz
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Input Entity: Wie wird die Entität benannt?
+?F1: Von welchem Typ ist der Primärschlüssel?
+	#i: Int
+		~Set PTyp=int;
+	#G: Guid
+		~Set PTyp=Guid;
+~Execute
+>> Anleitung >> Implementiere die Funktion Erstelle$Entity()
+	>|public $PTyp Erstelle$Entity()
+	>|{
+	>|   // Rufe generische Funktion auf
+	>|   return ErstelleElement<$PTyp>()
+	>|}
+>> Anleitung >> Ergänze den Aufruf in der Geschäftslogik
+	>|   $PTyp id = Erstelle$Entity()

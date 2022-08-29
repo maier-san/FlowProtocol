@@ -42,7 +42,8 @@ namespace FlowProtocol.Core
                 Regex regComment = new Regex("^//.*");                
                 Regex regRestriction = new Regex(@"^\?([A-Za-z0-9]*[']?):(.*)");
                 Regex regOption = new Regex("^#([A-Za-z0-9]*):(.*)");
-                Regex regSubItem = new Regex("^>(.*)");
+                Regex regCodeLine = new Regex("^>\\|(.*)");
+                Regex regSubItem = new Regex("^>(.*)");                
                 Regex regGroupedResultItem = new Regex("^>>(.*)>>(.*)");
                 Regex regResultItem = new Regex("^>>(.*)");
                 Regex regExecute = new Regex(@"^~Execute");
@@ -138,6 +139,15 @@ namespace FlowProtocol.Core
                             }
                             else AddReadError("R06", "Ausgabeeintrag kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
                         }
+                        else if (regCodeLine.IsMatch(codeline))
+                        {
+                            if (currentResultItem != null)
+                            {
+                                var m = regCodeLine.Match(codeline);
+                                currentResultItem.AddCodeLine(m.Groups[1].Value.TrimEnd());
+                            }
+                            else AddReadError("R12", "Codezeile kann keinem Ausgabeeintrag zugeordnet werden.", filepath, linenumber, codeline);
+                        }
                         else if (regSubItem.IsMatch(codeline))
                         {
                             if (currentResultItem != null)
@@ -145,7 +155,7 @@ namespace FlowProtocol.Core
                                 var m = regSubItem.Match(codeline);
                                 currentResultItem.SubItems.Add(m.Groups[1].Value.Trim());
                             }
-                            else AddReadError("R07", "Unterpunkt kann keinen Ausgabeeintrag zugeordnet werden.", filepath, linenumber, codeline);
+                            else AddReadError("R07", "Unterpunkt kann keinem Ausgabeeintrag zugeordnet werden.", filepath, linenumber, codeline);
                         }
                         else if (regExecute.IsMatch(codeline))
                         {
@@ -168,7 +178,8 @@ namespace FlowProtocol.Core
                                 InputItem q = new InputItem(){ Key = AddKeyNumber(m.Groups[1].Value.Trim(), ref keyindex), QuestionText = m.Groups[2].Value.Trim()};
                                 parent.InputItems.Add(q);                                
                             }
-                            else AddReadError("R11", "Input-Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);                            
+                            else AddReadError("R11", "Input-Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
+                            currentResultItem = null;
                         }
                         else if (regCommand.IsMatch(codeline))
                         {

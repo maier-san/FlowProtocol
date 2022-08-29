@@ -98,7 +98,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                }
             }
          }
-         if (!ShowRestrictions.Any() && t.FollowTemplate != null)
+         if (!ShowRestrictions.Any() && !ShowInputs.Any() && t.FollowTemplate != null)
          {
             // Alle Fragen sind beantwortet und es gibt ein Folge-Template: ausführen
             ExtractRestrictions(t.FollowTemplate);
