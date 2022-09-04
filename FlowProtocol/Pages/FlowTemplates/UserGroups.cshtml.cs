@@ -26,7 +26,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             if (TemplatePathFound)
             {
                 DirectoryInfo di = new DirectoryInfo(TemplatePath);
-                List<string> userGroups = di.GetDirectories().Select(x => x.Name).Where(x=>!x.StartsWith(".")).OrderBy(x=>x).ToList();
+                List<string> userGroups = di.GetDirectories().Select(x => x.Name).Where(x=>!x.StartsWith(".") && x!="SharedFunctions").OrderBy(x=>x).ToList();
                 UserGroupArray.ReadList(userGroups);
             }                    
         }

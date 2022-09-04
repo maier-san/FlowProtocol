@@ -2,8 +2,8 @@ using FlowProtocol.Core;
 using FlowProtocol.SpecialCommands;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Web;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace FlowProtocol.Pages.FlowTemplates
 {
@@ -187,6 +187,12 @@ namespace FlowProtocol.Pages.FlowTemplates
             string template= m.Groups[1].Value.Trim();
             char separator = Path.DirectorySeparatorChar;
             string templateFileName = TemplateDetailPath + separator + template.Trim().Replace(".qff", string.Empty) + ".qff";
+            if (!System.IO.File.Exists(templateFileName))
+            {
+               // Wenn die Funktionsdatei lokal nicht gefunden wird, dann suche im Shared-Ordner
+               string sharedtemplatefile = TemplatePath + separator + "SharedFunctions" + separator + template.Trim().Replace(".qff", string.Empty) + ".qff";
+               if (System.IO.File.Exists(sharedtemplatefile)) templateFileName = sharedtemplatefile;
+            }            
             Dictionary<string, string> assignments = CommandHelper.ReadAssignments(m.Groups[2].Value);
             RecursionCount++;
             if (RecursionCount > 100)
