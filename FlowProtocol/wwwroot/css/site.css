@@ -34,3 +34,8 @@ table.cinereousTable tbody td {
 table.cinereousTable tfoot td {
   font-size: 16px;
 }
+pre code {
+  background-color: #eee;
+  border: 3px solid #eee;
+  display: block;
+}
