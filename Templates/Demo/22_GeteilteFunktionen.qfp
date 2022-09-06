@@ -1,0 +1,6 @@
+/// Der Textbaustein "Hallo Welt" wird in einer Form deiner Wahl ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Include HalloWelt5 weltindex=1; weltbezeichnung=Geteilte Welt
+~Include HalloWelt5 weltindex=2; weltbezeichnung=Gemeinsame Welt
+>> $Gruss1
+>> $Gruss2
