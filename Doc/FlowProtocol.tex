@@ -59,7 +59,7 @@ Die Grundidee der Anwendung besteht darin, ein Medium zu bieten, um Spezialwisse
 \subsection{Anwendungsbereiche}
 Die Anwendungsbereiche für diese Anwendung sind sehr vielfältig. Die ursprüngliche Intention war die Aufstellung von Prüflisten für wiederkehrende komplexe Tätigkeit\-en, die in vielen einzelnen Aspekten variieren können, sodass jeweils nur eine bestimmte Auswahl von Prüfpunkten relevant ist. Eine Gesamtprüfliste, bei der immer ein Großteil der Punkte hätte ignoriert werden müssen, wäre sowohl aufwendig, als auch fehlerträchtig, und daher nicht effektiv. \FlowProtocol kann hier durch sein Fragekonzept die für jeden Einzelfall relevanten Aspekte herausfiltern, und auf diese Weise sogar beliebig stark ins Detail gehen. Gleichzeitig hilft dem Anwender die Beantwortung der Fragen auch, sich gedanklich ausführlich mit seiner Aufgabe auseinanderzusetzen. Durch die Vermeidung offener Fragen wird gleichzeitig das Risiko minimiert, dass Dinge vergessen werden. Das Ergebnis ist ein zu 100\% relevantes und vollständiges Protokoll.
 
-Ein besonders positiver Nebeneffekt dieser Vorgehensweise besteht darin, dass durch einfaches Auswählen von Antworten am Ende ein Ergebnisdokument entsteht, das nicht mehr manuell erstellt werden muss. Das Anwendungsgebiet dehnt sich damit auf alle Arten von Dokumenten aus, die sich aus einer Aufzählung von Textbausteinen zusammensetzen, deren Zusammenstellung über eine Reihe iterierter Fragen erfolgen kann. Dies umfasst beispielsweise Bestandsaufnahmen, Analyseprotokolle, Zusammenfassungen, Aufgabenlisten und vieles andere mehr. Für kleinere Systeme lassen sich sogar mit überschaubarem Aufwand Vorlagen erstellen, die nicht nur das Ergebnis einer Analyse zusammenfassen, sondern ergänzend dazu auch schon Lösungsansätze und mögliche weitere Schritte beschreiben. Man kann so vom Prinzip her ein kleines Expertensystem erstellen, das wertvolles Spezialwissen eines Experten in sehr einfacher Form für andere Mitarbeiter verfügbar macht, ähnlich wie ein Chatbot. Das schont wertvolle Unternehmensressourcen und beugt Verfügbarkeitsengpässen vor. 
+Ein besonders positiver Nebeneffekt bei der Nutzung von Vorlagen besteht darin, dass durch einfaches Auswählen von Antworten am Ende ein Ergebnisdokument entsteht, das nicht mehr manuell erstellt werden muss. Das Anwendungsgebiet dehnt sich damit prinzipiell auf alle Arten von Dokumenten aus, die sich aus einer Aufzählung von Textbausteinen zusammensetzen und deren Zusammenstellung über eine Reihe iterierter Fragen erfolgen kann. Dies umfasst beispielsweise Bestandsaufnahmen, Analyseprotokolle, Zusammenfassungen, Aufgabenlisten und vieles andere mehr. Für kleinere Systeme lassen sich sogar mit überschaubarem Aufwand Vorlagen erstellen, die nicht nur das Ergebnis einer Analyse zusammenfassen, sondern ergänzend dazu auch schon Lösungsansätze und mögliche weitere Schritte beschreiben. Man kann so vom Prinzip her ein kleines Expertensystem erstellen, das wertvolles Spezialwissen eines Experten in sehr einfacher Form für andere Mitarbeiter verfügbar macht, ähnlich wie ein Chatbot. Das schont wertvolle Unternehmensressourcen und beugt Verfügbarkeitsengpässen vor. 
 
 Eine besonders nützliche Anwendung ist die Erstellung von interaktiven Anleitungen. Hierbei werden ebenfalls Rahmenbedigungen und einzelne Textbausteine im Vorfeld abgefragt, und in Abhängigkeit davon die für den vorliegenden Fall relevanten Schritte der Anleitung ausgegeben. Die Möglichkeit, kontextbezogene und durch Textersetzungen angepasste Codepassagen in die Ausgabe einzufügen, macht \FlowProtocol zu einem besonders nützlichen Werkzeug in der Softwareentwicklung, wo derartige wiederkehrende Muster zum Tagesgeschäft gehören. Die Kombination von Anleitung und Codegenerator erhöht nicht nur die Effizient, sondern auch die Qualität.
 
@@ -676,6 +676,38 @@ Anleitung
 \hspace*{2ex}\texttt{int id = ErstelleFahrzeug()}
 \end{numlist}
 }
+
+\subsection{Geteilte Funktionen}
+Manche Funktionen sind so allgemein, dass man sie anwendergruppenübergreifend verwenden, und deshalb auch zentral verwalten möchte. Zu diesem Zweck kann im Vorlagenverzeichnis ein Ordner mit der Bezeichnung \emph{SharedFunctions} angelegt werden, der beim Aufrufen von Funktionen speziell berücksichtigt wird. Wird die Datei zu einer aufgerufene Funktion im lokalen Ordner nicht gefunden, so wird diese als nächstes im SharedFunctions-Verzeichnis gesucht. Damit lassen sich Funktionen teilen und bei Bedarf auch später noch in das lokale Verzeichnis kopieren und dort anpassen, ohne dass dafür andere Vorlagen angepasst werden müssen.
+
+Im Normalfall wird man geteilte Funktionen nicht so aufbauen, dass sie selber Ausgaben erzeugen, sondern vielmehr so, dass sie ein Ergebnis in einer Menge von Variablen speichern, das dann an der aufrufenden Stelle weiterverarbeitet werden kann.
+
+Das nacholgende Beispiel demonstriert diese Möglichkeit gleich mit zwei Aufrufen derselben Funktion, durch die mittels Parametrisierung zwei unterschiedliche Variablen belegt werden:
+
+\Beispiel
+\begin{verbatim}
+/// Formatierte Hallo-Welt-Ausgabe
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Include HalloWelt5 weltindex=1; weltbezeichnung=Geteilte Welt
+~Include HalloWelt5 weltindex=2; weltbezeichnung=Gemeinsame Welt
+>> $Gruss1
+>> $Gruss2
+\end{verbatim}
+Aufgerufen wird hierbei die Funktionsdatei HalloWelt5.qff:
+\begin{verbatim}
+// Hallo-Welt-Funktion
+// Parameter $weltindex: Schlüsselindex
+// Parameter $weltbezeichnung: Weltbezeichnung
+?F$weltindex1: Wie soll $weltbezeichnung begrüßt werden?
+    #a1: Mit "Hallöchen"        
+        ~Set Gruss$weltindex=Hallöchen $weltbezeichnung
+    #a2: Mit "Guten Morgen"
+        ~Set Gruss$weltindex=Guten Morgen $weltbezeichnung
+    #a3: Mit Aloah
+        ~Set Gruss$weltindex=Aloah $weltbezeichnung
+\end{verbatim}
+
+Ein schöner Anwendungsfall für eine geteilte Funktion ist beispielsweise die Zusammenstellung eines Navigationspfades über eine Auswahlsequenz, z.B.\ um eine Stelle innerhalb einer Software oder anderen Struktur eindeutig zu benennen. Bei einer solchen Funktion wäre die Notwendigkeit einer zentralen Verwaltung aufgrund von Umfang und ständiger Erweiterung enorm wichtig, und trotzdem kann das Ergebnis über eine einfache Variable transportiert werden.
 
 \newpage
 \section{Fehlermeldungen}
