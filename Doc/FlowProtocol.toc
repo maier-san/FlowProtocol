@@ -14,11 +14,11 @@
 \contentsline {subsection}{\numberline {2.7}Gruppierungen}{9}{}%
 \contentsline {subsection}{\numberline {2.8}Unterpunkte}{10}{}%
 \contentsline {subsection}{\numberline {2.9}Wiederholungen}{11}{}%
-\contentsline {subsection}{\numberline {2.10}Implikationen}{11}{}%
+\contentsline {subsection}{\numberline {2.10}Implikationen}{12}{}%
 \contentsline {subsection}{\numberline {2.11}Autonummerierung}{12}{}%
 \contentsline {subsection}{\numberline {2.12}Ausf\"uhrungen}{13}{}%
 \contentsline {subsection}{\numberline {2.13}Funktionen}{14}{}%
-\contentsline {subsection}{\numberline {2.14}Parametrisierte Funktionen}{14}{}%
+\contentsline {subsection}{\numberline {2.14}Parametrisierte Funktionen}{15}{}%
 \contentsline {subsection}{\numberline {2.15}Variablen}{16}{}%
 \contentsline {subsection}{\numberline {2.16}Additionen}{17}{}%
 \contentsline {subsection}{\numberline {2.17}Schleifen}{18}{}%
