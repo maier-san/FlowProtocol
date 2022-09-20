@@ -14,19 +14,20 @@
 \contentsline {subsection}{\numberline {2.7}Gruppierungen}{9}{}%
 \contentsline {subsection}{\numberline {2.8}Unterpunkte}{10}{}%
 \contentsline {subsection}{\numberline {2.9}Wiederholungen}{11}{}%
-\contentsline {subsection}{\numberline {2.10}Implikationen}{11}{}%
+\contentsline {subsection}{\numberline {2.10}Implikationen}{12}{}%
 \contentsline {subsection}{\numberline {2.11}Autonummerierung}{12}{}%
 \contentsline {subsection}{\numberline {2.12}Ausf\"uhrungen}{13}{}%
 \contentsline {subsection}{\numberline {2.13}Funktionen}{14}{}%
-\contentsline {subsection}{\numberline {2.14}Parametrisierte Funktionen}{14}{}%
+\contentsline {subsection}{\numberline {2.14}Parametrisierte Funktionen}{15}{}%
 \contentsline {subsection}{\numberline {2.15}Variablen}{16}{}%
 \contentsline {subsection}{\numberline {2.16}Additionen}{17}{}%
 \contentsline {subsection}{\numberline {2.17}Schleifen}{18}{}%
 \contentsline {subsection}{\numberline {2.18}Eingaben}{19}{}%
 \contentsline {subsection}{\numberline {2.19}Codesequenzen}{20}{}%
-\contentsline {section}{\numberline {3}Fehlermeldungen}{22}{}%
-\contentsline {subsection}{\numberline {3.1}Einlesefehler}{23}{}%
-\contentsline {subsection}{\numberline {3.2}Ausf\"uhrungsfehler}{24}{}%
-\contentsline {section}{\numberline {4}Spezialbefehle}{25}{}%
-\contentsline {subsection}{\numberline {4.1}Rangfolgenbestimmung}{25}{}%
-\contentsline {subsection}{\numberline {4.2}Zitatmodus}{26}{}%
+\contentsline {subsection}{\numberline {2.20}Geteilte Funktionen}{21}{}%
+\contentsline {section}{\numberline {3}Fehlermeldungen}{23}{}%
+\contentsline {subsection}{\numberline {3.1}Einlesefehler}{24}{}%
+\contentsline {subsection}{\numberline {3.2}Ausf\"uhrungsfehler}{25}{}%
+\contentsline {section}{\numberline {4}Spezialbefehle}{26}{}%
+\contentsline {subsection}{\numberline {4.1}Rangfolgenbestimmung}{26}{}%
+\contentsline {subsection}{\numberline {4.2}Zitatmodus}{27}{}%

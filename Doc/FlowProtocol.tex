@@ -59,7 +59,7 @@ Die Grundidee der Anwendung besteht darin, ein Medium zu bieten, um Spezialwisse
 \subsection{Anwendungsbereiche}
 Die Anwendungsbereiche für diese Anwendung sind sehr vielfältig. Die ursprüngliche Intention war die Aufstellung von Prüflisten für wiederkehrende komplexe Tätigkeit\-en, die in vielen einzelnen Aspekten variieren können, sodass jeweils nur eine bestimmte Auswahl von Prüfpunkten relevant ist. Eine Gesamtprüfliste, bei der immer ein Großteil der Punkte hätte ignoriert werden müssen, wäre sowohl aufwendig, als auch fehlerträchtig, und daher nicht effektiv. \FlowProtocol kann hier durch sein Fragekonzept die für jeden Einzelfall relevanten Aspekte herausfiltern, und auf diese Weise sogar beliebig stark ins Detail gehen. Gleichzeitig hilft dem Anwender die Beantwortung der Fragen auch, sich gedanklich ausführlich mit seiner Aufgabe auseinanderzusetzen. Durch die Vermeidung offener Fragen wird gleichzeitig das Risiko minimiert, dass Dinge vergessen werden. Das Ergebnis ist ein zu 100\% relevantes und vollständiges Protokoll.
 
-Ein besonders positiver Nebeneffekt dieser Vorgehensweise besteht darin, dass durch einfaches Auswählen von Antworten am Ende ein Ergebnisdokument entsteht, das nicht mehr manuell erstellt werden muss. Das Anwendungsgebiet dehnt sich damit auf alle Arten von Dokumenten aus, die sich aus einer Aufzählung von Textbausteinen zusammensetzen, deren Zusammenstellung über eine Reihe iterierter Fragen erfolgen kann. Dies umfasst beispielsweise Bestandsaufnahmen, Analyseprotokolle, Zusammenfassungen, Aufgabenlisten und vieles andere mehr. Für kleinere Systeme lassen sich sogar mit überschaubarem Aufwand Vorlagen erstellen, die nicht nur das Ergebnis einer Analyse zusammenfassen, sondern ergänzend dazu auch schon Lösungsansätze und mögliche weitere Schritte beschreiben. Man kann so vom Prinzip her ein kleines Expertensystem erstellen, das wertvolles Spezialwissen eines Experten in sehr einfacher Form für andere Mitarbeiter verfügbar macht, ähnlich wie ein Chatbot. Das schont wertvolle Unternehmensressourcen und beugt Verfügbarkeitsengpässen vor. 
+Ein besonders positiver Nebeneffekt bei der Nutzung von Vorlagen besteht darin, dass durch einfaches Auswählen von Antworten am Ende ein Ergebnisdokument entsteht, das nicht mehr manuell erstellt werden muss. Das Anwendungsgebiet dehnt sich damit prinzipiell auf alle Arten von Dokumenten aus, die sich aus einer Aufzählung von Textbausteinen zusammensetzen und deren Zusammenstellung über eine Reihe iterierter Fragen erfolgen kann. Dies umfasst beispielsweise Bestandsaufnahmen, Analyseprotokolle, Zusammenfassungen, Aufgabenlisten und vieles andere mehr. Für kleinere Systeme lassen sich sogar mit überschaubarem Aufwand Vorlagen erstellen, die nicht nur das Ergebnis einer Analyse zusammenfassen, sondern ergänzend dazu auch schon Lösungsansätze und mögliche weitere Schritte beschreiben. Man kann so vom Prinzip her ein kleines Expertensystem erstellen, das wertvolles Spezialwissen eines Experten in sehr einfacher Form für andere Mitarbeiter verfügbar macht, ähnlich wie ein Chatbot. Das schont wertvolle Unternehmensressourcen und beugt Verfügbarkeitsengpässen vor. 
 
 Eine besonders nützliche Anwendung ist die Erstellung von interaktiven Anleitungen. Hierbei werden ebenfalls Rahmenbedigungen und einzelne Textbausteine im Vorfeld abgefragt, und in Abhängigkeit davon die für den vorliegenden Fall relevanten Schritte der Anleitung ausgegeben. Die Möglichkeit, kontextbezogene und durch Textersetzungen angepasste Codepassagen in die Ausgabe einzufügen, macht \FlowProtocol zu einem besonders nützlichen Werkzeug in der Softwareentwicklung, wo derartige wiederkehrende Muster zum Tagesgeschäft gehören. Die Kombination von Anleitung und Codegenerator erhöht nicht nur die Effizient, sondern auch die Qualität.
 
@@ -120,7 +120,7 @@ Wie soll \dq Hallo Welt\dq ausgegeben werden?
 \item Rückwärts
 \end{circlist}
 }
-Der Anwender kann und eine der drei Ant\-wort\-mög\-lich\-kei\-ten wählen, und die Bearbeitung mit der Weiter-Taste fortsetzen, bzw.\ in diesem Fall abschließen. 
+Der Anwender kann nun eine der drei Ant\-wort\-mög\-lich\-kei\-ten wählen, und die Bearbeitung mit der Weiter-Taste fortsetzen, bzw.\ in diesem Fall abschließen. 
 
 Wenn man zum Beispiel die zweite Antwortmöglichkeit \glqq In Großbuchstaben\grqq, so sieht das Ergebnis wie folgt aus:
 \webbox{
@@ -144,7 +144,7 @@ Damit lässt sich einem oder mehreren Sätzen kurz beschreiben, wozu die Vorlage d
 \begin{verbatim}
 // <Kommentar>
 \end{verbatim}
-Diese Kommentare werden bei der Verarbeitung durch die Anwendung vollständig ignoriert und dienen ausschließlich zur Kommentierung des Vorlagencodes und werden bei der Ausführung ignoriert.
+Diese Kommentare werden bei der Verarbeitung durch die Anwendung vollständig ignoriert und dienen ausschließlich zur Kommentierung des Vorlagencodes.
 
 \subsection{Frage, Antworten und Ausgaben}
 \Syntax
@@ -156,11 +156,11 @@ Diese Kommentare werden bei der Verarbeitung durch die Anwendung vollständig ign
         >> <Text Ausgabe 2>
     . . .
 \end{verbatim}
-Das Kernelement der Vorlagen sind Fragen. Diese bestehen aus einem Frageschlüssel und einem Frage Text. Die Schlüssel für Fragen und Ant\-wort\-mög\-lich\-kei\-ten werden verwendet, um die gegebenen Antworten innerhalb der URL zu verwalten. Sie dürfen nur aus Buchstaben und Zahlen bestehen und sollten möglichst kurz gewählt werden. Die Schlüssel der Fragen müssen über die komplette Vorlage eindeutig sein, die der Antworten nur innerhalb einer Frage.
+Das Kernelement der Vorlagen sind Fragen. Diese bestehen aus einem Frageschlüssel und einem Fragetext. Die Schlüssel für Fragen und Ant\-wort\-mög\-lich\-kei\-ten werden verwendet, um die gegebenen Antworten innerhalb der URL zu verwalten. Sie dürfen nur aus Buchstaben und Zahlen bestehen und sollten möglichst kurz gewählt werden. Die Schlüssel der Fragen müssen über die komplette Vorlage eindeutig sein, die der Antworten nur innerhalb einer Frage.
 
 An der Oberfläche dargestellt wird nur der Fragetext und die Texte der Ant\-wort\-mög\-lich\-kei\-ten.
 
-Durch\texttt{ >>} wird ein Ausgabeeintrag erzeugt, wenn die entsprechende Antwortmöglichkeit gewählt wurde. Die Ausgaben werden als nummerierte Liste zu einem Ergebnis zusammengefasst.
+Durch\texttt{ >>} wird ein Ausgabeeintrag erzeugt, wenn die entsprechende Ant\-wort\-mög\-lich\-keit gewählt wurde. Die Ausgaben werden als nummerierte Liste zu einem Ergebnis zusammengefasst.
 
 \subsection{Sequenzen}
 Mehrere Fragen können hintereinander aufgelistet werden. Diese werden stan\-dard\-mä\-ßig untereinander auf einer Seite aufgelistet und können zusammen bearbeitet werden.
@@ -197,6 +197,7 @@ Welcher Zusatz soll ergänzt werden?
 Die Benutzerführung erlaubt es, auch nur einen Teil der angezeigten Fragen zu beantworten und dann die Weiter-Schaltfläche zu betätigen. In diesem Fall werden die nicht beantworteten Fragen einfach auf der Folgeseite erneut angezeigt.
 
 \subsection{Verschachtelungen}
+Die Verschachtelung von Fragen ist das Hauptprinzip der Anwendung. Auf diese Weise kann gezielt ins Detail gegangen werden, wenn der entsprechende Fall vorliegt, und man kann Fragen weglassen, wenn sie nicht relevant sind.
 \Beispiel
 \begin{verbatim}
 /// Formatierte Hallo-Welt-Ausgabe
@@ -223,7 +224,7 @@ Soll \dq Hallo Welt\dq zusätzlich rückwärts ausgegeben werden?
 }
 
 \subsection{Gruppierungen}
-Das Ergebnis einer Bearbeitung kann in vielen Fällen mehr als eine Liste sein. Eine Vorlage zur Analyse kann beispielsweise zum einen den ist-Stand erfassen, mögliche Lösungsansätze formulieren und die noch ausstehenden Analyse-Maßnahmen Auf"|listen. Zu diesem Zweck können die Ausgaben in einer sehr einfachen Form gruppiert werden.
+Das Ergebnis einer Bearbeitung kann in vielen Fällen mehr als eine Liste sein. Eine Vorlage zur Analyse kann zum einen den Ist-Stand erfassen, mögliche Lösungsansätze formulieren und die noch ausstehenden Analyse-Maßnahmen auf"|listen. Zu diesem Zweck können die Ausgaben in einer sehr einfachen Form gruppiert werden.
 
 \Syntax
 \begin{verbatim}
@@ -261,7 +262,7 @@ Die Alternativen
 \end{numlist}
 }
 \subsection{Unterpunkte}\label{labUnterpunkte}
-Ausgaben können je nach Vorlage selbst wieder Tätigkeiten oder Aufgaben beschreiben, die sich aus verschiedenen Schritten zusammensetzen, oder bei denen mehrere Teilaspekte zu berücksichtigen sind. Diese lassen sich in Form von Unterpunkten Auf"|listen. Ein Unterpunkt, der mit der Protokollkennung \glqq https://\grqq\  beginnt und als Link erkannt wird, wird dabei in der Ausgabe als ausführbarer Link dargestellt.
+Ausgaben können je nach Vorlage selbst wieder Tätigkeiten oder Aufgaben beschreiben, die sich aus verschiedenen Schritten zusammensetzen, oder bei denen mehrere Teilaspekte zu berücksichtigen sind. Diese lassen sich in Form von Unterpunkten auf"|listen. Ein Unterpunkt, der mit der Protokollkennung \glqq https://\grqq\  beginnt und als Link erkannt wird, wird dabei in der Ausgabe als ausführbarer Link dargestellt. Man kann sogar ganze Codesequenzen als Unterpunkt formatieren (siehe Abschnitt~\ref{Codesequenzen}).
 
 \Syntax
 \begin{verbatim}
@@ -350,11 +351,11 @@ Die Antwort auf eine Frage kann in manchen Fällen die Antwort auf eine andere im
     #z2: "Ich grüße dich!"
         >> Ich grüße dich!
 \end{verbatim}
-Bei Auswahl der Antwort \glqq In Großbuchstaben\grqq\  Frage \texttt{F1} wird für die Frage \texttt{F2a} die 
+Bei Auswahl der Antwort \glqq In Großbuchstaben\grqq\ für Frage \texttt{F1} wird für die Frage \texttt{F2a} die 
 Antwort \glqq Ja\grqq\  impliziert. Diese wird dann nicht mehr gestellt, sondern automatisch beantwortet. Im Falle der anderen Ant\-wort\-mög\-lich\-kei\-ten wird keine Antwort impliziert, sodass die Frage \texttt{F2a} in diesem Fall ganz normal gestellt und verarbeitet wird.
 
 \subsection{Autonummerierung}
-Das Durchnummerieren der Frageschlüssel kann in umfangreichen Dateien sehr müh\-sam werden, da diese zumeist nicht von oben nach unten aufgebaut werden, sondern in die Tiefe. Die Kontrolle über die Schlüssel benötigt man aber nur, wenn man mit Implikationen oder Wiederholungen arbeitet, oder die Gültigkeit von Links auch nach Erweiterungen der Vorlage sicherstellen möchte. Für alle anderen Fälle kann man die Nummerierung automatisch vergeben lassen.
+Das Durchnummerieren der Frageschlüssel kann in umfangreichen Dateien sehr müh\-sam werden, da diese zumeist nicht von oben nach unten aufgebaut werden, sondern ausgehend von einer ersten Ebene Stück für Stück in die Tiefe. Die Kontrolle über die Schlüssel benötigt man aber nur, wenn man mit Implikationen oder Wiederholungen arbeitet, oder die Gültigkeit von Links auch nach Erweiterungen der Vorlage sicherstellen möchte. Für alle anderen Fälle kann man die Schlüssel automatisch vergeben lassen.
 \Syntax
 \begin{verbatim}
 ?<Frageschlüsselanfang>': <Fragetext>
@@ -403,7 +404,7 @@ Bei längeren Sequenzen und insbesondere bei der Verwendung von Wiederholungen un
 Die beiden Fragen aus dem Sequenzen-Beispiel werden in diesem Fall einzelnen angezeigt.
 
 \subsection{Funktionen}\label{Funktionen}
-Vorlagen können mitunter sehr umfangreich und tief verschachtelt sein. Verwaltet man solche Vorlagen in einer einzigen Datei, kann das insbesondere aufgrund der Einrückungen sehr unübersichtlich werden, sodass sich Anpassungen und Erweiterungen schwierig gestalten. Hier ist es empfehlenswert Teile des Codes als Funktionen in jeweils eigene Dateien auszulagern. Eine Funktion ist vom Prinzip und vom Aufbau her das gleiche wie eine Vorlage und wird über eine Datei der Endung \glqq *.qff\grqq\  (Quick Flow Function) bereitgestellt. Aufgrund der abweichenden Dateiendung werden Funktionen nicht als Vorlagen in der Anwendung zur Auswahl angeboten.
+Vorlagen können mitunter sehr umfangreich und tief verschachtelt sein. Verwaltet man solche Vorlagen in einer einzigen Datei, kann das insbesondere aufgrund der Einrückungen sehr unübersichtlich werden, sodass sich Anpassungen und Erweiterungen schwierig gestalten. Hier ist es empfehlenswert, Teile des Codes als Funktionen in jeweils eigene Dateien auszulagern. Eine Funktion ist vom Prinzip und vom Aufbau her das gleiche wie eine Vorlage und wird über eine Datei der Endung \glqq *.qff\grqq\  (Quick Flow Function) bereitgestellt. Aufgrund der abweichenden Dateiendung werden Funktionen nicht als Vorlagen in der Anwendung zur Auswahl angeboten.
 
 Die Funktionsdatei muss auf der gleichen Ebene liegen wie die Vorlage, die sie aufruft und der Name darf nur aus Buchstaben und Ziffern bestehen.
 
@@ -428,10 +429,10 @@ Mit der Funktionsdatei HalloWelt1.qff
     #a3: Rückwärts
         >> tleW ollaH
 \end{verbatim}
-Neben der Erhöhung der Übersichtlichkeit hat die Verwendung von Funktionen viele weitere Vorteile. Auf technischer Ebene vereinfacht es die Verarbeitung, da eine Funktion erst dann geladen wird, wenn der entsprechende Pfad auch tatsächlich erreicht wird. Aus Anwendersicht ergibt sich der große Vorteil, dass man eine Funktion in verschiedenen Antwortzweigen aufrufen kann, und damit keinen doppelten Code pflegen muss. Entsprechend lassen sich Funktionen auch aus verschiedenen Vorlagen heraus aufrufen, sodass fachliche Einheiten ausgelagert und mehrfach wieder verwendet werden können.
+Neben der Erhöhung der Übersichtlichkeit hat die Verwendung von Funktionen viele weitere Vorteile. Auf technischer Ebene vereinfacht es die Verarbeitung, da eine Funktion erst dann geladen wird, wenn der entsprechende Pfad auch tatsächlich erreicht wird. Aus Anwendersicht ergibt sich der große Vorteil, dass man eine Funktion in verschiedenen Antwortzweigen aufrufen kann, und damit keinen doppelten Code pflegen muss. Entsprechend lassen sich Funktionen auch aus verschiedenen Vorlagen heraus aufrufen, sodass fachliche Einheiten ausgelagert und mehrfach wieder verwendet werden können. Mit geteilten Funktionen geht dies sogar für Vorlagen aus verschiedenen Anwendungsgruppen-Ordnern (siehe Abschnitt~\ref{GeteilteFunktionen}).
 
 \subsection{Parametrisierte Funktionen}
-Möchte man eine Funktion innerhalb einer Vorlage mehrfach ausführen, so stößt man auf das Problem, dass die dort eingetragenen Frage-Schlüssel für beide Aufrufe identisch sind, und so der zweite Aufruf automatisch die Antworten des ersten Aufrufs übernehmen würde. Zudem wäre die Anzeige der Fragen identisch, sodass man diese beim Beantworten nicht den jeweiligen Aufrufen zuordnen könnte. Und dieses Problem zu lösen, lassen sich Aufrufe parametrisieren.
+Möchte man eine Funktion innerhalb einer Vorlage mehrfach ausführen, so stößt man auf das Problem, dass die dort eingetragenen Frage-Schlüssel für beide Aufrufe identisch sind, und so der zweite Aufruf automatisch die Antworten des ersten Aufrufs übernehmen würde. Zudem wäre die Anzeige der Fragen identisch, sodass man diese beim Beantworten nicht den jeweiligen Aufrufen zuordnen könnten. Um dieses Problem zu lösen, lassen sich Aufrufe parametrisieren.
 
 \Syntax
 \begin{verbatim}
@@ -624,7 +625,7 @@ Wird im obigen Beispiel die Antwort  Ja gewählt, so wird im nächsten Schritt die
 Welche Welt möchtest du grüßen?\\
 \fbox{\rule[-1mm]{0mm}{4mm}\hspace*{6cm}}
 }
-\subsection{Codesequenzen}
+\subsection{Codesequenzen}\label{Codesequenzen}
 In der Softwareentwicklung und insbesondere bei der Pflege und Weiterentwicklung großer Systeme gibt es zahlreiche Komponenten und Bausteine, die immer nach dem grundsätzlich selben Muster auf-, oder eingebaut werden. Oft gibt es dabei Varianten, bei denen man den einen oder anderen Aufruf mehr oder weniger benötigt, und die Benennung der Elemente muss ebenfalls angepasst werden. 
 Es kann die Arbeit deutlich vereinfachen, wenn man mit \FlowProtocol eine Vorlage für eine Anleitung erstellt, die die relevanten Abhängigkeiten abfragt, und dem Entwickler die notwendigen Implementierungsschritte beschreibt. Noch besser ist es, wenn man eine Stufe weiter geht, und die einzelnen Codefragmente direkt durch die Vorlage erstellen lässt, so dass man diese ausschneiden und in den Produktivcode einfügen kann. Hierfür gibt es die Möglichkeit, ganze Codesequenzen ausgeben zu lassen.
 
@@ -676,6 +677,38 @@ Anleitung
 \hspace*{2ex}\texttt{int id = ErstelleFahrzeug()}
 \end{numlist}
 }
+
+\subsection{Geteilte Funktionen}\label{GeteilteFunktionen}
+Manche Funktionen sind so allgemein, dass man sie anwendergruppenübergreifend verwenden, und deshalb auch zentral verwalten möchte. Zu diesem Zweck kann im Vorlagenverzeichnis ein Ordner mit der Bezeichnung \emph{SharedFunctions} angelegt werden, der beim Aufrufen von Funktionen speziell berücksichtigt wird. Wird die Datei zu einer aufgerufene Funktion im lokalen Ordner nicht gefunden, so wird diese als nächstes im SharedFunctions-Verzeichnis gesucht. Damit lassen sich Funktionen teilen und bei Bedarf auch später noch in das lokale Verzeichnis kopieren und dort anpassen, ohne dass dafür andere Vorlagen angepasst werden müssen.
+
+Im Normalfall wird man geteilte Funktionen nicht so aufbauen, dass sie selber Ausgaben erzeugen, sondern vielmehr so, dass sie ein Ergebnis in einer Menge von Variablen speichern, das dann an der aufrufenden Stelle weiterverarbeitet werden kann.
+
+Das nacholgende Beispiel demonstriert diese Möglichkeit gleich mit zwei Aufrufen derselben Funktion, durch die mittels Parametrisierung zwei unterschiedliche Variablen belegt werden:
+
+\Beispiel
+\begin{verbatim}
+/// Formatierte Hallo-Welt-Ausgabe
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Include HalloWelt5 weltindex=1; weltbezeichnung=Geteilte Welt
+~Include HalloWelt5 weltindex=2; weltbezeichnung=Gemeinsame Welt
+>> $Gruss1
+>> $Gruss2
+\end{verbatim}
+Aufgerufen wird hierbei die Funktionsdatei HalloWelt5.qff:
+\begin{verbatim}
+// Hallo-Welt-Funktion
+// Parameter $weltindex: Schlüsselindex
+// Parameter $weltbezeichnung: Weltbezeichnung
+?F$weltindex1: Wie soll $weltbezeichnung begrüßt werden?
+    #a1: Mit "Hallöchen"        
+        ~Set Gruss$weltindex=Hallöchen $weltbezeichnung
+    #a2: Mit "Guten Morgen"
+        ~Set Gruss$weltindex=Guten Morgen $weltbezeichnung
+    #a3: Mit Aloah
+        ~Set Gruss$weltindex=Aloah $weltbezeichnung
+\end{verbatim}
+
+Ein schöner Anwendungsfall für eine geteilte Funktion ist beispielsweise die Zusammenstellung eines Navigationspfades über eine Auswahlsequenz, z.B.\ um eine Stelle innerhalb einer Software oder anderen Struktur eindeutig zu benennen. Bei einer solchen Funktion wäre die Notwendigkeit einer zentralen Verwaltung aufgrund von Umfang und ständiger Erweiterung enorm wichtig, und trotzdem kann das Ergebnis über eine einfache Variable transportiert werden.
 
 \newpage
 \section{Fehlermeldungen}

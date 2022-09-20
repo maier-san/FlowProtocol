@@ -308,7 +308,8 @@ namespace FlowProtocol.Pages.FlowTemplates
 
       public bool IsURL(string text)
       {
-         return (text.StartsWith("https://") || text.StartsWith("http://")) && Uri.IsWellFormedUriString(text, UriKind.RelativeOrAbsolute);
+         return (text.StartsWith("https://") || text.StartsWith("http://")) && Uri.IsWellFormedUriString(text, UriKind.RelativeOrAbsolute)
+            || text.StartsWith("mailto:");
       }
    }
 }
