@@ -316,10 +316,23 @@ namespace FlowProtocol.Pages.FlowTemplates
          return input;
       }
 
-      public bool IsURL(string text)
+      // Prüft, ob ein Text eine URL ist, evtl in der Form URL|Display-Text und gibt die Bestandteile zurück
+      public bool IsURL(string text, out string url, out string displayText)
       {
-         return (text.StartsWith("https://") || text.StartsWith("http://")) && Uri.IsWellFormedUriString(text, UriKind.RelativeOrAbsolute)
-            || text.StartsWith("mailto:");
+         Regex regDisplayURL = new Regex("^(.*)\\|(.*)");
+         if (regDisplayURL.IsMatch(text))
+         {
+            var m = regDisplayURL.Match(text);
+            url = m.Groups[1].Value.Trim();
+            displayText = m.Groups[2].Value.Trim();
+         }
+         else
+         {
+            url= text;
+            displayText = text;
+         }         
+         return (url.StartsWith("https://") || url.StartsWith("http://")) && Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute)
+            || url.StartsWith("mailto:");
       }
    }
 }
