@@ -1,0 +1,7 @@
+/// Der Textbaustein "Hallo Welt" wird ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+>> HALLO WELT
+	> Eine Guid: $NewGuid
+	> Datum: $GetDate
+	> Datum mit Uhrzeit: $GetDateTime
+	> Uhrzeit: $GetTime

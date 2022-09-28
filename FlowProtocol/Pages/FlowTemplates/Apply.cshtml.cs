@@ -315,6 +315,10 @@ namespace FlowProtocol.Pages.FlowTemplates
          }
          // Systemvariablen
          input = input.Replace("$MyURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path + this.HttpContext.Request.QueryString);
+         input = input.Replace("$NewGuid", Guid.NewGuid().ToString());
+         input = input.Replace("$GetDateTime", $"{DateTime.Now:g}");
+         input = input.Replace("$GetDate", $"{DateTime.Now:d}");         
+         input = input.Replace("$GetTime", $"{DateTime.Now:T}");         
          return input;
       }
 
