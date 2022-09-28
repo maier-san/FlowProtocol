@@ -7,5 +7,8 @@
 		>> HALLO WELT
 	#a3: Rückwärts
 		>> tleW ollaH
->> FlowProtocol-Link: $MyURL
-	> $MyURL|mit FlowProtocol öffnen
+~Set MRU=$MyResultURL
+~UrlEncode MRU
+>> FlowProtocol-Link:
+	> $MyBaseURL|Weitere Ausführung
+	> mailto:xyz@abc.de?subject=W-Vote&body=$MRU|Per Mail abstimmen

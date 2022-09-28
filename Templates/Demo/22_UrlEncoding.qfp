@@ -1,6 +1,9 @@
-/// Ein Eingabewert wird codiert
+/// Kleine Suchmaschine
 //  Anwendungsbeispiel für die Befehlsreferenz
-~Input W: String
-~Set V = $W
-~UrlEncode V
->> Wert in URL-Codierung: $V
+~Input S: Suchbegriff
+~Set SBeg=$S
+~UrlEncode SBeg
+>> Bei Google suchen:
+	> https://www.google.com/search?q=$SBeg
+>> Bei DuckDuckGo suchen:
+	> https://duckduckgo.com/?q=$SBeg&ia=web

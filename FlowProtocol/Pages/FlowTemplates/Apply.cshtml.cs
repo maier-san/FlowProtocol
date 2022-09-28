@@ -243,10 +243,14 @@ namespace FlowProtocol.Pages.FlowTemplates
       private void RunCmd_UrlEncode(Command cmd)
       {
          string arguments = cmd.Arguments;
-         if (GlobalVars.ContainsKey(arguments))
+         foreach(var idx in arguments.Split(";"))
          {
-            GlobalVars[arguments] = HttpUtility.UrlEncode(GlobalVars[arguments]);            
-         }
+            string gvar = idx.Trim();
+            if (GlobalVars.ContainsKey(gvar))
+            {
+               GlobalVars[gvar] = HttpUtility.UrlEncode(GlobalVars[gvar]).Replace("+","%20");            
+            }
+         }         
       }
 
       // Fügt einen Fehler beim ausführend eines Commandos hinzu
@@ -314,7 +318,8 @@ namespace FlowProtocol.Pages.FlowTemplates
             input = input.Replace("$" + v.Key, v.Value);
          }
          // Systemvariablen
-         input = input.Replace("$MyURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path + this.HttpContext.Request.QueryString);
+         input = input.Replace("$MyResultURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path + this.HttpContext.Request.QueryString);
+         input = input.Replace("$MyBaseURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path);
          input = input.Replace("$NewGuid", Guid.NewGuid().ToString());
          input = input.Replace("$GetDateTime", $"{DateTime.Now:g}");
          input = input.Replace("$GetDate", $"{DateTime.Now:d}");         

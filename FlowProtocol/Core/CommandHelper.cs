@@ -68,10 +68,10 @@ namespace FlowProtocol.Core
             Dictionary<string, string> assignments = new Dictionary<string, string>();
             if (!string.IsNullOrWhiteSpace(varExpression))
             {                   
-                Regex regSetAssignment = new Regex(@"^([A-Za-z0-9]*)\s*=(.*)");               
+                Regex regSetAssignment = new Regex(@"^([A-Za-z0-9]*)\s*=(.*)");
                 foreach(var idx in varExpression.Split(";"))
                 {
-                     string assignment = idx.Trim();
+                    string assignment = idx.Trim();
                     if (regSetAssignment.IsMatch(assignment))
                     {
                         var m = regSetAssignment.Match(assignment);

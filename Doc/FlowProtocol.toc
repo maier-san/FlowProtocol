@@ -25,9 +25,12 @@
 \contentsline {subsection}{\numberline {2.18}Eingaben}{19}{}%
 \contentsline {subsection}{\numberline {2.19}Codesequenzen}{20}{}%
 \contentsline {subsection}{\numberline {2.20}Geteilte Funktionen}{21}{}%
-\contentsline {section}{\numberline {3}Fehlermeldungen}{23}{}%
-\contentsline {subsection}{\numberline {3.1}Einlesefehler}{24}{}%
-\contentsline {subsection}{\numberline {3.2}Ausf\"uhrungsfehler}{25}{}%
-\contentsline {section}{\numberline {4}Spezialbefehle}{26}{}%
-\contentsline {subsection}{\numberline {4.1}Rangfolgenbestimmung}{26}{}%
-\contentsline {subsection}{\numberline {4.2}Zitatmodus}{27}{}%
+\contentsline {subsection}{\numberline {2.21}URL-Codierung}{22}{}%
+\contentsline {subsection}{\numberline {2.22}Links mit Anzeigetext}{23}{}%
+\contentsline {subsection}{\numberline {2.23}Verweise auf die eigene URL}{24}{}%
+\contentsline {section}{\numberline {3}Fehlermeldungen}{26}{}%
+\contentsline {subsection}{\numberline {3.1}Einlesefehler}{27}{}%
+\contentsline {subsection}{\numberline {3.2}Ausf\"uhrungsfehler}{28}{}%
+\contentsline {section}{\numberline {4}Spezialbefehle}{29}{}%
+\contentsline {subsection}{\numberline {4.1}Rangfolgenbestimmung}{29}{}%
+\contentsline {subsection}{\numberline {4.2}Zitatmodus}{30}{}%

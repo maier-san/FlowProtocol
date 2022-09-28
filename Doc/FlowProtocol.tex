@@ -710,6 +710,108 @@ Aufgerufen wird hierbei die Funktionsdatei HalloWelt5.qff:
 
 Ein schöner Anwendungsfall für eine geteilte Funktion ist beispielsweise die Zusammenstellung eines Navigationspfades über eine Auswahlsequenz, z.B.\ um eine Stelle innerhalb einer Software oder anderen Struktur eindeutig zu benennen. Bei einer solchen Funktion wäre die Notwendigkeit einer zentralen Verwaltung aufgrund von Umfang und ständiger Erweiterung enorm wichtig, und trotzdem kann das Ergebnis über eine einfache Variable transportiert werden.
 
+\subsection{URL-Codierung}
+Durch den Einbau von Links auf Webseiten in die Ausgabe ist es auch möglich, Webanwendungan anzusteuern, die über die URL parametrisiert werden können. Die häufigste Anwendung hierbei werden Suchaufrufe sein, aber es können auch komplexere Formularseiten oder auch der lokale Mail-Client über einen mailto-Link angestoßen werden. Ein weiterer möglicher Anwendungsfall wäre der Aufruf einer anderen \FlowProtocol-Vorlage mit vollständig oder teilweise vorbelegten Frage- und Eingabeschlüsseln.
+
+Die Hürde, die dabei zu überwinden ist, ist die Codierung der Parameter, so dass diese in der URL übergeben werden können. Sofern die Parameter zur Designzeit feststehen, kann man die Codierung über geeignete Webportale bestimmen und im Vorlagecode hinterlegen, doch bei eingegebenen Parametern ist das nicht möglich. Hierfür gibt es den Befehl \verb|~UrlEncode|.
+
+\Syntax
+\begin{verbatim}
+~UrlEncode <Var 1>; <Var 2>
+\end{verbatim}
+
+Dem Befehl kann eine Liste von Variablen übergeben werden, die für die Verwednung in einer URL codiert werden.
+
+\Beispiel
+\begin{verbatim}
+/// Kleine Suchmaschine
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Input S: Suchbegriff
+~Set SBeg=$S
+~UrlEncode SBeg
+>> Bei Google suchen:
+    > https://www.google.com/search?q=$SBeg
+>> Bei DuckDuckGo suchen:
+    > https://duckduckgo.com/?q=$SBeg&ia=web
+\end{verbatim}
+
+Im Beispiel wird ein Suchbegriff abgefragt und in die Variable \verb|SBeg| übertragen, da die Codierung nur für Parameter, nicht jedoch für Eingabe- und Frageschlüssel möglich ist. Die Variable wird anschließend in die URLs eingebaut und führt bei Eingabe von \verb|C# int?| zu folgender Ausgabe:
+
+\webbox{
+\webheadR{Ergebnisliste (Demo, 22 UrlEncoding)}\\[3mm]
+\begin{numlist}
+\item Bei Google suchen: 
+\begin{itemize}
+\item \texttt{https://www.google.com/search?q=C\%23\%20int\%3f}
+\end{itemize}
+\item Bei DuckDuckGo suchen: 
+\begin{itemize}
+\item \texttt{https://duckduckgo.com/?q=C\%23\%20int\%3f\&ia=web}
+\end{itemize}
+\end{numlist}
+}
+
+Die häufig in der Softwareentwicklung verwendete Anwendung Jira bietet z.B. eine Webseite, über die Vorgänge mit vorbelegten Eigenschaften erstellt werden können, wobei Projekt, Typ und beliebige Eigenschaften per Parameter vorbelegt werden können. Ein Expertensystem könnte so durch gezielte Fragen die notwendigen Informationen sammeln und am Ende in der Ausgabe die Erstellung eines Vorgangs vom richtige Typ mit passenden Eigenschaften als Link anbieten.
+
+\subsection{Links mit Anzeigetext}
+Aus Abschnitt~\ref{labUnterpunkte} wissen wir, dass Unterpunkte, die als URL interpretiert werden können, ausführbar ausgegeben werden. Die zuletzt gezeigten Möglichkeiten führen dabei jedoch in der Regel zu sehr langen und kryptischen Links, für die ein alternativer Anzeigetext wünscheswert wäre. Dies ist wie folgt möglich:
+
+\Syntax
+\begin{verbatim}
+>> <Ausgabe Text>
+    > <URL 1>|<Displaytext 1>
+    > <URL 2>|<Displaytext 2>
+    . . . 
+\end{verbatim}
+Der URL-Angabe wird, abgetrennt durch das Pipe-Zeichen der anzuzeigende Text nachgestellt. Wird der Zusatz weggelasen, so wird die URL selbst wie in Abschnitt~\ref{labUnterpunkte} beschrieben ausgegeben. Ist der vordere Teil nicht als URL interpretierbar, so wird der Anzeigetext ignoriert.
+
+\Beispiel
+\begin{verbatim}
+/// Der Textbaustein "Hallo Welt" wird ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+>> HALLO WELT
+    > Mehr Infos findest du hier:
+    > https://github.com/maier-san/FlowProtocol|FP bei GitHub
+\end{verbatim}
+
+Der in der Vorlage hinterlegte Link wird damit in der Ausgabe wie folgt angezeigt:
+
+\webbox{
+\webheadR{Ergebnisliste (Demo, 23 Displaytext)}
+\begin{numlist}
+\item HALLO WELT
+\begin{itemize}
+\item Mehr Infos findest du hier:
+\item \underline{FP bei GitHub}
+\end{itemize}
+\end{numlist}
+}
+
+\subsection{Verweise auf die eigene URL}
+Die mit \FlowProtocol erzeugte Ausgabe wird häufig in andere digitale Dokumente übertragen. In manchen Fällen kann es dabei sinnvoll sein, die eigene URL in die Ausgabe miteinzubauen, z.B. um spätere Anpassungen der Vorlage nachträglich zu berücksichtigen, oder den Ursprung des Dokuments festzuhalten. Es kann auch sinnvoll sein, nur die URL der Vorlage anzugeben ohne die codierten Frage- und Eingabeschlüssel, um direkt weitere Durchführungen anzubieten. Unabhängig davon bietet die URL auch eine einfache Möglichkeit, das Ergebnis einer komplexeren Abfrage über eine Variable weiterzugeben.
+
+Der Zugriff auf die Information erfolgt über die Systemvariablen \verb|$MyResultURL| für die volltändige URL inklusive der Frage- und Eingabeschlüssel und \verb|$MyBaseURL| für die URL der noch nicht ausgefüllten Vorlage.
+
+\Beispiel
+\begin{verbatim}
+/// Der Textbaustein "Hallo Welt" wird ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+    #a1: Ganz normal
+        >> Hallo Welt		
+    #a2: In Großbuchstaben
+        >> HALLO WELT
+    #a3: Rückwärts
+        >> tleW ollaH
+~Set MRU=$MyResultURL
+~UrlEncode MRU
+>> FlowProtocol-Link:
+    > $MyBaseURL|Weitere Ausführung
+    > mailto:xyz@abc.de?subject=W-Vote&body=$MRU|Per Mail abstimmen
+\end{verbatim}
+
+Das Beispiel oben erzeugt als ersten Unterpunkt einen Link, mit dem die URL der Vorlage aufgerufen werden kann, so dass man einen weiteren Durchlauf machen kann. Als zweiter Unterpunkt wir ein mailto-Link erzeugt, bei der der Mail-Inhalt aus der vollständigen URL besteht, so dass der Mail-Empfänger das Ergebnis abrufen kann. Auf diese Weise kann z.B.\ ein einfacher Rücksendeweg für Abstimmungen angeboten werden.
+
 \newpage
 \section{Fehlermeldungen}
 Die Möglichkeit, Vorlagen von Hand zu schreiben birgt ein gewisses Fehlerrisiko. Die Fehler werden bei der Ausführung weitestgehend erkannt und im Kopfbereich mit allen notwendigen Informationen angezeigt. 
