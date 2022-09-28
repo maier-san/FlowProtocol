@@ -318,7 +318,14 @@ namespace FlowProtocol.Pages.FlowTemplates
          input = input.Replace("$NewGuid", Guid.NewGuid().ToString());
          input = input.Replace("$GetDateTime", $"{DateTime.Now:g}");
          input = input.Replace("$GetDate", $"{DateTime.Now:d}");         
-         input = input.Replace("$GetTime", $"{DateTime.Now:T}");         
+         input = input.Replace("$GetTime", $"{DateTime.Now:T}");
+         if (input.Contains("$Chr"))
+         {
+            for(int i=1; i < 255; i++)
+            {
+               input = input.Replace($"$Chr{i:000}", Convert.ToChar(i).ToString());
+            }
+         }       
          return input;
       }
 
