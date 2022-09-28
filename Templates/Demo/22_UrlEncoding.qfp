@@ -1,0 +1,6 @@
+/// Ein Eingabewert wird codiert
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Input W: String
+~Set V = $W
+~UrlEncode V
+>> Wert in URL-Codierung: $V

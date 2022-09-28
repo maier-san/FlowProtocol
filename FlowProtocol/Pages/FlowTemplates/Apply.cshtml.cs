@@ -150,6 +150,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                 case "Implies": RunCmd_Implies(cmd); break;
                 case "Include": RunCmd_Include(cmd); break;
                 case "Set": RunCmd_Set(cmd); break;
+                case "UrlEncode": RunCmd_UrlEncode(cmd); break;
                 case "Vote": sc = new VoteCommand(); break;
                 case "Cite": sc = new CiteCommand(); break;
                 default: AddCommandError("C02", $"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
@@ -236,6 +237,15 @@ namespace FlowProtocol.Pages.FlowTemplates
             {
                 AddCommandError("C04", $"Der Wert der Variablen ${a.Key} konnte nicht als ganze Zahl interpretiert werden.", cmd);
             }
+         }
+      }
+
+      private void RunCmd_UrlEncode(Command cmd)
+      {
+         string arguments = cmd.Arguments;
+         if (GlobalVars.ContainsKey(arguments))
+         {
+            GlobalVars[arguments] = HttpUtility.UrlEncode(GlobalVars[arguments]);            
          }
       }
 
