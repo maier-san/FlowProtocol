@@ -313,6 +313,8 @@ namespace FlowProtocol.Pages.FlowTemplates
          {
             input = input.Replace("$" + v.Key, v.Value);
          }
+         // Systemvariablen
+         input = input.Replace("$MyURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path + this.HttpContext.Request.QueryString);
          return input;
       }
 
@@ -330,7 +332,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          {
             url= text;
             displayText = text;
-         }         
+         }  
          return (url.StartsWith("https://") || url.StartsWith("http://")) && Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute)
             || url.StartsWith("mailto:");
       }

@@ -96,9 +96,9 @@ else
                             @foreach(var s in t.SubItems)
                             {
                                 <li>
-                                @if(Model.IsURL(s))
+                                @if(Model.IsURL(s, out string url, out string displaytext))
                                 {
-                                    <a href="@s" target="_blank">@s</a>
+                                    <a href="@url" target="_blank">@displaytext</a>
                                 }
                                 else
                                 {
