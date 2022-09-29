@@ -268,7 +268,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          Dictionary<string, int> assignments = new Dictionary<string, int>();
          if (!string.IsNullOrWhiteSpace(varExpression))
          {
-            Regex regAddAssignment = new Regex(@"^([A-Za-z0-9]*)\s*\+=\s*([0-9]*)");                         
+            Regex regAddAssignment = new Regex(@"^([A-Za-z0-9]*)\s*\+=\s*(-?[0-9]*)");                         
             foreach(var idx in varExpression.Split(";"))
             {
                string assignment = idx.Trim();
