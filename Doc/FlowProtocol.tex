@@ -46,6 +46,7 @@
 }}{\end{list}}
 \newcommand{\ZeigeFehlerItem}[4]{\item\textbf{#1}\\#2\ \textsl{#3}\\\texttt{#4}}
 \newcommand{\FehlerBeschreibungItem}[2]{\item[#1]\textsl{#2}\\}
+\newcommand{\SysVar}[2]{\item[\$#1]\textsl{#2}\\}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -787,7 +788,7 @@ Der in der Vorlage hinterlegte Link wird damit in der Ausgabe wie folgt angezeig
 \end{numlist}
 }
 
-\subsection{Verweise auf die eigene URL}
+\subsection{Verweise auf die eigene URL}\label{eigeneURL}
 Die mit \FlowProtocol erzeugte Ausgabe wird häufig in andere digitale Dokumente übertragen. In manchen Fällen kann es dabei sinnvoll sein, die eigene URL in die Ausgabe miteinzubauen, z.B. um spätere Anpassungen der Vorlage nachträglich zu berücksichtigen, oder den Ursprung des Dokuments festzuhalten. Es kann auch sinnvoll sein, nur die URL der Vorlage anzugeben ohne die codierten Frage- und Eingabeschlüssel, um direkt weitere Durchführungen anzubieten. Unabhängig davon bietet die URL auch eine einfache Möglichkeit, das Ergebnis einer komplexeren Abfrage über eine Variable weiterzugeben.
 
 Der Zugriff auf die Information erfolgt über die Systemvariablen \verb|$MyResultURL| für die volltändige URL inklusive der Frage- und Eingabeschlüssel und \verb|$MyBaseURL| für die URL der noch nicht ausgefüllten Vorlage.
@@ -812,6 +813,17 @@ Der Zugriff auf die Information erfolgt über die Systemvariablen \verb|$MyResult
 
 Das Beispiel oben erzeugt als ersten Unterpunkt einen Link, mit dem die URL der Vorlage aufgerufen werden kann, so dass man einen weiteren Durchlauf machen kann. Als zweiter Unterpunkt wir ein mailto-Link erzeugt, bei der der Mail-Inhalt aus der vollständigen URL besteht, so dass der Mail-Empfänger das Ergebnis abrufen kann. Auf diese Weise kann z.B.\ ein einfacher Rücksendeweg für Abstimmungen angeboten werden.
 
+\section{Systemvariablen}
+Systemvariablen sind spezielle Variablen, die schon durch das System mit Werten belegt werden. Diese lassen sich wie andere Variablen abrufen und in Fragen, Ausgaben oder Variablenzuweisungen verwenden. Manche der Variablen sind vielmehr als Funktionen zu betrachten und dementsprechend auch mit \texttt{Get\dots} benannt. Im Abschnitt~\ref{eigeneURL} haben wir schon zwei Beispiele für Systemvariablen kennengelernt, mit denen die eigene URL abgerufen werden kann.
+\begin{description}
+\SysVar{NewGuid}{Gibt eine zufällige Guid zurück, z.B.\\\texttt{d817e626-d0b1-40c7-979a-a08b5d6df8a8}.}
+\SysVar{GetDateTime}{Gibt den aktuellen Zeitpunkt mit Datum und Uhrzeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{29.09.2022 17:26}.}
+\SysVar{GetDate}{Gibt das aktuelle Datum in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{29.09.2022}.}
+\SysVar{GetTime}{Gibt die aktuelle Zeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{17:26}.}
+\SysVar{MyResultURL}{Gibt die URL der aktuellen Vorlageausführung inklusive Schlüs\-sel\-pa\-ra\-me\-ter zurück, siehe auch Abschnitt~\ref{eigeneURL}.}
+\SysVar{MyBaseURL}{Gibt die URL der aktuellen Vorlageausführung ohne Schlüs\-sel\-pa\-ra\-me\-ter zurück, siehe auch Abschnitt~\ref{eigeneURL}.}
+\SysVar{ChrXXX}{mit $1\le XXX\le 255$. Gibt das Zeichen mit dem ASCII-Code XXX zurück, z.B.\ \texttt{\$Chr065 = A}.}
+\end{description}
 \newpage
 \section{Fehlermeldungen}
 Die Möglichkeit, Vorlagen von Hand zu schreiben birgt ein gewisses Fehlerrisiko. Die Fehler werden bei der Ausführung weitestgehend erkannt und im Kopfbereich mit allen notwendigen Informationen angezeigt. 
