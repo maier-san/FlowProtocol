@@ -18,10 +18,11 @@ namespace FlowProtocol.Pages.FlowTemplates
       private string TemplateDetailPath { get; set; }
       public List<ReadErrorItem> ReadErrors {get; set;}   
       private int RecursionCount = 0;
-
+      
       [BindProperty(SupportsGet = true)]
       public Dictionary<string, string> SelectedOptions { get; set; }
       public List<string> GivenKeys { get; set; }
+      public string TemplateBaseURL { get; set; }
       private Dictionary<string, string> GlobalVars { get; set; }
       
       public ApplyModel(IConfiguration configuration)
@@ -44,16 +45,17 @@ namespace FlowProtocol.Pages.FlowTemplates
          string templateFileName = TemplatePath + separator + templateDec + ".qfp";
          System.IO.FileInfo fi = new System.IO.FileInfo(templateFileName);
          if (fi == null || fi.DirectoryName == null)
-         {
+         {            
             return RedirectToPage("./NoTemplate");
-         }
+         }         
          TemplateDetailPath = fi.DirectoryName;
          TemplateBreadcrumb = templateDec.Replace(separator.ToString(), ", ");
          Template? currentTemplate = LoadTemplate(templateFileName);         
          if (currentTemplate == null)
-         {
+         {            
             return RedirectToPage("./NoTemplate");
          }
+         TemplateBaseURL = this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path;
          TemplateDescription = currentTemplate?.Description?.Split(Environment.NewLine).ToList();
          if (currentTemplate != null) ExtractRestrictions(currentTemplate);
          return Page();
