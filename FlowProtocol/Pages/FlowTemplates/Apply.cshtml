@@ -116,5 +116,8 @@ else
             }
         </ol>
     }
-    <p><a asp-page="/Index" class="btn btn-primary">Zurück zur Startseite</a></p>
+    <p>
+        <a href=@Model.TemplateBaseURL class="btn btn-primary">Neue Ausführung</a>
+        <a asp-page="/Index" class="btn btn-primary">Zurück zur Startseite</a>        
+    </p>
 }
