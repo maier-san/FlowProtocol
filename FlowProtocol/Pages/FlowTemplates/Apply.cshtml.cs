@@ -37,6 +37,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          TemplateBreadcrumb = "Unbekannte Vorlage";
          GlobalVars = new Dictionary<string, string>();
          ShowInputs = new List<InputItem>();
+         TemplateBaseURL = string.Empty;
       }
       public IActionResult OnGet(string template)
       {
