@@ -1,0 +1,17 @@
+@using FlowProtocol.Core
+@model IElementWithHelpLines
+@if (@Model.HelpLines.Any())
+{
+    <ul>
+        <i>
+            <span style="color: #993366;">
+                @foreach (var hl in @Model.HelpLines)
+                {
+                    <li>
+                        @hl
+                    </li>
+                }
+            </span>
+        </i>
+    </ul>
+}

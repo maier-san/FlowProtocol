@@ -27,6 +27,7 @@
 \newcommand{\webbox}[1]{\par\setlength{\fboxsep}{3mm}\fbox{\begin{minipage}{12cm}\textsf{#1}\end{minipage}\par}\par\vspace{3mm}}
 \newcommand{\webhead}[2]{{\large  #1}\\[2mm]#2\\[1mm]\rule{\linewidth}{1pt}\\[3mm]}
 \newcommand{\webheadR}[1]{{\large  #1}\\}
+\newcommand{\fpinputbox}{\fbox{\rule[-1mm]{0mm}{4mm}\hspace*{6cm}}}
 \newenvironment{circlist}%
 {\begin{list}{$\bigcirc$}{%
 \setlength{\labelsep}{5pt}
@@ -44,9 +45,17 @@
 \setlength{\parsep}{0pt}
 \setlength{\labelwidth}{1cm}
 }}{\end{list}}
+\newenvironment{helplist}%
+{\itshape\begin{list}{$\cdot$}{%
+\setlength{\labelsep}{5pt}
+\setlength{\topsep}{5pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\labelwidth}{5mm}
+}}{\end{list}}
 \newcommand{\ZeigeFehlerItem}[4]{\item\textbf{#1}\\#2\ \textsl{#3}\\\texttt{#4}}
 \newcommand{\FehlerBeschreibungItem}[2]{\item[#1]\textsl{#2}\\}
-\newcommand{\SysVar}[2]{\item[\$#1]\textsl{#2}\\}
+\newcommand{\SysVar}[2]{\item[\$#1]\textsl{#2}}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -624,7 +633,7 @@ Wird im obigen Beispiel die Antwort  Ja gewählt, so wird im nächsten Schritt die
 \webbox{
 \webhead{Vorlage Demo, 19 Eingaben}{Es wird ein Wert abgefragt}
 Welche Welt möchtest du grüßen?\\
-\fbox{\rule[-1mm]{0mm}{4mm}\hspace*{6cm}}
+\fpinputbox
 }
 \subsection{Codesequenzen}\label{Codesequenzen}
 In der Softwareentwicklung und insbesondere bei der Pflege und Weiterentwicklung großer Systeme gibt es zahlreiche Komponenten und Bausteine, die immer nach dem grundsätzlich selben Muster auf-, oder eingebaut werden. Oft gibt es dabei Varianten, bei denen man den einen oder anderen Aufruf mehr oder weniger benötigt, und die Benennung der Elemente muss ebenfalls angepasst werden. 
@@ -739,7 +748,7 @@ Dem Befehl kann eine Liste von Variablen übergeben werden, die für die Verwednun
 Im Beispiel wird ein Suchbegriff abgefragt und in die Variable \verb|SBeg| übertragen, da die Codierung nur für Parameter, nicht jedoch für Eingabe- und Frageschlüssel möglich ist. Die Variable wird anschließend in die URLs eingebaut und führt bei Eingabe von \verb|C# int?| zu folgender Ausgabe:
 
 \webbox{
-\webheadR{Ergebnisliste (Demo, 22 UrlEncoding)}\\[3mm]
+\webheadR{Ergebnisliste (Demo, 22 UrlEncoding)}
 \begin{numlist}
 \item Bei Google suchen: 
 \begin{itemize}
@@ -799,7 +808,7 @@ Der Zugriff auf die Information erfolgt über die Systemvariablen \verb|$MyResult
 //  Anwendungsbeispiel für die Befehlsreferenz
 ?F1: Wie soll "Hallo Welt" ausgegeben werden?
     #a1: Ganz normal
-        >> Hallo Welt		
+        >> Hallo Welt        
     #a2: In Großbuchstaben
         >> HALLO WELT
     #a3: Rückwärts
@@ -813,6 +822,59 @@ Der Zugriff auf die Information erfolgt über die Systemvariablen \verb|$MyResult
 
 Das Beispiel oben erzeugt als ersten Unterpunkt einen Link, mit dem die URL der Vorlage aufgerufen werden kann, so dass man einen weiteren Durchlauf machen kann. Als zweiter Unterpunkt wir ein mailto-Link erzeugt, bei der der Mail-Inhalt aus der vollständigen URL besteht, so dass der Mail-Empfänger das Ergebnis abrufen kann. Auf diese Weise kann z.B.\ ein einfacher Rücksendeweg für Abstimmungen angeboten werden.
 
+\subsection{Hilfetexte}
+Manche Fragen und Eingaben können erklärungsbedürftig sein, insbesondere man man ihnen zum ersten Mal oder nach längerer Zeit als Anwender begegnet. Zusätzliche Erläuterungen könnten in die Fragestellung selbst eingebaut werden, würden aber dort den Lesefluss stören. Aus diesem Grund können für für die o.g.\ Elemente Hilfetexte hinterlegt werden, die in der Darstellung klar abgegrenzt werden.
+
+\Syntax
+\begin{verbatim}
+>& <Hilfetext 1>
+>& <Hilfetext 2>
+. . . 
+\end{verbatim}
+Es können mehrere Hilfetexte hintereinander eingegeben werde. Diese müssen jedoch unmittelbar auf die Frage oder Eingabe folgen und werden nicht über die Einrückung zugeordnet.
+
+\Beispiel
+\begin{verbatim}
+/// Der Textbaustein "Hallo Welt" wird ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+    >& Wählen Sie die gewünschte Art der Ausgabe.
+    >& Sie können die Ausgabe auch selbst wählen
+    #a1: Ganz normal
+        >> Hallo Welt
+    #a2: In Großbuchstaben
+        >> HALLO WELT
+    #a3: Selbst wählen
+        ~Input FO: Gewünschte Ausgabe
+            >& Geben Sie den gewünschten Text ein.
+            >& Sie können auch Systemvariablen verwenden.
+        >> $FO
+\end{verbatim}
+
+Diese Vorlage führt zu folgender Darstellung:
+\webbox{
+\webhead{Vorlage Demo, 26 Hilfstexte}{Hallo-Welt-Ausgabe mit Hilfestellung}
+Wie soll \dq Hallo Welt\dq ausgegeben werden?
+\begin{helplist}
+\item Wählen Sie die gewünschte Art der Ausgabe.
+\item Sie können die Ausgabe auch selbst wählen.
+\end{helplist}
+\begin{circlist}
+\item Ganz normal
+\item In Großbuchstaben
+\item Selbst wählen
+\end{circlist}
+}
+Bei Wahl der Option \glqq Selbst wählen\grqq\ werden die Hilfetexte auch dort bei der Abfrage der gewünschten Ausgabe angezeigt.
+\webbox{
+\webhead{Vorlage Demo, 26 Hilfstexte}{Hallo-Welt-Ausgabe mit Hilfestellung}
+ Gewünschte Ausgabe
+\begin{helplist}
+\item Geben Sie den gewünschten Text ein.
+\item Sie können die Ausgabe auch selbst wählen.
+\end{helplist}
+\fpinputbox
+}
 \section{Systemvariablen}
 Systemvariablen sind spezielle Variablen, die schon durch das System mit Werten belegt werden. Diese lassen sich wie andere Variablen abrufen und in Fragen, Ausgaben oder Variablenzuweisungen verwenden. Manche der Variablen sind vielmehr als Funktionen zu betrachten und dementsprechend auch mit \texttt{Get\dots} benannt. Im Abschnitt~\ref{eigeneURL} haben wir schon zwei Beispiele für Systemvariablen kennengelernt, mit denen die eigene URL abgerufen werden kann.
 \begin{description}
@@ -824,6 +886,7 @@ Systemvariablen sind spezielle Variablen, die schon durch das System mit Werten 
 \SysVar{MyBaseURL}{Gibt die URL der aktuellen Vorlageausführung ohne Schlüs\-sel\-pa\-ra\-me\-ter zurück, siehe auch Abschnitt~\ref{eigeneURL}.}
 \SysVar{ChrXXX}{mit $1\le XXX\le 255$. Gibt das Zeichen mit dem ASCII-Code XXX zurück, z.B.\ \texttt{\$Chr065 = A}.}
 \end{description}
+
 \newpage
 \section{Fehlermeldungen}
 Die Möglichkeit, Vorlagen von Hand zu schreiben birgt ein gewisses Fehlerrisiko. Die Fehler werden bei der Ausführung weitestgehend erkannt und im Kopfbereich mit allen notwendigen Informationen angezeigt. 
@@ -871,6 +934,7 @@ Einlesefehler treten direkt beim Einlesen einer Vorlage- oder Funktionsdatei auf
 \FehlerBeschreibungItem{R10}{Zeile nicht interpretierbar} Tritt auf, wenn eine Zeile nicht als Anweisung interpretiert werden kann, sie also keiner innerhalb einer Vorlage bekannten Syntax entspricht.
 \FehlerBeschreibungItem{R11}{Input-Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein Input-Befehl  keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
 \FehlerBeschreibungItem{R12}{Codezeile kann keinem Ausgabeeintrag zugeordnet werden.} Tritt auf, wenn eine Codezeile keinem Ausgabeeintrag zugeordnet werden kann. Codezeilen müssen immer unmittelbar auf Ausgabeeinträge oder Unterpunkte oder andere Codezeilen folgen und dürfen nicht durch Fragen und Antworten unterbrochen werden.
+\FehlerBeschreibungItem{R13}{Hilfetext kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein Hilfetext keine Kontext zugeordnet werden kann. Hilfetexte können direkt an eine Frage oder eine Eingabe angefügt werden.
 \end{description}
 
 \subsection{Ausführungsfehler}

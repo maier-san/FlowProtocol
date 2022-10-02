@@ -50,21 +50,9 @@
                     </label>
                     @if (q.HelpLines.Any())
                     {
-                        <ul>
-                            <i>
-                                <span style="color: #993366;">
-                                    @foreach (var hl in q.HelpLines)
-                                    {
-                                        <li>
-                                            @hl
-                                        </li>
-                                    }
-                                </span>
-                            </i>
-                        </ul>
+                        @await Html.PartialAsync("_HelpTextLines", q)
                     }
-                    <input type="text" class="form-control" access="false" id="@q.Key" asp-for="SelectedOptions[q.Key]"
-                maxlength="50">
+                    <input type="text" class="form-control" access="false" id="@q.Key" asp-for="SelectedOptions[q.Key]" maxlength="50">
                 </div>
             </div><br>
         }
@@ -76,18 +64,7 @@
                 </label>
                 @if (r.HelpLines.Any())
                 {
-                    <ul>
-                        <i>
-                            <span style="color: #993366;">
-                                @foreach (var hl in r.HelpLines)
-                                {
-                                    <li>
-                                        @hl
-                                    </li>
-                                }
-                            </span>
-                        </i>
-                    </ul>
+                    @await Html.PartialAsync("_HelpTextLines", r)
                 }
                 <div class="radio-group">
                     @foreach (var idx in r.Options)
