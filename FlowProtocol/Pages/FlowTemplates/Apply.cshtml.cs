@@ -337,23 +337,10 @@ namespace FlowProtocol.Pages.FlowTemplates
          return input;
       }
 
-      // Prüft, ob ein Text eine URL ist, evtl in der Form URL|Display-Text und gibt die Bestandteile zurück
+      // Prüft, ob ein String eine URL ist. Wird für die Partial-Views benötigt
       public bool IsURL(string text, out string url, out string displayText)
       {
-         Regex regDisplayURL = new Regex("^(.*)\\|(.*)");
-         if (regDisplayURL.IsMatch(text))
-         {
-            var m = regDisplayURL.Match(text);
-            url = m.Groups[1].Value.Trim();
-            displayText = m.Groups[2].Value.Trim();
-         }
-         else
-         {
-            url= text;
-            displayText = text;
-         }  
-         return (url.StartsWith("https://") || url.StartsWith("http://")) && Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute)
-            || url.StartsWith("mailto:");
+         return CoreLib.IsURL(text, out url, out displayText);
       }
    }
 }

@@ -73,7 +73,7 @@ Ein besonders positiver Nebeneffekt bei der Nutzung von Vorlagen besteht darin, 
 
 Eine besonders nützliche Anwendung ist die Erstellung von interaktiven Anleitungen. Hierbei werden ebenfalls Rahmenbedigungen und einzelne Textbausteine im Vorfeld abgefragt, und in Abhängigkeit davon die für den vorliegenden Fall relevanten Schritte der Anleitung ausgegeben. Die Möglichkeit, kontextbezogene und durch Textersetzungen angepasste Codepassagen in die Ausgabe einzufügen, macht \FlowProtocol zu einem besonders nützlichen Werkzeug in der Softwareentwicklung, wo derartige wiederkehrende Muster zum Tagesgeschäft gehören. Die Kombination von Anleitung und Codegenerator erhöht nicht nur die Effizient, sondern auch die Qualität.
 
-Auch kleinere personalisierte Umfragen lassen sich über Vorlagen realisieren, wenn man die Teilnehmer zur Rücksendung der Ergebnisse instruiert. Es gibt sogar einen speziellen Befehl, der bei der Rangfolgenbestimmung von kleineren Listen unterstützt, indem die darin vorkommenden Elemente paarweise gegenübergestellt werden (siehe Abschnitt~\ref{labRangfolgenbestimmung}). 
+Auch kleinere personalisierte Umfragen lassen sich über Vorlagen realisieren, wenn man die Teilnehmer zur Rücksendung der Ergebnisse instruiert. Es gibt sogar einen speziellen Befehl, der bei der Rangfolgenbestimmung von kleineren Listen unterstützt, indem die darin vorkommenden Elemente paarweise gegenübergestellt werden (siehe Abschnitt~\ref{Rangfolgenbestimmung}). 
 Für wichtige Rangfolgen wie beispielsweise Projektprioritäten ist es natürlich besser, man hat detaillierte und bewährte Kriterien, die sich objektiv auf alle Elemente der Liste anwenden lassen, und die am Ende über einen Zahlenwert zu einer Rangfolge oder Auswahl führen. Auch solche Bewertungen lassen sich mit \FlowProtocol sehr leicht umsetzen und für alle verfügbar machen.
 
 \subsection{Konfiguration}
@@ -271,7 +271,7 @@ Die Alternativen
 \item tleW ollaH
 \end{numlist}
 }
-\subsection{Unterpunkte}\label{labUnterpunkte}
+\subsection{Unterpunkte}\label{Unterpunkte}
 Ausgaben können je nach Vorlage selbst wieder Tätigkeiten oder Aufgaben beschreiben, die sich aus verschiedenen Schritten zusammensetzen, oder bei denen mehrere Teilaspekte zu berücksichtigen sind. Diese lassen sich in Form von Unterpunkten auf"|listen. Ein Unterpunkt, der mit der Protokollkennung \glqq https://\grqq\  beginnt und als Link erkannt wird, wird dabei in der Ausgabe als ausführbarer Link dargestellt. Man kann sogar ganze Codesequenzen als Unterpunkt formatieren (siehe Abschnitt~\ref{Codesequenzen}).
 
 \Syntax
@@ -639,7 +639,7 @@ Welche Welt möchtest du grüßen?\\
 In der Softwareentwicklung und insbesondere bei der Pflege und Weiterentwicklung großer Systeme gibt es zahlreiche Komponenten und Bausteine, die immer nach dem grundsätzlich selben Muster auf-, oder eingebaut werden. Oft gibt es dabei Varianten, bei denen man den einen oder anderen Aufruf mehr oder weniger benötigt, und die Benennung der Elemente muss ebenfalls angepasst werden. 
 Es kann die Arbeit deutlich vereinfachen, wenn man mit \FlowProtocol eine Vorlage für eine Anleitung erstellt, die die relevanten Abhängigkeiten abfragt, und dem Entwickler die notwendigen Implementierungsschritte beschreibt. Noch besser ist es, wenn man eine Stufe weiter geht, und die einzelnen Codefragmente direkt durch die Vorlage erstellen lässt, so dass man diese ausschneiden und in den Produktivcode einfügen kann. Hierfür gibt es die Möglichkeit, ganze Codesequenzen ausgeben zu lassen.
 
-Die Syntax ist ähnlich zu der der Unterpunkte (siehe Abschnitt~\ref{labUnterpunkte}). Codesequenzen und Unterpunkte lassen sich auch innerhalb desselben Ausgabeeintrags kombinieren, die Ausgabe erfolgt jedoch blockweise, d.h.\ zuerst die Unterpunkte und dann der Codeblock.
+Die Syntax ist ähnlich zu der der Unterpunkte (siehe Abschnitt~\ref{Unterpunkte}). Codesequenzen und Unterpunkte lassen sich auch innerhalb desselben Ausgabeeintrags kombinieren, die Ausgabe erfolgt jedoch blockweise, d.h.\ zuerst die Unterpunkte und dann der Codeblock.
 
 \Syntax
 \begin{verbatim}
@@ -763,8 +763,8 @@ Im Beispiel wird ein Suchbegriff abgefragt und in die Variable \verb|SBeg| übert
 
 Die häufig in der Softwareentwicklung verwendete Anwendung Jira bietet z.B. eine Webseite, über die Vorgänge mit vorbelegten Eigenschaften erstellt werden können, wobei Projekt, Typ und beliebige Eigenschaften per Parameter vorbelegt werden können. Ein Expertensystem könnte so durch gezielte Fragen die notwendigen Informationen sammeln und am Ende in der Ausgabe die Erstellung eines Vorgangs vom richtige Typ mit passenden Eigenschaften als Link anbieten.
 
-\subsection{Links mit Anzeigetext}
-Aus Abschnitt~\ref{labUnterpunkte} wissen wir, dass Unterpunkte, die als URL interpretiert werden können, ausführbar ausgegeben werden. Die zuletzt gezeigten Möglichkeiten führen dabei jedoch in der Regel zu sehr langen und kryptischen Links, für die ein alternativer Anzeigetext wünscheswert wäre. Dies ist wie folgt möglich:
+\subsection{Links mit Anzeigetext}\label{Displaytext}
+Aus Abschnitt~\ref{Unterpunkte} wissen wir, dass Unterpunkte, die als URL interpretiert werden können, ausführbar ausgegeben werden. Die zuletzt gezeigten Möglichkeiten führen dabei jedoch in der Regel zu sehr langen und kryptischen Links, für die ein alternativer Anzeigetext wünscheswert wäre. Dies ist wie folgt möglich:
 
 \Syntax
 \begin{verbatim}
@@ -773,7 +773,7 @@ Aus Abschnitt~\ref{labUnterpunkte} wissen wir, dass Unterpunkte, die als URL int
     > <URL 2>|<Displaytext 2>
     . . . 
 \end{verbatim}
-Der URL-Angabe wird, abgetrennt durch das Pipe-Zeichen der anzuzeigende Text nachgestellt. Wird der Zusatz weggelasen, so wird die URL selbst wie in Abschnitt~\ref{labUnterpunkte} beschrieben ausgegeben. Ist der vordere Teil nicht als URL interpretierbar, so wird der Anzeigetext ignoriert.
+Der URL-Angabe wird, abgetrennt durch das Pipe-Zeichen der anzuzeigende Text nachgestellt. Wird der Zusatz weggelasen, so wird die URL selbst wie in Abschnitt~\ref{Unterpunkte} beschrieben ausgegeben. Ist der vordere Teil nicht als URL interpretierbar, so wird der Anzeigetext ignoriert.
 
 \Beispiel
 \begin{verbatim}
@@ -823,7 +823,8 @@ Der Zugriff auf die Information erfolgt über die Systemvariablen \verb|$MyResult
 Das Beispiel oben erzeugt als ersten Unterpunkt einen Link, mit dem die URL der Vorlage aufgerufen werden kann, so dass man einen weiteren Durchlauf machen kann. Als zweiter Unterpunkt wir ein mailto-Link erzeugt, bei der der Mail-Inhalt aus der vollständigen URL besteht, so dass der Mail-Empfänger das Ergebnis abrufen kann. Auf diese Weise kann z.B.\ ein einfacher Rücksendeweg für Abstimmungen angeboten werden.
 
 \subsection{Hilfetexte}
-Manche Fragen und Eingaben können erklärungsbedürftig sein, insbesondere man man ihnen zum ersten Mal oder nach längerer Zeit als Anwender begegnet. Zusätzliche Erläuterungen könnten in die Fragestellung selbst eingebaut werden, würden aber dort den Lesefluss stören. Aus diesem Grund können für für die o.g.\ Elemente Hilfetexte hinterlegt werden, die in der Darstellung klar abgegrenzt werden.
+Manche Fragen und Eingaben können erklärungsbedürftig sein, insbesondere man man ihnen zum ersten Mal oder nach längerer Zeit als Anwender begegnet. Zu\-sätz\-li\-che Erläuterungen könnten in die Fragestellung selbst eingebaut werden, würden aber dort den Lesefluss stören. Aus diesem Grund können für für die o.g.\ Elemente Hilfetexte hinterlegt werden, die in der Darstellung klar abgegrenzt werden.
+So wie bei den Unterpunkten ist es auch hier möglich, Links mit Anzeigetext zu hinterlegen (siehe Abschnitt~\ref{Displaytext}), um auf evtl.\ weiterführende Informationen auf einer Wikiseite zu verweisen.
 
 \Syntax
 \begin{verbatim}
@@ -840,6 +841,7 @@ Es können mehrere Hilfetexte hintereinander eingegeben werde. Diese müssen jedoc
 ?F1: Wie soll "Hallo Welt" ausgegeben werden?
     >& Wählen Sie die gewünschte Art der Ausgabe.
     >& Sie können die Ausgabe auch selbst wählen
+    >& https://github.com/maier-san/FlowProtocol|FP bei GitHub
     #a1: Ganz normal
         >> Hallo Welt
     #a2: In Großbuchstaben
@@ -853,11 +855,12 @@ Es können mehrere Hilfetexte hintereinander eingegeben werde. Diese müssen jedoc
 
 Diese Vorlage führt zu folgender Darstellung:
 \webbox{
-\webhead{Vorlage Demo, 26 Hilfstexte}{Hallo-Welt-Ausgabe mit Hilfestellung}
+\webhead{Vorlage Demo, 20 Hilfstexte}{Hallo-Welt-Ausgabe mit Hilfestellung}
 Wie soll \dq Hallo Welt\dq ausgegeben werden?
 \begin{helplist}
 \item Wählen Sie die gewünschte Art der Ausgabe.
 \item Sie können die Ausgabe auch selbst wählen.
+\item \underline{FP bei GitHub}
 \end{helplist}
 \begin{circlist}
 \item Ganz normal
@@ -867,7 +870,7 @@ Wie soll \dq Hallo Welt\dq ausgegeben werden?
 }
 Bei Wahl der Option \glqq Selbst wählen\grqq\ werden die Hilfetexte auch dort bei der Abfrage der gewünschten Ausgabe angezeigt.
 \webbox{
-\webhead{Vorlage Demo, 26 Hilfstexte}{Hallo-Welt-Ausgabe mit Hilfestellung}
+\webhead{Vorlage Demo, 20 Hilfstexte}{Hallo-Welt-Ausgabe mit Hilfestellung}
  Gewünschte Ausgabe
 \begin{helplist}
 \item Geben Sie den gewünschten Text ein.
@@ -875,6 +878,8 @@ Bei Wahl der Option \glqq Selbst wählen\grqq\ werden die Hilfetexte auch dort be
 \end{helplist}
 \fpinputbox
 }
+
+\newpage
 \section{Systemvariablen}
 Systemvariablen sind spezielle Variablen, die schon durch das System mit Werten belegt werden. Diese lassen sich wie andere Variablen abrufen und in Fragen, Ausgaben oder Variablenzuweisungen verwenden. Manche der Variablen sind vielmehr als Funktionen zu betrachten und dementsprechend auch mit \texttt{Get\dots} benannt. Im Abschnitt~\ref{eigeneURL} haben wir schon zwei Beispiele für Systemvariablen kennengelernt, mit denen die eigene URL abgerufen werden kann.
 \begin{description}
@@ -956,7 +961,7 @@ Spezialbefehle sind spezielle Befehle, die die Struktur einer Vorlage verändern,
 \FehlerBeschreibungItem{S03}{Befehl ohne gültiges $\dots$-Argument.} Tritt auf, wenn ein ungültiger Parameterwert angegeben wurde, z.B.\ eine \texttt{GroupSize}-Angabe, die nicht als Zahl interpretiert werden kann.
 \end{description}
 
-\subsection{Rangfolgenbestimmung}\label{labRangfolgenbestimmung}
+\subsection{Rangfolgenbestimmung}\label{Rangfolgenbestimmung}
 Die Rangfolgenbestimmung ist die Implementierung einer Methode, bei der man eine Rangfolge von Dingen wie z.B. Projekten dadurch bestimmt, dass man diese paarweise vergleicht. Bei jedem Vergleich bekommt der Gewinner einen Punkt und am Ende sortiert man die Einträge entsprechend ihrer Punktezahl. Die Reduzierung auf 2er-Vergleiche vereinfacht zwar die Entscheidung pro Frage, macht die Beantwortung jedoch auch deutlich umfangreicher. Für $n$ Elemente ergeben sich $\frac{n(n-1)}{2}$ Einzelfragen, also für $n=8$ also schon 28 Fragen.
 \FlowProtocol unterteilt dabei die Einzelfragen so in Gruppen, dass jedes Element maximal einmal pro Gruppe vorkommt. Für eine gerade Anzahl von $n$ Elementen werden auf diese Weise $n-1$ Gruppen mit $\frac n2$ Vergleichen gebildet und für eine ungerade Anzahl $n$ sind es $n$ Gruppen mit je $\frac{n-1}{2}$ Vergleichen.
 \Syntax

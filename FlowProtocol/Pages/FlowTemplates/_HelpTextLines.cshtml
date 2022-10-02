@@ -8,7 +8,14 @@
                 @foreach (var hl in @Model.HelpLines)
                 {
                     <li>
-                        @hl
+                        @if (Model.IsURL(hl, out string url, out string displaytext))
+                        {
+                            <a href="@url" target="_blank">@displaytext</a>
+                        }
+                        else
+                        {
+                            @hl
+                        }
                     </li>
                 }
             </span>

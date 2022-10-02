@@ -24,5 +24,11 @@ namespace FlowProtocol.Core
       {
          QuestionText = conv(QuestionText);         
       }
+
+      // Prüft, ob ein String eine URL ist. Wird für die Partial-Views benötigt
+      public bool IsURL(string text, out string url, out string displayText)
+      {
+         return CoreLib.IsURL(text, out url, out displayText);
+      }
    }
 }
