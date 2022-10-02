@@ -1,6 +1,6 @@
 ﻿namespace FlowProtocol.Core
 {
-   public class Restriction
+   public class Restriction : IElementWithHelpLines
    {
       public string Key { get; set; }
       public string QuestionText { get; set; }
