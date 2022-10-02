@@ -160,7 +160,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             }
             if (sc != null)
             {
-               List<ResultItem> erg = sc.RunCommand(cmd, t, SelectedOptions, ReadErrors.Add);
+               List<ResultItem> erg = sc.RunCommand(cmd, t, SelectedOptions, GlobalVars, ReadErrors.Add);
                if (erg != null)
                {
                   t.ResultItems.AddRange(erg);
@@ -248,7 +248,7 @@ namespace FlowProtocol.Pages.FlowTemplates
          string arguments = cmd.Arguments;
          foreach(var idx in arguments.Split(";"))
          {
-            string gvar = idx.Trim();
+            string gvar = idx.Trim(' ');
             if (GlobalVars.ContainsKey(gvar))
             {
                GlobalVars[gvar] = HttpUtility.UrlEncode(GlobalVars[gvar]).Replace("+","%20");            
@@ -327,6 +327,8 @@ namespace FlowProtocol.Pages.FlowTemplates
          input = input.Replace("$GetDateTime", $"{DateTime.Now:g}");
          input = input.Replace("$GetDate", $"{DateTime.Now:d}");         
          input = input.Replace("$GetTime", $"{DateTime.Now:T}");
+         input = input.Replace("$CRLF", "\r\n");
+         input = input.Replace("$LF", "\n");
          if (input.Contains("$Chr"))
          {
             for(int i=1; i < 255; i++)
