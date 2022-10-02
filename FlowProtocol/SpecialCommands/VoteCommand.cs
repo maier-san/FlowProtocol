@@ -4,13 +4,16 @@ namespace FlowProtocol.SpecialCommands
 {
     public class VoteCommand : ISpecialCommand
     {
-        public List<ResultItem> RunCommand(Command cmd, Template template, Dictionary<string, string> selectedOptions, Action<ReadErrorItem> addError)
+        public List<ResultItem> RunCommand(Command cmd, Template template, Dictionary<string, string> selectedOptions,
+            Dictionary<string, string> globalVars, Action<ReadErrorItem> addError)
         {
             Restriction? res = CommandHelper.GetRestriction(cmd, "Key", template, addError);
             string groupname = CommandHelper.GetTextParameter(cmd, "GroupName", "Ergebnis", addError, false);
             string drawoption = CommandHelper.GetTextParameter(cmd, "DrawOption", "", addError, true);
-            Dictionary<Option, int> votingsum = SetCrossTemplates(template, res, selectedOptions, drawoption);            
-            List<ResultItem> result = CreateResultlist(votingsum, groupname);
+            string resVar = CommandHelper.GetTextParameter(cmd, "ResultVar", "", addError, true);
+            string resSep = CommandHelper.GetTextParameter(cmd, "ResultSep", "", addError, true);
+            Dictionary<Option, int> votingsum = SetCrossTemplates(template, res, selectedOptions, drawoption);
+            List<ResultItem> result = CreateResultlist(votingsum, groupname, resVar, resSep, globalVars);
             return result;
         }
 
@@ -28,7 +31,7 @@ namespace FlowProtocol.SpecialCommands
             }
             // Bestimmung von Gruppen mit Vergleichpaaren, die jeweils kein Element doppelt enthalten
             List<List<Tuple<Option, Option>>> compareGroups = CreateCompareGroups(res.Options);
-            
+
             // Gruppen in Fragen umformen und mit den gegebenen Antworten abgleichen:
             bool notfirstrun = false;
             foreach (var idg in compareGroups)
@@ -58,12 +61,12 @@ namespace FlowProtocol.SpecialCommands
                     }
                     if (selectedOptions.ContainsKey(ncres.Key))
                     {
-                        if (selectedOptions[ncres.Key] == i1.Key) votingsum[i1]+=val;
-                        else if (selectedOptions[ncres.Key] == i2.Key) votingsum[i2]+=val;
+                        if (selectedOptions[ncres.Key] == i1.Key) votingsum[i1] += val;
+                        else if (selectedOptions[ncres.Key] == i2.Key) votingsum[i2] += val;
                         else if (!string.IsNullOrEmpty(drawoption) && selectedOptions[ncres.Key] == drawKey)
                         {
-                            votingsum[i1]+=1;
-                            votingsum[i2]+=1;
+                            votingsum[i1] += 1;
+                            votingsum[i2] += 1;
                         }
                     }
                     t.Restrictions.Add(ncres);
@@ -156,11 +159,15 @@ namespace FlowProtocol.SpecialCommands
             return result;
         }
 
-        private List<ResultItem> CreateResultlist(Dictionary<Option, int> votingsum, string groupname)
+        private List<ResultItem> CreateResultlist(Dictionary<Option, int> votingsum, string groupname,
+            string resVar, string resSep, Dictionary<string, string> globalVars)
         {
             List<ResultItem> result = new List<ResultItem>();
             int ranking = 0;
             int previousvalue = -1;
+            string resVarValRPO = string.Empty;
+            string resVarValPO = string.Empty;
+            string resVarValO = string.Empty;
             foreach (var idx in votingsum.OrderBy(x => -x.Value))
             {
                 if (previousvalue < 0 || idx.Value < previousvalue)
@@ -174,8 +181,23 @@ namespace FlowProtocol.SpecialCommands
                     ResultItemText = $"Platz {ranking} ({idx.Value} Punkte) {idx.Key.OptionText}"
                 };
                 result.Add(ri);
+                AddTextWithSeparator(ref resVarValRPO, resSep, $"Platz {ranking} ({idx.Value} Punkte) {idx.Key.OptionText}");
+                AddTextWithSeparator(ref resVarValPO, resSep, $"{idx.Value} Punkte {idx.Key.OptionText}");
+                AddTextWithSeparator(ref resVarValO, resSep, $"{idx.Key.OptionText}");
+            }
+            if (!string.IsNullOrEmpty(resVar) && globalVars != null)
+            {
+                globalVars[resVar + "RPO"] = resVarValRPO;
+                globalVars[resVar + "PO"] = resVarValPO;
+                globalVars[resVar + "O"] = resVarValO;
             }
             return result;
+        }
+
+        private void AddTextWithSeparator(ref string current, string sep, string text)
+        {
+            if (!string.IsNullOrEmpty(current)) current += sep;
+            current += text;
         }
     }
 }
