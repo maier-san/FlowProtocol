@@ -48,6 +48,21 @@
                         @q.QuestionText
                         <br>
                     </label>
+                    @if (q.HelpLines.Any())
+                    {
+                        <ul>
+                            <i>
+                                <span style="color: #993366;">
+                                    @foreach (var hl in q.HelpLines)
+                                    {
+                                        <li>
+                                            @hl
+                                        </li>
+                                    }
+                                </span>
+                            </i>
+                        </ul>
+                    }
                     <input type="text" class="form-control" access="false" id="@q.Key" asp-for="SelectedOptions[q.Key]"
                 maxlength="50">
                 </div>

@@ -196,7 +196,7 @@ namespace FlowProtocol.Core
                                 var m = regInputItem.Match(codeline);
                                 InputItem q = new InputItem(){ Key = AddKeyNumber(m.Groups[1].Value.Trim(), ref keyindex), QuestionText = m.Groups[2].Value.Trim()};
                                 parent.InputItems.Add(q);
-                                //currentElementWithHelpLines = q;
+                                currentElementWithHelpLines = q;
                             }
                             else AddReadError("R11", "Input-Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
                             currentResultItem = null;                            
