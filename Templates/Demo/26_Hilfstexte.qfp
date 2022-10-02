@@ -1,0 +1,11 @@
+/// Der Textbaustein "Hallo Welt" wird in einer Form deiner Wahl ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+	>& Wählen sie "Ganz Normal", wenn Sie den Text in normaler Schreibweise ausgegeben haben wollen.
+	>& Sie können den Text auch in Großbuchstaben oder rückwärts geschrieben ausgeben lassen.
+	#a1: Ganz normal
+		>> Hallo Welt
+	#a2: In Großbuchstaben
+		>> HALLO WELT
+	#a3: Rückwärts
+		>> tleW ollaH

@@ -41,9 +41,10 @@ namespace FlowProtocol.Core
                 Regex regDescription = new Regex("^///(.*)");
                 Regex regComment = new Regex("^//.*");                
                 Regex regRestriction = new Regex(@"^\?([A-Za-z0-9]*[']?):(.*)");
+                Regex regHelpText = new Regex("^>&(.*)");
                 Regex regOption = new Regex("^#([A-Za-z0-9]*):(.*)");
                 Regex regCodeLine = new Regex("^>\\|(.*)");
-                Regex regSubItem = new Regex("^>(.*)");                
+                Regex regSubItem = new Regex("^>(.*)");
                 Regex regGroupedResultItem = new Regex("^>>(.*)>>(.*)");
                 Regex regResultItem = new Regex("^>>(.*)");
                 Regex regExecute = new Regex(@"^~Execute");
@@ -113,6 +114,17 @@ namespace FlowProtocol.Core
                                 TemplateStack.Push(new Tuple<int, Template>(indent, o));
                             }
                             else AddReadError("R04", "Antwort kann keinem Fragekontext zugeordnet werden.", filepath, linenumber, codeline);
+                            currentResultItem = null;
+                        }
+                        else if (regHelpText.IsMatch(codeline))
+                        {
+                            Restriction? parent = GetMatchingParent(indent, ResttrictionStack);
+                            if (parent != null)
+                            {
+                                var m = regHelpText.Match(codeline);                                
+                                parent.AddHelpLine(m.Groups[1].Value.Trim());
+                            }
+                            else AddReadError("R13", "Hilfetext kann keinem Fragekontext zugeordnet werden.", filepath, linenumber, codeline);
                             currentResultItem = null;
                         }
                         else if (regGroupedResultItem.IsMatch(codeline))
