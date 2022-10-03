@@ -181,8 +181,8 @@ namespace FlowProtocol.SpecialCommands
                     ResultItemText = $"Platz {ranking} ({idx.Value} Punkte) {idx.Key.OptionText}"
                 };
                 result.Add(ri);
-                AddTextWithSeparator(ref resVarValRPO, resSep, $"Platz {ranking} ({idx.Value} Punkte) {idx.Key.OptionText}");
-                AddTextWithSeparator(ref resVarValPO, resSep, $"{idx.Value} Punkte {idx.Key.OptionText}");
+                AddTextWithSeparator(ref resVarValRPO, resSep, $"Platz {ranking}, {idx.Value} Punkte, {idx.Key.OptionText}");
+                AddTextWithSeparator(ref resVarValPO, resSep, $"{idx.Value} Punkte, {idx.Key.OptionText}");
                 AddTextWithSeparator(ref resVarValO, resSep, $"{idx.Key.OptionText}");
             }
             if (!string.IsNullOrEmpty(resVar) && globalVars != null)

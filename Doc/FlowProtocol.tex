@@ -73,7 +73,7 @@ Ein besonders positiver Nebeneffekt bei der Nutzung von Vorlagen besteht darin, 
 
 Eine besonders nützliche Anwendung ist die Erstellung von interaktiven Anleitungen. Hierbei werden ebenfalls Rahmenbedigungen und einzelne Textbausteine im Vorfeld abgefragt, und in Abhängigkeit davon die für den vorliegenden Fall relevanten Schritte der Anleitung ausgegeben. Die Möglichkeit, kontextbezogene und durch Textersetzungen angepasste Codepassagen in die Ausgabe einzufügen, macht \FlowProtocol zu einem besonders nützlichen Werkzeug in der Softwareentwicklung, wo derartige wiederkehrende Muster zum Tagesgeschäft gehören. Die Kombination von Anleitung und Codegenerator erhöht nicht nur die Effizient, sondern auch die Qualität.
 
-Auch kleinere personalisierte Umfragen lassen sich über Vorlagen realisieren, wenn man die Teilnehmer zur Rücksendung der Ergebnisse instruiert. Es gibt sogar einen speziellen Befehl, der bei der Rangfolgenbestimmung von kleineren Listen unterstützt, indem die darin vorkommenden Elemente paarweise gegenübergestellt werden (siehe Abschnitt~\ref{Rangfolgenbestimmung}). 
+Auch kleinere personalisierte Umfragen lassen sich über Vorlagen realisieren, wenn man die Teilnehmer zur Rücksendung der Ergebnisse instruiert. Es gibt sogar einen eigenen Befehl, der bei der Rangfolgenbestimmung von kleineren Listen un\-ter\-stützt, indem die darin vorkommenden Elemente paarweise gegenübergestellt werden (siehe Abschnitt~\ref{Rangfolgenbestimmung}). 
 Für wichtige Rangfolgen wie beispielsweise Projektprioritäten ist es natürlich besser, man hat detaillierte und bewährte Kriterien, die sich objektiv auf alle Elemente der Liste anwenden lassen, und die am Ende über einen Zahlenwert zu einer Rangfolge oder Auswahl führen. Auch solche Bewertungen lassen sich mit \FlowProtocol sehr leicht umsetzen und für alle verfügbar machen.
 
 \subsection{Konfiguration}
@@ -234,7 +234,7 @@ Soll \dq Hallo Welt\dq zusätzlich rückwärts ausgegeben werden?
 }
 
 \subsection{Gruppierungen}
-Das Ergebnis einer Bearbeitung kann in vielen Fällen mehr als eine Liste sein. Eine Vorlage zur Analyse kann zum einen den Ist-Stand erfassen, mögliche Lösungsansätze formulieren und die noch ausstehenden Analyse-Maßnahmen auf"|listen. Zu diesem Zweck können die Ausgaben in einer sehr einfachen Form gruppiert werden.
+Das Ergebnis einer Bearbeitung kann in vielen Fällen mehr als eine Liste sein. Eine Vorlage zur Analyse kann zum einen den Ist-Stand erfassen, mögliche Lö\-sungs\-an\-sä\-tze formulieren und die noch ausstehenden Analyse-Maßnahmen auf"|listen. Zu diesem Zweck können die Ausgaben in einer sehr einfachen Form gruppiert werden.
 
 \Syntax
 \begin{verbatim}
@@ -682,7 +682,7 @@ Anleitung
 \texttt{\{}\\
 \hspace*{2ex}\texttt{// Rufe generische Funktion auf}\\
 \hspace*{2ex}\texttt{return ErstelleElement<int>()}\\
-\texttt{\}}
+\texttt{\}}\\
 \item Ergänze den Aufruf in der Geschäftslogik\\
 \hspace*{2ex}\texttt{int id = ErstelleFahrzeug()}
 \end{numlist}
@@ -773,7 +773,7 @@ Aus Abschnitt~\ref{Unterpunkte} wissen wir, dass Unterpunkte, die als URL interp
     > <URL 2>|<Displaytext 2>
     . . . 
 \end{verbatim}
-Der URL-Angabe wird, abgetrennt durch das Pipe-Zeichen der anzuzeigende Text nachgestellt. Wird der Zusatz weggelasen, so wird die URL selbst wie in Abschnitt~\ref{Unterpunkte} beschrieben ausgegeben. Ist der vordere Teil nicht als URL interpretierbar, so wird der Anzeigetext ignoriert.
+Der URL-Angabe wird, abgetrennt durch das Pipe-Zeichen der anzuzeigende Text nachgestellt. Wird der Zusatz weggelasen, so wird die URL vollständig wie in Abschnitt~\ref{Unterpunkte} beschrieben ausgegeben. Ist der vordere Teil nicht als URL interpretierbar, so wird der Anzeigetext ignoriert.
 
 \Beispiel
 \begin{verbatim}
@@ -784,8 +784,7 @@ Der URL-Angabe wird, abgetrennt durch das Pipe-Zeichen der anzuzeigende Text nac
     > https://github.com/maier-san/FlowProtocol|FP bei GitHub
 \end{verbatim}
 
-Der in der Vorlage hinterlegte Link wird damit in der Ausgabe wie folgt angezeigt:
-
+Der in der Vorlage hinterlegte Link wird damit in der Ausgabe wie folgt angezeigt:\nopagebreak
 \webbox{
 \webheadR{Ergebnisliste (Demo, 23 Displaytext)}
 \begin{numlist}
@@ -889,6 +888,8 @@ Systemvariablen sind spezielle Variablen, die schon durch das System mit Werten 
 \SysVar{GetTime}{Gibt die aktuelle Zeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{17:26}.}
 \SysVar{MyResultURL}{Gibt die URL der aktuellen Vorlageausführung inklusive Schlüs\-sel\-pa\-ra\-me\-ter zurück, siehe auch Abschnitt~\ref{eigeneURL}.}
 \SysVar{MyBaseURL}{Gibt die URL der aktuellen Vorlageausführung ohne Schlüs\-sel\-pa\-ra\-me\-ter zurück, siehe auch Abschnitt~\ref{eigeneURL}.}
+\SysVar{CRLF}{Gibt die Zeichenfolge \texttt{\textbackslash r\textbackslash n} (Carriage Return + Line Feed) zurück, mit der ein Zeilenumbruch auf Windows-System erzeugt wird.}
+\SysVar{LF}{Gibt das Zeichen \texttt{\textbackslash n} (Line Feed) zurück, mit dem ein Zeilenuburch auf den System Unix/Mac OS X erzeugt wird.}
 \SysVar{ChrXXX}{mit $1\le XXX\le 255$. Gibt das Zeichen mit dem ASCII-Code XXX zurück, z.B.\ \texttt{\$Chr065 = A}.}
 \end{description}
 
@@ -967,21 +968,39 @@ Die Rangfolgenbestimmung ist die Implementierung einer Methode, bei der man eine
 \Syntax
 \begin{verbatim}
 ~Vote Key=<F-Schlüssel> [;GroupName=<G-Name>] 
-                        [;DrawOption=<Unentschiedenoption>]
+            [;DrawOption=<Unentschiedenoption>]
+            [;ResultVar=<Var>; ResultSep=<Trennzeichen>;]
 \end{verbatim}
 \Beispiel
 \begin{verbatim}
 /// Es wird eine Rangfolgenbestimmung durchgeführt
 //  Anwendungsbeispiel für die Befehlsreferenz
-~Vote Key=V; GroupName=Die besten Welten; DrawOption=egal
+~Vote Key=V; GroupName=Die besten Welten; DrawOption=egal; 
+            ResultVar=Erg; ResultSep=$CRLF;
 ?V: Welche Welt gefällt dir besser?
     #w1: Waldwelt
     #w2: Wasserwelt
     #w3: Bergwelt
     #w4: Wichtelwelt
+~Execute
+~UrlEncode ErgRPO
+>> Abstimmen >> Klicken Sie auf den Link
+    > mailto:xyz@abc.de?subject=W-Vote&body=$ErgRPO|Jetzt abstimmen
 \end{verbatim}
 Der Aufruf dieser Vorlage führt dazu, dass die Frage mit dem Schlüssel \texttt{V} zu einer Reihe von Einzelfragen umgestaltet wird. Genauer: Die Frage wird für jede der drei 2er-Kombinationen abgefragt. Die Fragen werden zur 3er-Gruppen zusammengefasst, was hier eine Gruppe ergibt. Das Ergebnis wird unter der Gruppenüberschrift \textit{Die besten Welten} aufgelistet.
+
 Die Option \texttt{DrawOption} ermöglicht es, für jede Paarung auch mit unentschieden zu stimmen, wobei der Text für diese Option frei gewählt werden kann. Im Beispiel oben wird als dritte Option jeweils \textit{egal} angezeigt. Die Punktevergabe wird in diesem Fall so angepasst, dass der Sieger einer Paarung 2 Punkte bekommt und im Fall eines Unentschiedens jeder einen Punkt, so dass auch hier die Gesamtpunktzahl immer gleich bleibt.
+
+Mit den Optionen \texttt{ResultVar} und \texttt{ResultSep} kann festgelegt werden, dass das Ergebnis der Abstimmung in drei Variablen zur Verfügung gestellt wird. Diese beginnen mit der in \texttt{ResultVar} angegebenen Zeichenfolge und Enden auf \texttt{RPO}, \texttt{RPO} und \texttt{O}:\\[1ex]
+\begin{tabular}{|r|l|l|}\hline
+Endung & Abkürzung für & Beispiel\\\hline
+\texttt{RPO} & Rang, Punkte, Option & Platz 1, 6 Punkte, Bergwelt\\
+\texttt{PO} & Punkte, Option & 6 Punkte, Bergwelt\\
+\texttt{O} & Option & Bergwelt\\\hline
+\end{tabular}\\[1ex]
+
+Im Beispiel oben wird die Variable \texttt{ErgRPO} für die Verwendung in einem mailto-Link codiert. 
+Man bechte außerdem den zusätzlichen Strichpunkt nach \verb|$CRLF|. Dieser verhindert, dass die zu einem Whitespace-Zeichen ersetze Zeichensequenz am Zeilenende steht und damit ignoriert wird.
 \webbox{
 \webhead{Vorlage Demo, 16 Vote}{Es wird eine Abstimmungsbewertung durchgeführt}
 Welche Welt gefällt dir besser? 
@@ -997,9 +1016,9 @@ Welche Welt gefällt dir besser?
 \item egal
 \end{circlist}
 }
-Das Ergebnis wird dann wie folgt präsentiert:
+Das Ergebnis wird dann wie folgt präsentiert:\nopagebreak
 \webbox{
-\webheadR{Ergebnisliste (Demo, 16 Vote)}\\[3mm]
+\webheadR{Ergebnisliste (Demo, 16 Vote)}\\
 Die besten Welten
 \begin{numlist}
 \item Platz 1 (6 Punkte) Bergwelt
@@ -1007,8 +1026,15 @@ Die besten Welten
 \item Platz 3 (2 Punkte) Wasserwelt
 \item Platz 4 (0 Punkte) Wichtelwelt
 \end{numlist}
+Abstimmen
+\begin{numlist}
+\item Klicken Sie auf den Link
+\begin{itemize}
+\item \underline{Jetz abstimmen}
+\end{itemize}
+\end{numlist}
 }
-Man beachte, es kann auch Punktegleichstand geben. Dann teilen sich mehrere Elemente einen Platz.
+Es kann auch Punktegleichstand geben. Dann teilen sich mehrere Elemente einen Platz.
 \subsection{Zitatmodus}
 Sofern es bei einer Vorlage nur darum geht, die gewählten Antworten auf die Fragen zu notieren, kann man sich die Arbeit stark vereinfachen. Mit den standardmäßigen Sprachmitteln müsste man in jedem Antwortzweig Ausgaben erzeugen, die sowohl Frage, als auch Antwort beinhalten, was eine prinzipiell unnötige Wiederholung einer schon vorhandenen Information ist. Der Zitatmodus erledigt genau das für einen kompletten Vorlageteil.
 \Syntax
