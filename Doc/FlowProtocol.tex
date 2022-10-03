@@ -3,6 +3,7 @@
 \usepackage[german]{babel}
 \usepackage{fancyheadings}
 \usepackage{geometry}
+\usepackage{mathptm}
 \title{FlowProtocol - Anwenderhandbuch}
 \author{Wolfgang Maier}
 %%
@@ -62,7 +63,7 @@
 \newpage
 \section{Beschreibung und Hintergrund}
 \subsection{Grundidee}
-\FlowProtocol ist eine Anwendung, mit der man Aufgaben-, bzw. Prüflisten zu ausgewählten Themengebieten anhand einfacher Kontrollfragen erstellen kann. Der Name leitet sich ab aus Flow für \glqq Flussdiagramm\grqq\   und \glqq Protokoll\grqq\   und steht für das Grundkonzept der Anwendung, anhand eines verzweigten Entscheidungsbaums ein Protokoll zusammenzustellen. Die Anwendung funktioniert dabei wie folgt:  Nach Auswahl einer Vorlage wird eine Reihe von Multiple-Choice-Fragen gestellt, mit denen die relevanten Aspekte eines Themas Schritt für Schritt eingegrenzt werden, und aus denen am Ende eine genau abgestimmte Auf"|listung von Punkten zusammengestellt wird, die beispielsweise als Protokoll verwendet werden können.
+\FlowProtocol ist eine Anwendung, mit der man Aufgaben-, bzw. Prüflisten zu aus\-ge\-wähl\-ten Themengebieten anhand einfacher Kontrollfragen erstellen kann. Der Name leitet sich ab aus Flow für \glqq Flussdiagramm\grqq\   und \glqq Protokoll\grqq\   und steht für das Grundkonzept der Anwendung, anhand eines verzweigten Entscheidungsbaums ein Protokoll zusammenzustellen. Die Anwendung funktioniert dabei wie folgt:  Nach Auswahl einer Vorlage wird eine Reihe von Multiple-Choice-Fragen gestellt, mit denen die relevanten Aspekte eines Themas Schritt für Schritt eingegrenzt werden, und aus denen am Ende eine genau abgestimmte Auf"|listung von Punkten zusammengestellt wird, die beispielsweise als Protokoll verwendet werden können.
 
 Die Grundidee der Anwendung besteht darin, ein Medium zu bieten, um Spezialwissen ohne großen Aufwand zu erfassen und es dann in sehr einfacher Form für andere bereitzustellen, ohne dass es dafür vermittelt und erworben werden muss. Die Erstellung der Vorlagen kann und soll direkt durch die Menschen erfolgen, die über das jeweilige Wissen verfügen und die Anwendung für alle möglich sein, die dieses Wissen benötigen.
 
@@ -73,7 +74,7 @@ Ein besonders positiver Nebeneffekt bei der Nutzung von Vorlagen besteht darin, 
 
 Eine besonders nützliche Anwendung ist die Erstellung von interaktiven Anleitungen. Hierbei werden ebenfalls Rahmenbedigungen und einzelne Textbausteine im Vorfeld abgefragt, und in Abhängigkeit davon die für den vorliegenden Fall relevanten Schritte der Anleitung ausgegeben. Die Möglichkeit, kontextbezogene und durch Textersetzungen angepasste Codepassagen in die Ausgabe einzufügen, macht \FlowProtocol zu einem besonders nützlichen Werkzeug in der Softwareentwicklung, wo derartige wiederkehrende Muster zum Tagesgeschäft gehören. Die Kombination von Anleitung und Codegenerator erhöht nicht nur die Effizient, sondern auch die Qualität.
 
-Auch kleinere personalisierte Umfragen lassen sich über Vorlagen realisieren, wenn man die Teilnehmer zur Rücksendung der Ergebnisse instruiert. Es gibt sogar einen eigenen Befehl, der bei der Rangfolgenbestimmung von kleineren Listen un\-ter\-stützt, indem die darin vorkommenden Elemente paarweise gegenübergestellt werden (siehe Abschnitt~\ref{Rangfolgenbestimmung}). 
+Auch kleinere personalisierte Umfragen lassen sich über Vorlagen realisieren, wenn man die Teilnehmer zur Rücksendung der Ergebnisse instruiert. Es gibt sogar einen Befehl, der bei der Rangfolgenbestimmung von kleineren Listen un\-ter\-stützt, indem die darin vorkommenden Elemente paarweise gegenübergestellt werden (siehe Abschnitt~\ref{Rangfolgenbestimmung}). 
 Für wichtige Rangfolgen wie beispielsweise Projektprioritäten ist es natürlich besser, man hat detaillierte und bewährte Kriterien, die sich objektiv auf alle Elemente der Liste anwenden lassen, und die am Ende über einen Zahlenwert zu einer Rangfolge oder Auswahl führen. Auch solche Bewertungen lassen sich mit \FlowProtocol sehr leicht umsetzen und für alle verfügbar machen.
 
 \subsection{Konfiguration}
@@ -260,7 +261,7 @@ Das Ergebnis einer Bearbeitung kann in vielen Fällen mehr als eine Liste sein. E
 \end{verbatim}
 Wählt man die Antwortmöglichkeit \glqq In Großbuchstaben\grqq, so erhält man die folgende Ausgabe:
 \webbox{
-\webheadR{Ergebnisliste (Demo, 05 Gruppierungen)}\\[3mm]
+\webheadR{Ergebnisliste (Demo, 05 Gruppierungen)}\\
 Deine Ausgabe
 \begin{numlist}
 \item HALLO WELT
@@ -414,7 +415,7 @@ Bei längeren Sequenzen und insbesondere bei der Verwendung von Wiederholungen un
 Die beiden Fragen aus dem Sequenzen-Beispiel werden in diesem Fall einzelnen angezeigt.
 
 \subsection{Funktionen}\label{Funktionen}
-Vorlagen können mitunter sehr umfangreich und tief verschachtelt sein. Verwaltet man solche Vorlagen in einer einzigen Datei, kann das insbesondere aufgrund der Einrückungen sehr unübersichtlich werden, sodass sich Anpassungen und Erweiterungen schwierig gestalten. Hier ist es empfehlenswert, Teile des Codes als Funktionen in jeweils eigene Dateien auszulagern. Eine Funktion ist vom Prinzip und vom Aufbau her das gleiche wie eine Vorlage und wird über eine Datei der Endung \glqq *.qff\grqq\  (Quick Flow Function) bereitgestellt. Aufgrund der abweichenden Dateiendung werden Funktionen nicht als Vorlagen in der Anwendung zur Auswahl angeboten.
+Vorlagen können mitunter sehr umfangreich und tief verschachtelt sein. Verwaltet man solche Vorlagen in einer einzigen Datei, kann das insbesondere aufgrund der Ein\-rück\-ung\-en sehr unübersichtlich werden, sodass sich Anpassungen und Erweiterungen schwierig gestalten. Hier ist es empfehlenswert, Teile des Codes als Funktionen in jeweils eigene Dateien auszulagern. Eine Funktion ist vom Prinzip und vom Aufbau her das gleiche wie eine Vorlage und wird über eine Datei der Endung \glqq *.qff\grqq\  (Quick Flow Function) bereitgestellt. Aufgrund der abweichenden Dateiendung werden Funktionen nicht als Vorlagen in der Anwendung zur Auswahl angeboten.
 
 Die Funktionsdatei muss auf der gleichen Ebene liegen wie die Vorlage, die sie aufruft und der Name darf nur aus Buchstaben und Ziffern bestehen.
 
@@ -636,7 +637,7 @@ Welche Welt möchtest du grüßen?\\
 \fpinputbox
 }
 \subsection{Codesequenzen}\label{Codesequenzen}
-In der Softwareentwicklung und insbesondere bei der Pflege und Weiterentwicklung großer Systeme gibt es zahlreiche Komponenten und Bausteine, die immer nach dem grundsätzlich selben Muster auf-, oder eingebaut werden. Oft gibt es dabei Varianten, bei denen man den einen oder anderen Aufruf mehr oder weniger benötigt, und die Benennung der Elemente muss ebenfalls angepasst werden. 
+In der Softwareentwicklung und insbesondere bei der Pflege und Weiterentwicklung gro\-ßer Systeme gibt es zahlreiche Komponenten und Bausteine, die immer nach dem grund\-sätz\-lich selben Muster auf-, oder eingebaut werden. Oft gibt es dabei Varianten, bei denen man den einen oder anderen Aufruf mehr oder weniger benötigt, und die Benennung der Elemente muss ebenfalls angepasst werden. 
 Es kann die Arbeit deutlich vereinfachen, wenn man mit \FlowProtocol eine Vorlage für eine Anleitung erstellt, die die relevanten Abhängigkeiten abfragt, und dem Entwickler die notwendigen Implementierungsschritte beschreibt. Noch besser ist es, wenn man eine Stufe weiter geht, und die einzelnen Codefragmente direkt durch die Vorlage erstellen lässt, so dass man diese ausschneiden und in den Produktivcode einfügen kann. Hierfür gibt es die Möglichkeit, ganze Codesequenzen ausgeben zu lassen.
 
 Die Syntax ist ähnlich zu der der Unterpunkte (siehe Abschnitt~\ref{Unterpunkte}). Codesequenzen und Unterpunkte lassen sich auch innerhalb desselben Ausgabeeintrags kombinieren, die Ausgabe erfolgt jedoch blockweise, d.h.\ zuerst die Unterpunkte und dann der Codeblock.
@@ -674,7 +675,7 @@ Die Ausgabe erfolgt in einer Festbreitenschriftart und es werden auch führende L
 
 Wird im obigen Beispiel als Entitätsbennung \glqq Fahrzeug\grqq\ eingegeben und als Typ des Primärschlüssels \glqq int\grqq\ gewählt, so bekommt man folgende Ausgabe:
 \webbox{
-\webheadR{Ergebnisliste (Demo, 21 Codegen)}\\[3mm]
+\webheadR{Ergebnisliste (Demo, 21 Codegen)}\\
 Anleitung
 \begin{numlist}
 \item Implementiere die Funktion ErstelleFahrzeug()\\
@@ -745,7 +746,7 @@ Dem Befehl kann eine Liste von Variablen übergeben werden, die für die Verwednun
     > https://duckduckgo.com/?q=$SBeg&ia=web
 \end{verbatim}
 
-Im Beispiel wird ein Suchbegriff abgefragt und in die Variable \verb|SBeg| übertragen, da die Codierung nur für Parameter, nicht jedoch für Eingabe- und Frageschlüssel möglich ist. Die Variable wird anschließend in die URLs eingebaut und führt bei Eingabe von \verb|C# int?| zu folgender Ausgabe:
+Im Beispiel wird ein Suchbegriff abgefragt und in die Variable \verb|SBeg| übertragen, da die Codierung nur für Parameter, nicht jedoch für Eingabe- und Frageschlüssel möglich ist. Die Variable wird anschließend in die URLs eingebaut und führt bei Eingabe von \verb|C#| \verb|int?| zu folgender Ausgabe:
 
 \webbox{
 \webheadR{Ergebnisliste (Demo, 22 UrlEncoding)}
@@ -797,7 +798,7 @@ Der in der Vorlage hinterlegte Link wird damit in der Ausgabe wie folgt angezeig
 }
 
 \subsection{Verweise auf die eigene URL}\label{eigeneURL}
-Die mit \FlowProtocol erzeugte Ausgabe wird häufig in andere digitale Dokumente übertragen. In manchen Fällen kann es dabei sinnvoll sein, die eigene URL in die Ausgabe miteinzubauen, z.B. um spätere Anpassungen der Vorlage nachträglich zu berücksichtigen, oder den Ursprung des Dokuments festzuhalten. Es kann auch sinnvoll sein, nur die URL der Vorlage anzugeben ohne die codierten Frage- und Eingabeschlüssel, um direkt weitere Durchführungen anzubieten. Unabhängig davon bietet die URL auch eine einfache Möglichkeit, das Ergebnis einer komplexeren Abfrage über eine Variable weiterzugeben.
+Die mit \FlowProtocol erzeugte Ausgabe wird häufig in andere digitale Dokumente über\-tra\-gen. In manchen Fällen kann es dabei sinnvoll sein, die eigene URL in die Ausgabe miteinzubauen, z.B. um spätere Anpassungen der Vorlage nachträglich zu berücksichtigen, oder den Ursprung des Dokuments festzuhalten. Es kann auch sinnvoll sein, nur die URL der Vorlage anzugeben ohne die codierten Frage- und Eingabeschlüssel, um direkt weitere Durchführungen anzubieten. Unabhängig davon bietet die URL auch eine einfache Möglichkeit, das Ergebnis einer komplexeren Abfrage über eine Variable weiterzugeben.
 
 Der Zugriff auf die Information erfolgt über die Systemvariablen \verb|$MyResultURL| für die volltändige URL inklusive der Frage- und Eingabeschlüssel und \verb|$MyBaseURL| für die URL der noch nicht ausgefüllten Vorlage.
 
@@ -822,7 +823,7 @@ Der Zugriff auf die Information erfolgt über die Systemvariablen \verb|$MyResult
 Das Beispiel oben erzeugt als ersten Unterpunkt einen Link, mit dem die URL der Vorlage aufgerufen werden kann, so dass man einen weiteren Durchlauf machen kann. Als zweiter Unterpunkt wir ein mailto-Link erzeugt, bei der der Mail-Inhalt aus der vollständigen URL besteht, so dass der Mail-Empfänger das Ergebnis abrufen kann. Auf diese Weise kann z.B.\ ein einfacher Rücksendeweg für Abstimmungen angeboten werden.
 
 \subsection{Hilfetexte}
-Manche Fragen und Eingaben können erklärungsbedürftig sein, insbesondere man man ihnen zum ersten Mal oder nach längerer Zeit als Anwender begegnet. Zu\-sätz\-li\-che Erläuterungen könnten in die Fragestellung selbst eingebaut werden, würden aber dort den Lesefluss stören. Aus diesem Grund können für für die o.g.\ Elemente Hilfetexte hinterlegt werden, die in der Darstellung klar abgegrenzt werden.
+Manche Fragen und Eingaben können erklärungsbedürftig sein, insbesondere man man ihnen zum ersten Mal oder nach längerer Zeit als Anwender begegnet. Zu\-sätz\-li\-che Er\-läu\-te\-run\-gen kön\-nten in die Fragestellung selbst eingebaut werden, würden aber dort den Lesefluss stören. Aus diesem Grund können für für die o.g.\ Elemente Hilfetexte hinterlegt werden, die in der Darstellung klar abgegrenzt werden.
 So wie bei den Unterpunkten ist es auch hier möglich, Links mit Anzeigetext zu hinterlegen (siehe Abschnitt~\ref{Displaytext}), um auf evtl.\ weiterführende Informationen auf einer Wikiseite zu verweisen.
 
 \Syntax
@@ -884,9 +885,9 @@ Systemvariablen sind spezielle Variablen, die schon durch das System mit Werten 
 \begin{description}
 \SysVar{NewGuid}{Gibt eine zufällige Guid zurück, z.B.\\\texttt{d817e626-d0b1-40c7-979a-a08b5d6df8a8}.}
 \SysVar{GetDateTime}{Gibt den aktuellen Zeitpunkt mit Datum und Uhrzeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{29.09.2022 17:26}.}
-\SysVar{GetDate}{Gibt das aktuelle Datum in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{29.09.2022}.}
-\SysVar{GetTime}{Gibt die aktuelle Zeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{17:26}.}
-\SysVar{MyResultURL}{Gibt die URL der aktuellen Vorlageausführung inklusive Schlüs\-sel\-pa\-ra\-me\-ter zurück, siehe auch Abschnitt~\ref{eigeneURL}.}
+\SysVar{GetDate}{Gibt das aktuelle Datum in der auf dem System eingestellten Formatierung zu\-rück, z.B.\ \texttt{29.09.2022}.}
+\SysVar{GetTime}{Gibt die aktuelle Zeit in der auf dem System eingestellten Formatierung zu\-rück, z.B.\ \texttt{17:26}.}
+\SysVar{MyResultURL}{Gibt die URL der aktuellen Vorlageausführung inklusive Schlüs\-sel\-pa\-ra\-me\-ter zu\-rück, siehe auch Abschnitt~\ref{eigeneURL}.}
 \SysVar{MyBaseURL}{Gibt die URL der aktuellen Vorlageausführung ohne Schlüs\-sel\-pa\-ra\-me\-ter zurück, siehe auch Abschnitt~\ref{eigeneURL}.}
 \SysVar{CRLF}{Gibt die Zeichenfolge \texttt{\textbackslash r\textbackslash n} (Carriage Return + Line Feed) zurück, mit der ein Zeilenumbruch auf Windows-System erzeugt wird.}
 \SysVar{LF}{Gibt das Zeichen \texttt{\textbackslash n} (Line Feed) zurück, mit dem ein Zeilenuburch auf den System Unix/Mac OS X erzeugt wird.}
@@ -926,17 +927,17 @@ Ist ein Fehler schlimm?
 Wie man erkennt, wird der nach dem Fehler stehende Vorlagencode trotz der Fehler interpretiert und ausgeführt, was die Notwendigkeit einer Korrektur natürlich nicht mindert.
 
 \subsection{Einlesefehler}
-Einlesefehler treten direkt beim Einlesen einer Vorlage- oder Funktionsdatei auf. Da Funktionsdateien erst bei Bedarf eingelesen werden, werden auch die darin enthaltenen Fehler erst angezeigt, wenn der entsprechende Zweig durchlaufen wird.
+Einlesefehler treten direkt beim Einlesen einer Vorlage- oder Funktionsdatei auf. Da eine Funktionsdatei erst bei Bedarf eingelesen wird, werden auch die darin enthaltenen Fehler erst angezeigt, wenn der entsprechende Zweig durchlaufen wird.
 \begin{description}
 \FehlerBeschreibungItem{R01}{Vorlagendatei nicht gefunden.} Kann auftreten, wenn eine als Lesezeichen gespeicherte URL auf eine nicht (mehr) vorhandene Vorlagendatei verweist, oder kein Lesezugriff auf das Verzeichnis besteht.
 \FehlerBeschreibungItem{R02}{Beschreibungskommentar auf untergeordneter Ebene wird ignoriert.} Tritt auf, wenn ein Beschreibungskommentar nicht auf oberster Ebene der Vorlage angegeben ist. Dieser wird ignoriert.
 \FehlerBeschreibungItem{R03}{Frage kann keinem Kontext zugeordnet werden.} Tritt auf, wenn eine Frage keinem Vorlagenkontext zugeordnet werden kann, wenn also die Struktur aus Fragen und Antworten unstimmig ist. Ursache kann eine fehlerhafte Einrückung sein, z.B.\ weil dabei Leerzeichen und Tabulatorzeichen gemischt wurden.
 \FehlerBeschreibungItem{R04}{Antwort kann keinem Fragekontext zugeordnet werden.} Tritt auf, wenn eine Antwort keinem Fragekontext zugeordnet werden kann, wenn also die Struktur aus Fragen und Antworten unstimmig ist. Ursache kann eine fehlerhafte Einrückung sein, z.B.\ weil dabei Leerzeichen und Tabulatorzeichen gemischt wurden.
-\FehlerBeschreibungItem{R05}{Gruppierter Ausgabeeintrag kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein gruppierter Ausgabeeintrag keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
+\FehlerBeschreibungItem{R05}{Gruppierter Ausgabeeintrag kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein gruppierter Ausgabeeintrag keinem Vorlagenkontext zugeordnet werden kann. Mög\-li\-che Ursachen siehe Fehler R03.
 \FehlerBeschreibungItem{R06}{Ausgabeeintrag kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein nicht gruppierter Ausgabeeintrag keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
 \FehlerBeschreibungItem{R07}{Unterpunkt  kann keinem Ausgabeeintrag zugeordnet werden.} Tritt auf, wenn ein Unterpunkt keinem Ausgabeeintrag zugeordnet werden kann. Unterpunkte müssen immer unmittelbar auf Ausgabeeinträge oder andere Unterpunkte oder Codezeilen folgen und dürfen nicht durch Fragen und Antworten unterbrochen werden.
 \FehlerBeschreibungItem{R08}{Execute-Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn der Execute-Befehl keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
-\FehlerBeschreibungItem{R09}{Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein Befehl keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
+\FehlerBeschreibungItem{R09}{Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein Befehl keinem Vorlagenkontext zugeordnet werden kann. Mög\-li\-che Ursachen siehe Fehler R03.
 \FehlerBeschreibungItem{R10}{Zeile nicht interpretierbar} Tritt auf, wenn eine Zeile nicht als Anweisung interpretiert werden kann, sie also keiner innerhalb einer Vorlage bekannten Syntax entspricht.
 \FehlerBeschreibungItem{R11}{Input-Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein Input-Befehl  keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
 \FehlerBeschreibungItem{R12}{Codezeile kann keinem Ausgabeeintrag zugeordnet werden.} Tritt auf, wenn eine Codezeile keinem Ausgabeeintrag zugeordnet werden kann. Codezeilen müssen immer unmittelbar auf Ausgabeeinträge oder Unterpunkte oder andere Codezeilen folgen und dürfen nicht durch Fragen und Antworten unterbrochen werden.
@@ -959,7 +960,7 @@ Spezialbefehle sind spezielle Befehle, die die Struktur einer Vorlage verändern,
 \begin{description}
 \FehlerBeschreibungItem{S01}{Befehl ohne $\dots$-Argument.} Tritt auf, wenn das zwingende $\dots$-Argument nicht angegeben wurde.
 \FehlerBeschreibungItem{S02}{Frageschlüssel $\dots$ ($\dots$-Argument) nicht gefunden.} Tritt auf, wenn der über das $\dots$-Argument angegebene Frageschlüssel nicht gefunden wurde.
-\FehlerBeschreibungItem{S03}{Befehl ohne gültiges $\dots$-Argument.} Tritt auf, wenn ein ungültiger Parameterwert angegeben wurde, z.B.\ eine \texttt{GroupSize}-Angabe, die nicht als Zahl interpretiert werden kann.
+\FehlerBeschreibungItem{S03}{Befehl ohne gültiges $\dots$-Argument.} Tritt auf, wenn für einen Befehl ein un\-gül\-ti\-ger Parameterwert angegeben wurde, z.B.\ eine \texttt{GroupSize}-Angabe, die nicht als Zahl interpretiert werden kann.
 \end{description}
 
 \subsection{Rangfolgenbestimmung}\label{Rangfolgenbestimmung}
@@ -1053,7 +1054,7 @@ Sofern es bei einer Vorlage nur darum geht, die gewählten Antworten auf die Frag
 \end{verbatim}
 Der Aufruf dieser Vorlage führt dazu, dass die Frage als Ausgabe mit der gewählten Antwort als Unterpunkt ausgegeben wird. Das Ergebnis wird unter der Grup\-pen\-über\-schrift \textit{Antwortprotokoll} aufgelistet. 
 \webbox{
-\webheadR{Ergebnisliste (Demo, 17 Cite)}\\[3mm]
+\webheadR{Ergebnisliste (Demo, 17 Cite)}\\
 Antwortprotokoll
 \begin{numlist}
 \item Wie soll \glqq Hallo Welt\grqq ausgegeben werden?
