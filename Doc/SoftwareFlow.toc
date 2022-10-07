@@ -1,0 +1,9 @@
+\babel@toc {german}{}\relax 
+\contentsline {section}{\numberline {0.1}Die Situation im Entwicklungsumfeld}{5}{}%
+\contentsline {subsection}{\numberline {0.1.1}Nicht nur f\"ur Programmierer}{5}{}%
+\contentsline {subsection}{\numberline {0.1.2}Kommunikation und Teamzusammenarbeit}{5}{}%
+\contentsline {subsection}{\numberline {0.1.3}Entscheidungshilfen und Unterst\"utzungssysteme}{7}{}%
+\contentsline {subsection}{\numberline {0.1.4}Erfahrung und Fachwissen}{8}{}%
+\contentsline {section}{\numberline {0.2}Bewertungen}{10}{}%
+\contentsline {subsection}{\numberline {0.2.1}Entscheidungsprozesse}{10}{}%
+\contentsline {subsection}{\numberline {0.2.2}Arbeiten mit Kriterien}{11}{}%
