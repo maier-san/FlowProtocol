@@ -1,0 +1,8 @@
+/// Es wird gerechnet
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Calculate x = 1,4 + 5,7
+~Calculate y = $x*-4,9
+~Calculate z = -11/ $y
+~Round r = $z|4
+>> Ergebnis z = $z
+>> Gerundet r = $r

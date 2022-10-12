@@ -521,7 +521,7 @@ Variablen können auch unabhängig von Funktionsparametern gesetzt und in Fragen, 
 \end{verbatim}
 Wird eine Variable in einer Frage oder Antwort verwendet, sollte durch die Struktur sichergestellt werden, dass die Frage, die für das Setzen der Variablen zuständig ist, zuvor ausgeführt wurde. Dies kann z.B. mit dem oben beschriebenen \verb|~Execute|-Befehl geschehen.
 
-\subsection{Additionen}
+\subsection{Additionen}\label{Additionen}
 Über Variablen lassen sich auch einfache Additionen durchführen, beispielsweise um Kosten, Aufwände oder Komplexität zu ermitteln, die sich aus den gewählten Ant\-wort\-mög\-lich\-kei\-ten zusammensetzen. Dies ist ebenfalls über den \verb|~Set|-Befehl möglich.
 \Syntax
 \begin{verbatim}
@@ -880,6 +880,42 @@ Bei Wahl der Option \glqq Selbst wählen\grqq\ werden die Hilfetexte auch dort be
 \fpinputbox
 }
 
+\subsection{Berechnungen}\label{Berechnungen}
+Neben den einfachen Additionen aus Abschnitt~\ref{Additionen} kann es manchmal notwendig sein, mit Zahlen und Variablen zu rechnen. Für die Anwendung der Grundrechenoperationen gibt es den Befehl \verb|~Calculate|.
+\Syntax
+\begin{verbatim}
+~Caluculate <Variable> = <Wert1> <Operator> <Wert2>
+\end{verbatim}
+Wert 1 und Wert 2 sind Gleitkommaausdrücke in der Formatierung des Systems und der Operator ist eines der Zeichen \verb|+|, \verb|-|, \verb|*|, \verb|/|. Das Ergebnis wird der angegebenen Variablen zugewiesen.
+
+Zusätzlich gibt es den Befehl \verb|~Round|, mit dem ein Wert auf eine bestimmte Anzahl von Dezimalstellen gerundet werden kann.
+\Syntax
+\begin{verbatim}
+~Round <Variable> = <Wert1> | <Genauigkeit>
+\end{verbatim}
+Als Genauigkeit kann eine natürliche Zahl angegeben, was zur Rundund auf entsprechend viele Dezimalstellen werden. Das Ergebnis wird wieder der angegebenen Variablen zugewiesen.
+
+\Beispiel
+\begin{verbatim}
+/// Es wird gerechnet
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Calculate x = 1,4 + 5,7
+~Calculate y = $x * -4,9
+~Calculate z = -11 / $y
+~Round r = $z|4
+>> Ergebnis z = $z
+>> Gerundet r = $r
+\end{verbatim}
+
+Diese Vorlage produziert folgende Ausgabe:
+\webbox{
+\webheadR{Ergebnisliste (Demo, 26 Berechnungen)}
+\begin{numlist}
+\item Ergebnis z = 0,3161828111526301 
+\item Gerundet r = 0,3162 
+\end{numlist}
+}
+
 \newpage
 \section{Systemvariablen}
 Systemvariablen sind spezielle Variablen, die schon durch das System mit Werten belegt werden. Diese lassen sich wie andere Variablen abrufen und in Fragen, Ausgaben oder Variablenzuweisungen verwenden. Manche der Variablen sind vielmehr als Funktionen zu betrachten und dementsprechend auch mit \texttt{Get\dots} benannt. Im Abschnitt~\ref{eigeneURL} haben wir schon zwei Beispiele für Systemvariablen kennengelernt, mit denen die eigene URL abgerufen werden kann.
@@ -953,6 +989,13 @@ Ausführungsfehler treten im Zusammenhang mit der Ausführung von Befehlen auf und
 \FehlerBeschreibungItem{C03}{Die Funktionsdatei $\dots$ konnte nicht geladen werden.} Tritt auf, wenn in einem Include-Befehl angegebene Funktionsdatei nicht gefunden werden konnte.
 \FehlerBeschreibungItem{C04}{Der Wert der Variablen $\dots$ konnte nicht als ganze Zahl interpretiert werden.} Tritt auf, wenn für eine Variable im Set-Befehl ein Wert addiert werden soll, und diese zum entsprechenden Zeitpunkt einen nichtnumerischen Wert enthält.
 \FehlerBeschreibungItem{C05}{Der Aufruf der Funktionsdatei $\dots$ überschreitet das Rekursionsmaximum von 100.} Tritt auf, wenn mehr als 100 Mal eine Funktionsdatei aufgerufen wird. Diese einfache Sicherung verhindert Endlosrekursionen, die zum Absturz der Anwendung führen würden.
+\FehlerBeschreibungItem{C06}{Der Ausdruck $\dots$ konnte nicht als Berechnungsausdruck interpretiert werden.} Tritt auf, wenn ein der für einen Calculate-Befehl angegebene Audruck nicht wie in Abschnitt~\ref{Berechnungen} beschrieben interpretiert werden kann.
+\FehlerBeschreibungItem{C07}{Der Ausdruck $\dots$ konnte nicht als gültige Zielvariable interpretiert werden.} Tritt auf, wenn der Audruck links vom Gleichheitszeichen eines \texttt{Calculate}-, oder \texttt{Round}-Befehls nicht als Variable interpretiert werden kann.
+\FehlerBeschreibungItem{C08}{Der Ausdruck $\dots$ konnte nicht als Gleitkommazahl interpretiert werden.} Tritt auf, wenn einer der Operanden eines \texttt{Calculate}-, bzw.\ der erste Operand des \texttt{Round}-Befehls nicht als Gleitkommazahl interpretiert werden kann.
+\FehlerBeschreibungItem{C09}{Division durch 0.} Tritt auf, wenn über den \texttt{Calculate}-Befehl eine Divison durch 0 durchgeführt werden soll.
+\FehlerBeschreibungItem{C10}{Der Ausdruck $\dots$ konnte nicht als zulässiger Operator interpretiert werden.} Tritt auf, wenn der Operator eines \texttt{Calculate}-Befehls nicht interpretiert werden kann.
+\FehlerBeschreibungItem{C11}{Der Ausdruck $\dots$ konnte nicht als natürliche Zahl interpretiert werden.} Tritt auf, wenn der zweite Wert des \texttt{Round}-Befehls nicht als natürliche Zahl interpretiert werden kann.
+
 \end{description}
 \newpage
 \section{Spezialbefehle}
