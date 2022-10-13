@@ -875,12 +875,12 @@ Bei Wahl der Option \glqq Selbst wählen\grqq\ werden die Hilfetexte auch dort be
  Gewünschte Ausgabe
 \begin{helplist}
 \item Geben Sie den gewünschten Text ein.
-\item Sie können die Ausgabe auch selbst wählen.
+\item Sie können auch Systemvariablen verwenden.
 \end{helplist}
 \fpinputbox
 }
 
-\subsection{Berechnungen}\label{Berechnungen}
+\subsection{Berechnungen und Rundungen}\label{Berechnungen}
 Neben den einfachen Additionen aus Abschnitt~\ref{Additionen} kann es manchmal notwendig sein, mit Zahlen und Variablen zu rechnen. Für die Anwendung der Grundrechenoperationen gibt es den Befehl \verb|~Calculate|.
 \Syntax
 \begin{verbatim}
@@ -913,6 +913,34 @@ Diese Vorlage produziert folgende Ausgabe:
 \begin{numlist}
 \item Ergebnis z = 0,3161828111526301 
 \item Gerundet r = 0,3162 
+\end{numlist}
+}
+
+\subsection{Ersetzungen}\label{Ersetzungen}
+Ersetzungen können nützlich sein, um Texteingaben zu verarbeiten oder fest im Code hinterlegte Zeichenkennen wie z.B.\ Subversion-Eigenschaften in eine andere Form zu bringen. Hierfür gibt es den Befehl \verb|~Replace|.
+\Syntax
+\begin{verbatim}
+~Replace <Variable> = <Ausgangstext> |<Suchtext>-><Ersetzungstext>
+\end{verbatim}
+Ausgangstext, Such- und Ersetzungtext sind Zeichenketten und führen dazu, dass alle Vorkommendes Suchtextes im Ausgangstext durch den Erstzungtext ersetz werden. Das Ergebnis wird der angegebenen Variablen zugewiesen.
+
+\Beispiel
+\begin{verbatim}
+/// Es wird ersetzt
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Set x = Hallo Welt
+~Replace y = $x |Hallo->Aloah
+~Replace z = $x | ->+
+>> Ergebnis y = $y
+>> Ergebnis z = $z
+\end{verbatim}
+
+Diese Vorlage produziert folgende Ausgabe:
+\webbox{
+\webheadR{Ergebnisliste (Demo, 27 Ersetzungen)}
+\begin{numlist}
+\item Ergebnis y = Aloah Welt
+\item Ergebnis z = Hallo+Welt
 \end{numlist}
 }
 
@@ -989,13 +1017,14 @@ Ausführungsfehler treten im Zusammenhang mit der Ausführung von Befehlen auf und
 \FehlerBeschreibungItem{C03}{Die Funktionsdatei $\dots$ konnte nicht geladen werden.} Tritt auf, wenn in einem Include-Befehl angegebene Funktionsdatei nicht gefunden werden konnte.
 \FehlerBeschreibungItem{C04}{Der Wert der Variablen $\dots$ konnte nicht als ganze Zahl interpretiert werden.} Tritt auf, wenn für eine Variable im Set-Befehl ein Wert addiert werden soll, und diese zum entsprechenden Zeitpunkt einen nichtnumerischen Wert enthält.
 \FehlerBeschreibungItem{C05}{Der Aufruf der Funktionsdatei $\dots$ überschreitet das Rekursionsmaximum von 100.} Tritt auf, wenn mehr als 100 Mal eine Funktionsdatei aufgerufen wird. Diese einfache Sicherung verhindert Endlosrekursionen, die zum Absturz der Anwendung führen würden.
-\FehlerBeschreibungItem{C06}{Der Ausdruck $\dots$ konnte nicht als Berechnungsausdruck interpretiert werden.} Tritt auf, wenn ein der für einen Calculate-Befehl angegebene Audruck nicht wie in Abschnitt~\ref{Berechnungen} beschrieben interpretiert werden kann.
+\FehlerBeschreibungItem{C06}{Der Ausdruck $\dots$ konnte nicht als Berechnungsausdruck interpretiert werden.} Tritt auf, wenn ein im Zusammenhang mit einen \texttt{Calculate}-Befehl angegebener Audruck nicht wie in Abschnitt~\ref{Berechnungen} beschrieben interpretiert werden kann.
 \FehlerBeschreibungItem{C07}{Der Ausdruck $\dots$ konnte nicht als gültige Zielvariable interpretiert werden.} Tritt auf, wenn der Audruck links vom Gleichheitszeichen eines \texttt{Calculate}-, oder \texttt{Round}-Befehls nicht als Variable interpretiert werden kann.
 \FehlerBeschreibungItem{C08}{Der Ausdruck $\dots$ konnte nicht als Gleitkommazahl interpretiert werden.} Tritt auf, wenn einer der Operanden eines \texttt{Calculate}-, bzw.\ der erste Operand des \texttt{Round}-Befehls nicht als Gleitkommazahl interpretiert werden kann.
 \FehlerBeschreibungItem{C09}{Division durch 0.} Tritt auf, wenn über den \texttt{Calculate}-Befehl eine Divison durch 0 durchgeführt werden soll.
 \FehlerBeschreibungItem{C10}{Der Ausdruck $\dots$ konnte nicht als zulässiger Operator interpretiert werden.} Tritt auf, wenn der Operator eines \texttt{Calculate}-Befehls nicht interpretiert werden kann.
 \FehlerBeschreibungItem{C11}{Der Ausdruck $\dots$ konnte nicht als natürliche Zahl interpretiert werden.} Tritt auf, wenn der zweite Wert des \texttt{Round}-Befehls nicht als natürliche Zahl interpretiert werden kann.
-
+\FehlerBeschreibungItem{C12}{Der Ausdruck $\dots$ konnte nicht als Rundungsausdruck interpretiert werden.} Tritt auf, wenn ein im Zusammenhang mit einen \texttt{Round}-Befehl angegebener Audruck nicht wie in Abschnitt~\ref{Berechnungen} beschrieben interpretiert werden kann.
+\FehlerBeschreibungItem{C13}{Der Ausdruck $\dots$ konnte nicht als Ersetzungsausdruck interpretiert werden.} Tritt auf, wenn ein im Zusammenhang mit einen \texttt{Replace}-Befehl angegebener Audruck nicht wie in Abschnitt~\ref{Ersetzungen} beschrieben interpretiert werden kann.
 \end{description}
 \newpage
 \section{Spezialbefehle}

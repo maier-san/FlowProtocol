@@ -1,0 +1,7 @@
+/// Es wird ersetzt
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Set x = Hallo Welt
+~Replace y = $x |Hallo->Aloah
+~Replace z = $x | ->+
+>> Ergebnis y = $y
+>> Ergebnis z = $z

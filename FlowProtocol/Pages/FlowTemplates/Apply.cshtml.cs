@@ -156,6 +156,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                     case "UrlEncode": RunCmd_UrlEncode(cmd); break;
                     case "Calculate": RunCmd_Calculate(cmd); break;
                     case "Round": RundCmd_Round(cmd); break;
+                    case "Replace": RundCmd_Replace(cmd); break;
                     case "Vote": sc = new VoteCommand(); break;
                     case "Cite": sc = new CiteCommand(); break;
                     default: AddCommandError("C02", $"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
@@ -362,6 +363,36 @@ namespace FlowProtocol.Pages.FlowTemplates
                 {
                     GlobalVars[zvar] = dlbErg.ToString();
                 }
+            }
+            else
+            {
+                AddCommandError("C12", $"Der Ausdruck {arguments} konnte nicht als Rundungsausdruck interpretiert werden.", cmd);
+            }
+        }
+
+        private void RundCmd_Replace(Command cmd)
+        {
+            string arguments = cmd.Arguments.Trim();
+            Regex regReplace = new Regex(@"^([A-Za-z0-9]*)\s*=\s*(.*)\s*\|(.*)->(.*)");
+            if (regReplace.IsMatch(arguments))
+            {
+                var m = regReplace.Match(arguments);
+                string zvar = m.Groups[1].Value.Trim();
+                string wert = m.Groups[2].Value.Trim();
+                string sucheNach = m.Groups[3].Value;
+                string ersetzeDurch = m.Groups[4].Value;
+                if (string.IsNullOrEmpty(zvar))
+                {
+                    AddCommandError("C07", $"Der Ausdruck {zvar} konnte nicht als gültige Zielvariable interpretiert werden.", cmd);
+                }
+                else
+                {
+                    GlobalVars[zvar] = wert.Replace(sucheNach, ersetzeDurch);
+                }
+            }
+            else
+            {
+                AddCommandError("C13", $"Der Ausdruck {arguments} konnte nicht als Ersetzungsausdruck interpretiert werden.", cmd);
             }
         }
 
