@@ -1,8 +1,10 @@
 \documentclass[12pt ,a4paper]{article}
 \usepackage[ansi]{umlaute}
 \usepackage[german]{babel}
+\usepackage[T1]{fontenc}
 \usepackage{fancyheadings}
 \usepackage{geometry}
+\usepackage{mathptm}
 \title{FlowProtocol - Anwenderhandbuch}
 \author{Wolfgang Maier}
 %%
@@ -27,6 +29,7 @@
 \newcommand{\webbox}[1]{\par\setlength{\fboxsep}{3mm}\fbox{\begin{minipage}{12cm}\textsf{#1}\end{minipage}\par}\par\vspace{3mm}}
 \newcommand{\webhead}[2]{{\large  #1}\\[2mm]#2\\[1mm]\rule{\linewidth}{1pt}\\[3mm]}
 \newcommand{\webheadR}[1]{{\large  #1}\\}
+\newcommand{\fpinputbox}{\fbox{\rule[-1mm]{0mm}{4mm}\hspace*{6cm}}}
 \newenvironment{circlist}%
 {\begin{list}{$\bigcirc$}{%
 \setlength{\labelsep}{5pt}
@@ -44,15 +47,24 @@
 \setlength{\parsep}{0pt}
 \setlength{\labelwidth}{1cm}
 }}{\end{list}}
+\newenvironment{helplist}%
+{\itshape\begin{list}{$\cdot$}{%
+\setlength{\labelsep}{5pt}
+\setlength{\topsep}{5pt}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\labelwidth}{5mm}
+}}{\end{list}}
 \newcommand{\ZeigeFehlerItem}[4]{\item\textbf{#1}\\#2\ \textsl{#3}\\\texttt{#4}}
 \newcommand{\FehlerBeschreibungItem}[2]{\item[#1]\textsl{#2}\\}
+\newcommand{\SysVar}[2]{\item[\$#1]\textsl{#2}}
 \begin{document}
 \maketitle
 \tableofcontents
 \newpage
 \section{Beschreibung und Hintergrund}
 \subsection{Grundidee}
-\FlowProtocol ist eine Anwendung, mit der man Aufgaben-, bzw. Prüflisten zu ausgewählten Themengebieten anhand einfacher Kontrollfragen erstellen kann. Der Name leitet sich ab aus Flow für \glqq Flussdiagramm\grqq\   und \glqq Protokoll\grqq\   und steht für das Grundkonzept der Anwendung, anhand eines verzweigten Entscheidungsbaums ein Protokoll zusammenzustellen. Die Anwendung funktioniert dabei wie folgt:  Nach Auswahl einer Vorlage wird eine Reihe von Multiple-Choice-Fragen gestellt, mit denen die relevanten Aspekte eines Themas Schritt für Schritt eingegrenzt werden, und aus denen am Ende eine genau abgestimmte Auf"|listung von Punkten zusammengestellt wird, die beispielsweise als Protokoll verwendet werden können.
+\FlowProtocol ist eine Anwendung, mit der man Aufgaben-, bzw. Prüflisten zu aus\-ge\-wähl\-ten Themengebieten anhand einfacher Kontrollfragen erstellen kann. Der Name leitet sich ab aus Flow für \glqq Flussdiagramm\grqq\   und \glqq Protokoll\grqq\   und steht für das Grundkonzept der Anwendung, anhand eines verzweigten Entscheidungsbaums ein Protokoll zusammenzustellen. Die Anwendung funktioniert dabei wie folgt:  Nach Auswahl einer Vorlage wird eine Reihe von Multiple-Choice-Fragen gestellt, mit denen die relevanten Aspekte eines Themas Schritt für Schritt eingegrenzt werden, und aus denen am Ende eine genau abgestimmte Auf"|listung von Punkten zusammengestellt wird, die beispielsweise als Protokoll verwendet werden können.
 
 Die Grundidee der Anwendung besteht darin, ein Medium zu bieten, um Spezialwissen ohne großen Aufwand zu erfassen und es dann in sehr einfacher Form für andere bereitzustellen, ohne dass es dafür vermittelt und erworben werden muss. Die Erstellung der Vorlagen kann und soll direkt durch die Menschen erfolgen, die über das jeweilige Wissen verfügen und die Anwendung für alle möglich sein, die dieses Wissen benötigen.
 
@@ -63,7 +75,7 @@ Ein besonders positiver Nebeneffekt bei der Nutzung von Vorlagen besteht darin, 
 
 Eine besonders nützliche Anwendung ist die Erstellung von interaktiven Anleitungen. Hierbei werden ebenfalls Rahmenbedigungen und einzelne Textbausteine im Vorfeld abgefragt, und in Abhängigkeit davon die für den vorliegenden Fall relevanten Schritte der Anleitung ausgegeben. Die Möglichkeit, kontextbezogene und durch Textersetzungen angepasste Codepassagen in die Ausgabe einzufügen, macht \FlowProtocol zu einem besonders nützlichen Werkzeug in der Softwareentwicklung, wo derartige wiederkehrende Muster zum Tagesgeschäft gehören. Die Kombination von Anleitung und Codegenerator erhöht nicht nur die Effizient, sondern auch die Qualität.
 
-Auch kleinere personalisierte Umfragen lassen sich über Vorlagen realisieren, wenn man die Teilnehmer zur Rücksendung der Ergebnisse instruiert. Es gibt sogar einen speziellen Befehl, der bei der Rangfolgenbestimmung von kleineren Listen unterstützt, indem die darin vorkommenden Elemente paarweise gegenübergestellt werden (siehe Abschnitt~\ref{labRangfolgenbestimmung}). 
+Auch kleinere personalisierte Umfragen lassen sich über Vorlagen realisieren, wenn man die Teilnehmer zur Rücksendung der Ergebnisse instruiert. Es gibt sogar einen Befehl, der bei der Rangfolgenbestimmung von kleineren Listen un\-ter\-stützt, indem die darin vorkommenden Elemente paarweise gegenübergestellt werden (siehe Abschnitt~\ref{Rangfolgenbestimmung}). 
 Für wichtige Rangfolgen wie beispielsweise Projektprioritäten ist es natürlich besser, man hat detaillierte und bewährte Kriterien, die sich objektiv auf alle Elemente der Liste anwenden lassen, und die am Ende über einen Zahlenwert zu einer Rangfolge oder Auswahl führen. Auch solche Bewertungen lassen sich mit \FlowProtocol sehr leicht umsetzen und für alle verfügbar machen.
 
 \subsection{Konfiguration}
@@ -224,7 +236,7 @@ Soll \dq Hallo Welt\dq zusätzlich rückwärts ausgegeben werden?
 }
 
 \subsection{Gruppierungen}
-Das Ergebnis einer Bearbeitung kann in vielen Fällen mehr als eine Liste sein. Eine Vorlage zur Analyse kann zum einen den Ist-Stand erfassen, mögliche Lösungsansätze formulieren und die noch ausstehenden Analyse-Maßnahmen auf"|listen. Zu diesem Zweck können die Ausgaben in einer sehr einfachen Form gruppiert werden.
+Das Ergebnis einer Bearbeitung kann in vielen Fällen mehr als eine Liste sein. Eine Vorlage zur Analyse kann zum einen den Ist-Stand erfassen, mögliche Lö\-sungs\-an\-sä\-tze formulieren und die noch ausstehenden Analyse-Maßnahmen auf"|listen. Zu diesem Zweck können die Ausgaben in einer sehr einfachen Form gruppiert werden.
 
 \Syntax
 \begin{verbatim}
@@ -250,7 +262,7 @@ Das Ergebnis einer Bearbeitung kann in vielen Fällen mehr als eine Liste sein. E
 \end{verbatim}
 Wählt man die Antwortmöglichkeit \glqq In Großbuchstaben\grqq, so erhält man die folgende Ausgabe:
 \webbox{
-\webheadR{Ergebnisliste (Demo, 05 Gruppierungen)}\\[3mm]
+\webheadR{Ergebnisliste (Demo, 05 Gruppierungen)}\\
 Deine Ausgabe
 \begin{numlist}
 \item HALLO WELT
@@ -261,7 +273,7 @@ Die Alternativen
 \item tleW ollaH
 \end{numlist}
 }
-\subsection{Unterpunkte}\label{labUnterpunkte}
+\subsection{Unterpunkte}\label{Unterpunkte}
 Ausgaben können je nach Vorlage selbst wieder Tätigkeiten oder Aufgaben beschreiben, die sich aus verschiedenen Schritten zusammensetzen, oder bei denen mehrere Teilaspekte zu berücksichtigen sind. Diese lassen sich in Form von Unterpunkten auf"|listen. Ein Unterpunkt, der mit der Protokollkennung \glqq https://\grqq\  beginnt und als Link erkannt wird, wird dabei in der Ausgabe als ausführbarer Link dargestellt. Man kann sogar ganze Codesequenzen als Unterpunkt formatieren (siehe Abschnitt~\ref{Codesequenzen}).
 
 \Syntax
@@ -404,7 +416,7 @@ Bei längeren Sequenzen und insbesondere bei der Verwendung von Wiederholungen un
 Die beiden Fragen aus dem Sequenzen-Beispiel werden in diesem Fall einzelnen angezeigt.
 
 \subsection{Funktionen}\label{Funktionen}
-Vorlagen können mitunter sehr umfangreich und tief verschachtelt sein. Verwaltet man solche Vorlagen in einer einzigen Datei, kann das insbesondere aufgrund der Einrückungen sehr unübersichtlich werden, sodass sich Anpassungen und Erweiterungen schwierig gestalten. Hier ist es empfehlenswert, Teile des Codes als Funktionen in jeweils eigene Dateien auszulagern. Eine Funktion ist vom Prinzip und vom Aufbau her das gleiche wie eine Vorlage und wird über eine Datei der Endung \glqq *.qff\grqq\  (Quick Flow Function) bereitgestellt. Aufgrund der abweichenden Dateiendung werden Funktionen nicht als Vorlagen in der Anwendung zur Auswahl angeboten.
+Vorlagen können mitunter sehr umfangreich und tief verschachtelt sein. Verwaltet man solche Vorlagen in einer einzigen Datei, kann das insbesondere aufgrund der Ein\-rück\-ung\-en sehr unübersichtlich werden, sodass sich Anpassungen und Erweiterungen schwierig gestalten. Hier ist es empfehlenswert, Teile des Codes als Funktionen in jeweils eigene Dateien auszulagern. Eine Funktion ist vom Prinzip und vom Aufbau her das gleiche wie eine Vorlage und wird über eine Datei der Endung \glqq *.qff\grqq\  (Quick Flow Function) bereitgestellt. Aufgrund der abweichenden Dateiendung werden Funktionen nicht als Vorlagen in der Anwendung zur Auswahl angeboten.
 
 Die Funktionsdatei muss auf der gleichen Ebene liegen wie die Vorlage, die sie aufruft und der Name darf nur aus Buchstaben und Ziffern bestehen.
 
@@ -509,7 +521,7 @@ Variablen können auch unabhängig von Funktionsparametern gesetzt und in Fragen, 
 \end{verbatim}
 Wird eine Variable in einer Frage oder Antwort verwendet, sollte durch die Struktur sichergestellt werden, dass die Frage, die für das Setzen der Variablen zuständig ist, zuvor ausgeführt wurde. Dies kann z.B. mit dem oben beschriebenen \verb|~Execute|-Befehl geschehen.
 
-\subsection{Additionen}
+\subsection{Additionen}\label{Additionen}
 Über Variablen lassen sich auch einfache Additionen durchführen, beispielsweise um Kosten, Aufwände oder Komplexität zu ermitteln, die sich aus den gewählten Ant\-wort\-mög\-lich\-kei\-ten zusammensetzen. Dies ist ebenfalls über den \verb|~Set|-Befehl möglich.
 \Syntax
 \begin{verbatim}
@@ -623,13 +635,13 @@ Wird im obigen Beispiel die Antwort  Ja gewählt, so wird im nächsten Schritt die
 \webbox{
 \webhead{Vorlage Demo, 19 Eingaben}{Es wird ein Wert abgefragt}
 Welche Welt möchtest du grüßen?\\
-\fbox{\rule[-1mm]{0mm}{4mm}\hspace*{6cm}}
+\fpinputbox
 }
 \subsection{Codesequenzen}\label{Codesequenzen}
-In der Softwareentwicklung und insbesondere bei der Pflege und Weiterentwicklung großer Systeme gibt es zahlreiche Komponenten und Bausteine, die immer nach dem grundsätzlich selben Muster auf-, oder eingebaut werden. Oft gibt es dabei Varianten, bei denen man den einen oder anderen Aufruf mehr oder weniger benötigt, und die Benennung der Elemente muss ebenfalls angepasst werden. 
+In der Softwareentwicklung und insbesondere bei der Pflege und Weiterentwicklung gro\-ßer Systeme gibt es zahlreiche Komponenten und Bausteine, die immer nach dem grund\-sätz\-lich selben Muster auf-, oder eingebaut werden. Oft gibt es dabei Varianten, bei denen man den einen oder anderen Aufruf mehr oder weniger benötigt, und die Benennung der Elemente muss ebenfalls angepasst werden. 
 Es kann die Arbeit deutlich vereinfachen, wenn man mit \FlowProtocol eine Vorlage für eine Anleitung erstellt, die die relevanten Abhängigkeiten abfragt, und dem Entwickler die notwendigen Implementierungsschritte beschreibt. Noch besser ist es, wenn man eine Stufe weiter geht, und die einzelnen Codefragmente direkt durch die Vorlage erstellen lässt, so dass man diese ausschneiden und in den Produktivcode einfügen kann. Hierfür gibt es die Möglichkeit, ganze Codesequenzen ausgeben zu lassen.
 
-Die Syntax ist ähnlich zu der der Unterpunkte (siehe Abschnitt~\ref{labUnterpunkte}). Codesequenzen und Unterpunkte lassen sich auch innerhalb desselben Ausgabeeintrags kombinieren, die Ausgabe erfolgt jedoch blockweise, d.h.\ zuerst die Unterpunkte und dann der Codeblock.
+Die Syntax ist ähnlich zu der der Unterpunkte (siehe Abschnitt~\ref{Unterpunkte}). Codesequenzen und Unterpunkte lassen sich auch innerhalb desselben Ausgabeeintrags kombinieren, die Ausgabe erfolgt jedoch blockweise, d.h.\ zuerst die Unterpunkte und dann der Codeblock.
 
 \Syntax
 \begin{verbatim}
@@ -664,7 +676,7 @@ Die Ausgabe erfolgt in einer Festbreitenschriftart und es werden auch führende L
 
 Wird im obigen Beispiel als Entitätsbennung \glqq Fahrzeug\grqq\ eingegeben und als Typ des Primärschlüssels \glqq int\grqq\ gewählt, so bekommt man folgende Ausgabe:
 \webbox{
-\webheadR{Ergebnisliste (Demo, 21 Codegen)}\\[3mm]
+\webheadR{Ergebnisliste (Demo, 21 Codegen)}\\
 Anleitung
 \begin{numlist}
 \item Implementiere die Funktion ErstelleFahrzeug()\\
@@ -672,7 +684,7 @@ Anleitung
 \texttt{\{}\\
 \hspace*{2ex}\texttt{// Rufe generische Funktion auf}\\
 \hspace*{2ex}\texttt{return ErstelleElement<int>()}\\
-\texttt{\}}
+\texttt{\}}\\
 \item Ergänze den Aufruf in der Geschäftslogik\\
 \hspace*{2ex}\texttt{int id = ErstelleFahrzeug()}
 \end{numlist}
@@ -710,6 +722,243 @@ Aufgerufen wird hierbei die Funktionsdatei HalloWelt5.qff:
 
 Ein schöner Anwendungsfall für eine geteilte Funktion ist beispielsweise die Zusammenstellung eines Navigationspfades über eine Auswahlsequenz, z.B.\ um eine Stelle innerhalb einer Software oder anderen Struktur eindeutig zu benennen. Bei einer solchen Funktion wäre die Notwendigkeit einer zentralen Verwaltung aufgrund von Umfang und ständiger Erweiterung enorm wichtig, und trotzdem kann das Ergebnis über eine einfache Variable transportiert werden.
 
+\subsection{URL-Codierung}
+Durch den Einbau von Links auf Webseiten in die Ausgabe ist es auch möglich, Webanwendungan anzusteuern, die über die URL parametrisiert werden können. Die häufigste Anwendung hierbei werden Suchaufrufe sein, aber es können auch komplexere Formularseiten oder auch der lokale Mail-Client über einen mailto-Link angestoßen werden. Ein weiterer möglicher Anwendungsfall wäre der Aufruf einer anderen \FlowProtocol-Vorlage mit vollständig oder teilweise vorbelegten Frage- und Eingabeschlüsseln.
+
+Die Hürde, die dabei zu überwinden ist, ist die Codierung der Parameter, so dass diese in der URL übergeben werden können. Sofern die Parameter zur Designzeit feststehen, kann man die Codierung über geeignete Webportale bestimmen und im Vorlagecode hinterlegen, doch bei eingegebenen Parametern ist das nicht möglich. Hierfür gibt es den Befehl \verb|~UrlEncode|.
+
+\Syntax
+\begin{verbatim}
+~UrlEncode <Var 1>; <Var 2>
+\end{verbatim}
+
+Dem Befehl kann eine Liste von Variablen übergeben werden, die für die Verwednung in einer URL codiert werden.
+
+\Beispiel
+\begin{verbatim}
+/// Kleine Suchmaschine
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Input S: Suchbegriff
+~Set SBeg=$S
+~UrlEncode SBeg
+>> Bei Google suchen:
+    > https://www.google.com/search?q=$SBeg
+>> Bei DuckDuckGo suchen:
+    > https://duckduckgo.com/?q=$SBeg&ia=web
+\end{verbatim}
+
+Im Beispiel wird ein Suchbegriff abgefragt und in die Variable \verb|SBeg| übertragen, da die Codierung nur für Parameter, nicht jedoch für Eingabe- und Frageschlüssel möglich ist. Die Variable wird anschließend in die URLs eingebaut und führt bei Eingabe von \verb|C#| \verb|int?| zu folgender Ausgabe:
+
+\webbox{
+\webheadR{Ergebnisliste (Demo, 22 UrlEncoding)}
+\begin{numlist}
+\item Bei Google suchen: 
+\begin{itemize}
+\item \texttt{https://www.google.com/search?q=C\%23\%20int\%3f}
+\end{itemize}
+\item Bei DuckDuckGo suchen: 
+\begin{itemize}
+\item \texttt{https://duckduckgo.com/?q=C\%23\%20int\%3f\&ia=web}
+\end{itemize}
+\end{numlist}
+}
+
+Die häufig in der Softwareentwicklung verwendete Anwendung Jira bietet z.B. eine Webseite, über die Vorgänge mit vorbelegten Eigenschaften erstellt werden können, wobei Projekt, Typ und beliebige Eigenschaften per Parameter vorbelegt werden können. Ein Expertensystem könnte so durch gezielte Fragen die notwendigen Informationen sammeln und am Ende in der Ausgabe die Erstellung eines Vorgangs vom richtige Typ mit passenden Eigenschaften als Link anbieten.
+
+\subsection{Links mit Anzeigetext}\label{Displaytext}
+Aus Abschnitt~\ref{Unterpunkte} wissen wir, dass Unterpunkte, die als URL interpretiert werden können, ausführbar ausgegeben werden. Die zuletzt gezeigten Möglichkeiten führen dabei jedoch in der Regel zu sehr langen und kryptischen Links, für die ein alternativer Anzeigetext wünscheswert wäre. Dies ist wie folgt möglich:
+
+\Syntax
+\begin{verbatim}
+>> <Ausgabe Text>
+    > <URL 1>|<Displaytext 1>
+    > <URL 2>|<Displaytext 2>
+    . . . 
+\end{verbatim}
+Der URL-Angabe wird, abgetrennt durch das Pipe-Zeichen der anzuzeigende Text nachgestellt. Wird der Zusatz weggelasen, so wird die URL vollständig wie in Abschnitt~\ref{Unterpunkte} beschrieben ausgegeben. Ist der vordere Teil nicht als URL interpretierbar, so wird der Anzeigetext ignoriert.
+
+\Beispiel
+\begin{verbatim}
+/// Der Textbaustein "Hallo Welt" wird ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+>> HALLO WELT
+    > Mehr Infos findest du hier:
+    > https://github.com/maier-san/FlowProtocol|FP bei GitHub
+\end{verbatim}
+
+Der in der Vorlage hinterlegte Link wird damit in der Ausgabe wie folgt angezeigt:\nopagebreak
+\webbox{
+\webheadR{Ergebnisliste (Demo, 23 Displaytext)}
+\begin{numlist}
+\item HALLO WELT
+\begin{itemize}
+\item Mehr Infos findest du hier:
+\item \underline{FP bei GitHub}
+\end{itemize}
+\end{numlist}
+}
+
+\subsection{Verweise auf die eigene URL}\label{eigeneURL}
+Die mit \FlowProtocol erzeugte Ausgabe wird häufig in andere digitale Dokumente über\-tra\-gen. In manchen Fällen kann es dabei sinnvoll sein, die eigene URL in die Ausgabe miteinzubauen, z.B. um spätere Anpassungen der Vorlage nachträglich zu berücksichtigen, oder den Ursprung des Dokuments festzuhalten. Es kann auch sinnvoll sein, nur die URL der Vorlage anzugeben ohne die codierten Frage- und Eingabeschlüssel, um direkt weitere Durchführungen anzubieten. Unabhängig davon bietet die URL auch eine einfache Möglichkeit, das Ergebnis einer komplexeren Abfrage über eine Variable weiterzugeben.
+
+Der Zugriff auf die Information erfolgt über die Systemvariablen \verb|$MyResultURL| für die volltändige URL inklusive der Frage- und Eingabeschlüssel und \verb|$MyBaseURL| für die URL der noch nicht ausgefüllten Vorlage.
+
+\Beispiel
+\begin{verbatim}
+/// Der Textbaustein "Hallo Welt" wird ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+    #a1: Ganz normal
+        >> Hallo Welt        
+    #a2: In Großbuchstaben
+        >> HALLO WELT
+    #a3: Rückwärts
+        >> tleW ollaH
+~Set MRU=$MyResultURL
+~UrlEncode MRU
+>> FlowProtocol-Link:
+    > $MyBaseURL|Weitere Ausführung
+    > mailto:xyz@abc.de?subject=W-Vote&body=$MRU|Per Mail abstimmen
+\end{verbatim}
+
+Das Beispiel oben erzeugt als ersten Unterpunkt einen Link, mit dem die URL der Vorlage aufgerufen werden kann, so dass man einen weiteren Durchlauf machen kann. Als zweiter Unterpunkt wir ein mailto-Link erzeugt, bei der der Mail-Inhalt aus der vollständigen URL besteht, so dass der Mail-Empfänger das Ergebnis abrufen kann. Auf diese Weise kann z.B.\ ein einfacher Rücksendeweg für Abstimmungen angeboten werden.
+
+\subsection{Hilfetexte}
+Manche Fragen und Eingaben können erklärungsbedürftig sein, insbesondere man man ihnen zum ersten Mal oder nach längerer Zeit als Anwender begegnet. Zu\-sätz\-li\-che Er\-läu\-te\-run\-gen kön\-nten in die Fragestellung selbst eingebaut werden, würden aber dort den Lesefluss stören. Aus diesem Grund können für für die o.g.\ Elemente Hilfetexte hinterlegt werden, die in der Darstellung klar abgegrenzt werden.
+So wie bei den Unterpunkten ist es auch hier möglich, Links mit Anzeigetext zu hinterlegen (siehe Abschnitt~\ref{Displaytext}), um auf evtl.\ weiterführende Informationen auf einer Wikiseite zu verweisen.
+
+\Syntax
+\begin{verbatim}
+>& <Hilfetext 1>
+>& <Hilfetext 2>
+. . . 
+\end{verbatim}
+Es können mehrere Hilfetexte hintereinander eingegeben werde. Diese müssen jedoch unmittelbar auf die Frage oder Eingabe folgen und werden nicht über die Einrückung zugeordnet.
+
+\Beispiel
+\begin{verbatim}
+/// Der Textbaustein "Hallo Welt" wird ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+    >& Wählen Sie die gewünschte Art der Ausgabe.
+    >& Sie können die Ausgabe auch selbst wählen
+    >& https://github.com/maier-san/FlowProtocol|FP bei GitHub
+    #a1: Ganz normal
+        >> Hallo Welt
+    #a2: In Großbuchstaben
+        >> HALLO WELT
+    #a3: Selbst wählen
+        ~Input FO: Gewünschte Ausgabe
+            >& Geben Sie den gewünschten Text ein.
+            >& Sie können auch Systemvariablen verwenden.
+        >> $FO
+\end{verbatim}
+
+Diese Vorlage führt zu folgender Darstellung:
+\webbox{
+\webhead{Vorlage Demo, 20 Hilfstexte}{Hallo-Welt-Ausgabe mit Hilfestellung}
+Wie soll \dq Hallo Welt\dq ausgegeben werden?
+\begin{helplist}
+\item Wählen Sie die gewünschte Art der Ausgabe.
+\item Sie können die Ausgabe auch selbst wählen.
+\item \underline{FP bei GitHub}
+\end{helplist}
+\begin{circlist}
+\item Ganz normal
+\item In Großbuchstaben
+\item Selbst wählen
+\end{circlist}
+}
+Bei Wahl der Option \glqq Selbst wählen\grqq\ werden die Hilfetexte auch dort bei der Abfrage der gewünschten Ausgabe angezeigt.
+\webbox{
+\webhead{Vorlage Demo, 20 Hilfstexte}{Hallo-Welt-Ausgabe mit Hilfestellung}
+ Gewünschte Ausgabe
+\begin{helplist}
+\item Geben Sie den gewünschten Text ein.
+\item Sie können auch Systemvariablen verwenden.
+\end{helplist}
+\fpinputbox
+}
+
+\subsection{Berechnungen und Rundungen}\label{Berechnungen}
+Neben den einfachen Additionen aus Abschnitt~\ref{Additionen} kann es manchmal notwendig sein, mit Zahlen und Variablen zu rechnen. Für die Anwendung der Grundrechenoperationen gibt es den Befehl \verb|~Calculate|.
+\Syntax
+\begin{verbatim}
+~Caluculate <Variable> = <Wert1> <Operator> <Wert2>
+\end{verbatim}
+Wert 1 und Wert 2 sind Gleitkommaausdrücke in der Formatierung des Systems und der Operator ist eines der Zeichen \verb|+|, \verb|-|, \verb|*|, \verb|/|. Das Ergebnis wird der angegebenen Variablen zugewiesen.
+
+Zusätzlich gibt es den Befehl \verb|~Round|, mit dem ein Wert auf eine bestimmte Anzahl von Dezimalstellen gerundet werden kann.
+\Syntax
+\begin{verbatim}
+~Round <Variable> = <Wert1> | <Genauigkeit>
+\end{verbatim}
+Als Genauigkeit kann eine natürliche Zahl angegeben, was zur Rundund auf entsprechend viele Dezimalstellen werden. Das Ergebnis wird wieder der angegebenen Variablen zugewiesen.
+
+\Beispiel
+\begin{verbatim}
+/// Es wird gerechnet
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Calculate x = 1,4 + 5,7
+~Calculate y = $x * -4,9
+~Calculate z = -11 / $y
+~Round r = $z|4
+>> Ergebnis z = $z
+>> Gerundet r = $r
+\end{verbatim}
+
+Diese Vorlage produziert folgende Ausgabe:
+\webbox{
+\webheadR{Ergebnisliste (Demo, 26 Berechnungen)}
+\begin{numlist}
+\item Ergebnis z = 0,3161828111526301 
+\item Gerundet r = 0,3162 
+\end{numlist}
+}
+
+\subsection{Ersetzungen}\label{Ersetzungen}
+Ersetzungen können nützlich sein, um Texteingaben zu verarbeiten oder fest im Code hinterlegte Zeichenkennen wie z.B.\ Subversion-Eigenschaften in eine andere Form zu bringen. Hierfür gibt es den Befehl \verb|~Replace|.
+\Syntax
+\begin{verbatim}
+~Replace <Variable> = <Ausgangstext> |<Suchtext>-><Ersetzungstext>
+\end{verbatim}
+Ausgangstext, Such- und Ersetzungtext sind Zeichenketten und führen dazu, dass alle Vorkommendes Suchtextes im Ausgangstext durch den Erstzungtext ersetz werden. Das Ergebnis wird der angegebenen Variablen zugewiesen.
+
+\Beispiel
+\begin{verbatim}
+/// Es wird ersetzt
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Set x = Hallo Welt
+~Replace y = $x |Hallo->Aloah
+~Replace z = $x | ->+
+>> Ergebnis y = $y
+>> Ergebnis z = $z
+\end{verbatim}
+
+Diese Vorlage produziert folgende Ausgabe:
+\webbox{
+\webheadR{Ergebnisliste (Demo, 27 Ersetzungen)}
+\begin{numlist}
+\item Ergebnis y = Aloah Welt
+\item Ergebnis z = Hallo+Welt
+\end{numlist}
+}
+
+\newpage
+\section{Systemvariablen}
+Systemvariablen sind spezielle Variablen, die schon durch das System mit Werten belegt werden. Diese lassen sich wie andere Variablen abrufen und in Fragen, Ausgaben oder Variablenzuweisungen verwenden. Manche der Variablen sind vielmehr als Funktionen zu betrachten und dementsprechend auch mit \texttt{Get\dots} benannt. Im Abschnitt~\ref{eigeneURL} haben wir schon zwei Beispiele für Systemvariablen kennengelernt, mit denen die eigene URL abgerufen werden kann.
+\begin{description}
+\SysVar{NewGuid}{Gibt eine zufällige Guid zurück, z.B.\\\texttt{d817e626-d0b1-40c7-979a-a08b5d6df8a8}.}
+\SysVar{GetDateTime}{Gibt den aktuellen Zeitpunkt mit Datum und Uhrzeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{29.09.2022 17:26}.}
+\SysVar{GetDate}{Gibt das aktuelle Datum in der auf dem System eingestellten Formatierung zu\-rück, z.B.\ \texttt{29.09.2022}.}
+\SysVar{GetTime}{Gibt die aktuelle Zeit in der auf dem System eingestellten Formatierung zu\-rück, z.B.\ \texttt{17:26}.}
+\SysVar{MyResultURL}{Gibt die URL der aktuellen Vorlageausführung inklusive Schlüs\-sel\-pa\-ra\-me\-ter zu\-rück, siehe auch Abschnitt~\ref{eigeneURL}.}
+\SysVar{MyBaseURL}{Gibt die URL der aktuellen Vorlageausführung ohne Schlüs\-sel\-pa\-ra\-me\-ter zurück, siehe auch Abschnitt~\ref{eigeneURL}.}
+\SysVar{CRLF}{Gibt die Zeichenfolge \texttt{\textbackslash r\textbackslash n} (Carriage Return + Line Feed) zurück, mit der ein Zeilenumbruch auf Windows-System erzeugt wird.}
+\SysVar{LF}{Gibt das Zeichen \texttt{\textbackslash n} (Line Feed) zurück, mit dem ein Zeilenuburch auf den System Unix/Mac OS X erzeugt wird.}
+\SysVar{ChrXXX}{mit $1\le XXX\le 255$. Gibt das Zeichen mit dem ASCII-Code XXX zurück, z.B.\ \texttt{\$Chr065 = A}.}
+\end{description}
+
 \newpage
 \section{Fehlermeldungen}
 Die Möglichkeit, Vorlagen von Hand zu schreiben birgt ein gewisses Fehlerrisiko. Die Fehler werden bei der Ausführung weitestgehend erkannt und im Kopfbereich mit allen notwendigen Informationen angezeigt. 
@@ -743,20 +992,21 @@ Ist ein Fehler schlimm?
 Wie man erkennt, wird der nach dem Fehler stehende Vorlagencode trotz der Fehler interpretiert und ausgeführt, was die Notwendigkeit einer Korrektur natürlich nicht mindert.
 
 \subsection{Einlesefehler}
-Einlesefehler treten direkt beim Einlesen einer Vorlage- oder Funktionsdatei auf. Da Funktionsdateien erst bei Bedarf eingelesen werden, werden auch die darin enthaltenen Fehler erst angezeigt, wenn der entsprechende Zweig durchlaufen wird.
+Einlesefehler treten direkt beim Einlesen einer Vorlage- oder Funktionsdatei auf. Da eine Funktionsdatei erst bei Bedarf eingelesen wird, werden auch die darin enthaltenen Fehler erst angezeigt, wenn der entsprechende Zweig durchlaufen wird.
 \begin{description}
 \FehlerBeschreibungItem{R01}{Vorlagendatei nicht gefunden.} Kann auftreten, wenn eine als Lesezeichen gespeicherte URL auf eine nicht (mehr) vorhandene Vorlagendatei verweist, oder kein Lesezugriff auf das Verzeichnis besteht.
 \FehlerBeschreibungItem{R02}{Beschreibungskommentar auf untergeordneter Ebene wird ignoriert.} Tritt auf, wenn ein Beschreibungskommentar nicht auf oberster Ebene der Vorlage angegeben ist. Dieser wird ignoriert.
 \FehlerBeschreibungItem{R03}{Frage kann keinem Kontext zugeordnet werden.} Tritt auf, wenn eine Frage keinem Vorlagenkontext zugeordnet werden kann, wenn also die Struktur aus Fragen und Antworten unstimmig ist. Ursache kann eine fehlerhafte Einrückung sein, z.B.\ weil dabei Leerzeichen und Tabulatorzeichen gemischt wurden.
 \FehlerBeschreibungItem{R04}{Antwort kann keinem Fragekontext zugeordnet werden.} Tritt auf, wenn eine Antwort keinem Fragekontext zugeordnet werden kann, wenn also die Struktur aus Fragen und Antworten unstimmig ist. Ursache kann eine fehlerhafte Einrückung sein, z.B.\ weil dabei Leerzeichen und Tabulatorzeichen gemischt wurden.
-\FehlerBeschreibungItem{R05}{Gruppierter Ausgabeeintrag kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein gruppierter Ausgabeeintrag keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
+\FehlerBeschreibungItem{R05}{Gruppierter Ausgabeeintrag kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein gruppierter Ausgabeeintrag keinem Vorlagenkontext zugeordnet werden kann. Mög\-li\-che Ursachen siehe Fehler R03.
 \FehlerBeschreibungItem{R06}{Ausgabeeintrag kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein nicht gruppierter Ausgabeeintrag keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
 \FehlerBeschreibungItem{R07}{Unterpunkt  kann keinem Ausgabeeintrag zugeordnet werden.} Tritt auf, wenn ein Unterpunkt keinem Ausgabeeintrag zugeordnet werden kann. Unterpunkte müssen immer unmittelbar auf Ausgabeeinträge oder andere Unterpunkte oder Codezeilen folgen und dürfen nicht durch Fragen und Antworten unterbrochen werden.
 \FehlerBeschreibungItem{R08}{Execute-Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn der Execute-Befehl keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
-\FehlerBeschreibungItem{R09}{Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein Befehl keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
+\FehlerBeschreibungItem{R09}{Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein Befehl keinem Vorlagenkontext zugeordnet werden kann. Mög\-li\-che Ursachen siehe Fehler R03.
 \FehlerBeschreibungItem{R10}{Zeile nicht interpretierbar} Tritt auf, wenn eine Zeile nicht als Anweisung interpretiert werden kann, sie also keiner innerhalb einer Vorlage bekannten Syntax entspricht.
 \FehlerBeschreibungItem{R11}{Input-Befehl kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein Input-Befehl  keinem Vorlagenkontext zugeordnet werden kann. Mögliche Ursachen siehe Fehler R03.
 \FehlerBeschreibungItem{R12}{Codezeile kann keinem Ausgabeeintrag zugeordnet werden.} Tritt auf, wenn eine Codezeile keinem Ausgabeeintrag zugeordnet werden kann. Codezeilen müssen immer unmittelbar auf Ausgabeeinträge oder Unterpunkte oder andere Codezeilen folgen und dürfen nicht durch Fragen und Antworten unterbrochen werden.
+\FehlerBeschreibungItem{R13}{Hilfetext kann keinem Kontext zugeordnet werden.} Tritt auf, wenn ein Hilfetext keine Kontext zugeordnet werden kann. Hilfetexte können direkt an eine Frage oder eine Eingabe angefügt werden.
 \end{description}
 
 \subsection{Ausführungsfehler}
@@ -767,6 +1017,14 @@ Ausführungsfehler treten im Zusammenhang mit der Ausführung von Befehlen auf und
 \FehlerBeschreibungItem{C03}{Die Funktionsdatei $\dots$ konnte nicht geladen werden.} Tritt auf, wenn in einem Include-Befehl angegebene Funktionsdatei nicht gefunden werden konnte.
 \FehlerBeschreibungItem{C04}{Der Wert der Variablen $\dots$ konnte nicht als ganze Zahl interpretiert werden.} Tritt auf, wenn für eine Variable im Set-Befehl ein Wert addiert werden soll, und diese zum entsprechenden Zeitpunkt einen nichtnumerischen Wert enthält.
 \FehlerBeschreibungItem{C05}{Der Aufruf der Funktionsdatei $\dots$ überschreitet das Rekursionsmaximum von 100.} Tritt auf, wenn mehr als 100 Mal eine Funktionsdatei aufgerufen wird. Diese einfache Sicherung verhindert Endlosrekursionen, die zum Absturz der Anwendung führen würden.
+\FehlerBeschreibungItem{C06}{Der Ausdruck $\dots$ konnte nicht als Berechnungsausdruck interpretiert werden.} Tritt auf, wenn ein im Zusammenhang mit einen \texttt{Calculate}-Befehl angegebener Audruck nicht wie in Abschnitt~\ref{Berechnungen} beschrieben interpretiert werden kann.
+\FehlerBeschreibungItem{C07}{Der Ausdruck $\dots$ konnte nicht als gültige Zielvariable interpretiert werden.} Tritt auf, wenn der Audruck links vom Gleichheitszeichen eines \texttt{Calculate}-, oder \texttt{Round}-Befehls nicht als Variable interpretiert werden kann.
+\FehlerBeschreibungItem{C08}{Der Ausdruck $\dots$ konnte nicht als Gleitkommazahl interpretiert werden.} Tritt auf, wenn einer der Operanden eines \texttt{Calculate}-, bzw.\ der erste Operand des \texttt{Round}-Befehls nicht als Gleitkommazahl interpretiert werden kann.
+\FehlerBeschreibungItem{C09}{Division durch 0.} Tritt auf, wenn über den \texttt{Calculate}-Befehl eine Divison durch 0 durchgeführt werden soll.
+\FehlerBeschreibungItem{C10}{Der Ausdruck $\dots$ konnte nicht als zulässiger Operator interpretiert werden.} Tritt auf, wenn der Operator eines \texttt{Calculate}-Befehls nicht interpretiert werden kann.
+\FehlerBeschreibungItem{C11}{Der Ausdruck $\dots$ konnte nicht als natürliche Zahl interpretiert werden.} Tritt auf, wenn der zweite Wert des \texttt{Round}-Befehls nicht als natürliche Zahl interpretiert werden kann.
+\FehlerBeschreibungItem{C12}{Der Ausdruck $\dots$ konnte nicht als Rundungsausdruck interpretiert werden.} Tritt auf, wenn ein im Zusammenhang mit einen \texttt{Round}-Befehl angegebener Audruck nicht wie in Abschnitt~\ref{Berechnungen} beschrieben interpretiert werden kann.
+\FehlerBeschreibungItem{C13}{Der Ausdruck $\dots$ konnte nicht als Ersetzungsausdruck interpretiert werden.} Tritt auf, wenn ein im Zusammenhang mit einen \texttt{Replace}-Befehl angegebener Audruck nicht wie in Abschnitt~\ref{Ersetzungen} beschrieben interpretiert werden kann.
 \end{description}
 \newpage
 \section{Spezialbefehle}
@@ -775,30 +1033,48 @@ Spezialbefehle sind spezielle Befehle, die die Struktur einer Vorlage verändern,
 \begin{description}
 \FehlerBeschreibungItem{S01}{Befehl ohne $\dots$-Argument.} Tritt auf, wenn das zwingende $\dots$-Argument nicht angegeben wurde.
 \FehlerBeschreibungItem{S02}{Frageschlüssel $\dots$ ($\dots$-Argument) nicht gefunden.} Tritt auf, wenn der über das $\dots$-Argument angegebene Frageschlüssel nicht gefunden wurde.
-\FehlerBeschreibungItem{S03}{Befehl ohne gültiges $\dots$-Argument.} Tritt auf, wenn ein ungültiger Parameterwert angegeben wurde, z.B.\ eine \texttt{GroupSize}-Angabe, die nicht als Zahl interpretiert werden kann.
+\FehlerBeschreibungItem{S03}{Befehl ohne gültiges $\dots$-Argument.} Tritt auf, wenn für einen Befehl ein un\-gül\-ti\-ger Parameterwert angegeben wurde, z.B.\ eine \texttt{GroupSize}-Angabe, die nicht als Zahl interpretiert werden kann.
 \end{description}
 
-\subsection{Rangfolgenbestimmung}\label{labRangfolgenbestimmung}
+\subsection{Rangfolgenbestimmung}\label{Rangfolgenbestimmung}
 Die Rangfolgenbestimmung ist die Implementierung einer Methode, bei der man eine Rangfolge von Dingen wie z.B. Projekten dadurch bestimmt, dass man diese paarweise vergleicht. Bei jedem Vergleich bekommt der Gewinner einen Punkt und am Ende sortiert man die Einträge entsprechend ihrer Punktezahl. Die Reduzierung auf 2er-Vergleiche vereinfacht zwar die Entscheidung pro Frage, macht die Beantwortung jedoch auch deutlich umfangreicher. Für $n$ Elemente ergeben sich $\frac{n(n-1)}{2}$ Einzelfragen, also für $n=8$ also schon 28 Fragen.
 \FlowProtocol unterteilt dabei die Einzelfragen so in Gruppen, dass jedes Element maximal einmal pro Gruppe vorkommt. Für eine gerade Anzahl von $n$ Elementen werden auf diese Weise $n-1$ Gruppen mit $\frac n2$ Vergleichen gebildet und für eine ungerade Anzahl $n$ sind es $n$ Gruppen mit je $\frac{n-1}{2}$ Vergleichen.
 \Syntax
 \begin{verbatim}
 ~Vote Key=<F-Schlüssel> [;GroupName=<G-Name>] 
-                        [;DrawOption=<Unentschiedenoption>]
+            [;DrawOption=<Unentschiedenoption>]
+            [;ResultVar=<Var>; ResultSep=<Trennzeichen>;]
 \end{verbatim}
 \Beispiel
 \begin{verbatim}
 /// Es wird eine Rangfolgenbestimmung durchgeführt
 //  Anwendungsbeispiel für die Befehlsreferenz
-~Vote Key=V; GroupName=Die besten Welten; DrawOption=egal
+~Vote Key=V; GroupName=Die besten Welten; DrawOption=egal; 
+            ResultVar=Erg; ResultSep=$CRLF;
 ?V: Welche Welt gefällt dir besser?
     #w1: Waldwelt
     #w2: Wasserwelt
     #w3: Bergwelt
     #w4: Wichtelwelt
+~Execute
+~UrlEncode ErgRPO
+>> Abstimmen >> Klicken Sie auf den Link
+    > mailto:xyz@abc.de?subject=W-Vote&body=$ErgRPO|Jetzt abstimmen
 \end{verbatim}
 Der Aufruf dieser Vorlage führt dazu, dass die Frage mit dem Schlüssel \texttt{V} zu einer Reihe von Einzelfragen umgestaltet wird. Genauer: Die Frage wird für jede der drei 2er-Kombinationen abgefragt. Die Fragen werden zur 3er-Gruppen zusammengefasst, was hier eine Gruppe ergibt. Das Ergebnis wird unter der Gruppenüberschrift \textit{Die besten Welten} aufgelistet.
+
 Die Option \texttt{DrawOption} ermöglicht es, für jede Paarung auch mit unentschieden zu stimmen, wobei der Text für diese Option frei gewählt werden kann. Im Beispiel oben wird als dritte Option jeweils \textit{egal} angezeigt. Die Punktevergabe wird in diesem Fall so angepasst, dass der Sieger einer Paarung 2 Punkte bekommt und im Fall eines Unentschiedens jeder einen Punkt, so dass auch hier die Gesamtpunktzahl immer gleich bleibt.
+
+Mit den Optionen \texttt{ResultVar} und \texttt{ResultSep} kann festgelegt werden, dass das Ergebnis der Abstimmung in drei Variablen zur Verfügung gestellt wird. Diese beginnen mit der in \texttt{ResultVar} angegebenen Zeichenfolge und Enden auf \texttt{RPO}, \texttt{RPO} und \texttt{O}:\\[1ex]
+\begin{tabular}{|r|l|l|}\hline
+Endung & Abkürzung für & Beispiel\\\hline
+\texttt{RPO} & Rang, Punkte, Option & Platz 1, 6 Punkte, Bergwelt\\
+\texttt{PO} & Punkte, Option & 6 Punkte, Bergwelt\\
+\texttt{O} & Option & Bergwelt\\\hline
+\end{tabular}\\[1ex]
+
+Im Beispiel oben wird die Variable \texttt{ErgRPO} für die Verwendung in einem mailto-Link codiert. 
+Man bechte außerdem den zusätzlichen Strichpunkt nach \verb|$CRLF|. Dieser verhindert, dass die zu einem Whitespace-Zeichen ersetze Zeichensequenz am Zeilenende steht und damit ignoriert wird.
 \webbox{
 \webhead{Vorlage Demo, 16 Vote}{Es wird eine Abstimmungsbewertung durchgeführt}
 Welche Welt gefällt dir besser? 
@@ -814,9 +1090,9 @@ Welche Welt gefällt dir besser?
 \item egal
 \end{circlist}
 }
-Das Ergebnis wird dann wie folgt präsentiert:
+Das Ergebnis wird dann wie folgt präsentiert:\nopagebreak
 \webbox{
-\webheadR{Ergebnisliste (Demo, 16 Vote)}\\[3mm]
+\webheadR{Ergebnisliste (Demo, 16 Vote)}\\
 Die besten Welten
 \begin{numlist}
 \item Platz 1 (6 Punkte) Bergwelt
@@ -824,8 +1100,15 @@ Die besten Welten
 \item Platz 3 (2 Punkte) Wasserwelt
 \item Platz 4 (0 Punkte) Wichtelwelt
 \end{numlist}
+Abstimmen
+\begin{numlist}
+\item Klicken Sie auf den Link
+\begin{itemize}
+\item \underline{Jetz abstimmen}
+\end{itemize}
+\end{numlist}
 }
-Man beachte, es kann auch Punktegleichstand geben. Dann teilen sich mehrere Elemente einen Platz.
+Es kann auch Punktegleichstand geben. Dann teilen sich mehrere Elemente einen Platz.
 \subsection{Zitatmodus}
 Sofern es bei einer Vorlage nur darum geht, die gewählten Antworten auf die Fragen zu notieren, kann man sich die Arbeit stark vereinfachen. Mit den standardmäßigen Sprachmitteln müsste man in jedem Antwortzweig Ausgaben erzeugen, die sowohl Frage, als auch Antwort beinhalten, was eine prinzipiell unnötige Wiederholung einer schon vorhandenen Information ist. Der Zitatmodus erledigt genau das für einen kompletten Vorlageteil.
 \Syntax
@@ -844,7 +1127,7 @@ Sofern es bei einer Vorlage nur darum geht, die gewählten Antworten auf die Frag
 \end{verbatim}
 Der Aufruf dieser Vorlage führt dazu, dass die Frage als Ausgabe mit der gewählten Antwort als Unterpunkt ausgegeben wird. Das Ergebnis wird unter der Grup\-pen\-über\-schrift \textit{Antwortprotokoll} aufgelistet. 
 \webbox{
-\webheadR{Ergebnisliste (Demo, 17 Cite)}\\[3mm]
+\webheadR{Ergebnisliste (Demo, 17 Cite)}\\
 Antwortprotokoll
 \begin{numlist}
 \item Wie soll \glqq Hallo Welt\grqq ausgegeben werden?

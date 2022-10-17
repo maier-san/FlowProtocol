@@ -20,7 +20,7 @@
       {
          ResultItemGroup = conv(ResultItemGroup);
          ResultItemText = conv(ResultItemText);
-         SubItems = ApplyTextOperationToList(SubItems, conv);
+         SubItems = CoreLib.ApplyTextOperationToList(SubItems, conv);
          CodeBlock = conv(CodeBlock);
       }
 
@@ -29,19 +29,6 @@
       {
          // Hier nicht mit Environment.newline arbeiten, da sonst beim ausschneiden und kopieren des Codes unerwünschte Leerzeilen eingefügt werden.
          if (CodeBlock == string.Empty) CodeBlock = codeline; else CodeBlock += "\n" + codeline;
-      }
-
-      // Wendet eine TExtoperation auf eine ganze Liste von Strings an.
-      private List<string> ApplyTextOperationToList(List<string> currentlist, Func<string, string> conv)
-      {
-         if (!currentlist.Any()) return currentlist;
-         List<string> newlist = new List<string>();         
-         foreach (var s in currentlist)
-         {
-            newlist.Add(conv(s));
-         }
-         currentlist.Clear();
-         return newlist;
       }
    }
 }

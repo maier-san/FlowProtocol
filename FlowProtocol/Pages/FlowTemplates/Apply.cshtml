@@ -9,30 +9,32 @@
 {
     <form method="post">
         <h2>Vorlage @Model.TemplateBreadcrumb</h2>
-        @if(Model.TemplateDescription != null)
+        @if (Model.TemplateDescription != null)
         {
-            <p> 
-            @foreach(var line in Model.TemplateDescription)
-            {
-                @line<br>
-            }
-            </p><hr>            
+            <p>
+                @foreach (var line in Model.TemplateDescription)
+                {
+                    @line<br>
+                }
+            </p>
+            <hr>
         }
-        @if(Model.ReadErrors.Any())
+        @if (Model.ReadErrors.Any())
         {
             <p><strong>Hinweis:</strong> Beim Ausführen der Vorlage sind Fehler aufgetreten.
-                Bitte wenden Sie sich an den Autoren der Vorlage oder einen Administrator, um die Korrekturen zu veranlassen:</p>
-                <ol>
-                    @foreach(var eitem in Model.ReadErrors)
-                    {
-                        <li>
-                            <strong>Fehler @eitem.ErrorCode,  @eitem.ErrorText</strong><br />
-                            Zeile @eitem.LineNumber in <i>@eitem.FilePath</i><br />
-                            <span style="color: #ff0000;">@eitem.Codeline</span>
-                        </li>
-                    }
-                </ol>
-            <hr> 
+                Bitte wenden Sie sich an den Autoren der Vorlage oder einen Administrator, um die Korrekturen zu veranlassen:
+            </p>
+            <ol>
+                @foreach (var eitem in Model.ReadErrors)
+                {
+                    <li>
+                        <strong>Fehler @eitem.ErrorCode, @eitem.ErrorText</strong><br />
+                        Zeile @eitem.LineNumber in <i>@eitem.FilePath</i><br />
+                        <span style="color: #ff0000;">@eitem.Codeline</span>
+                    </li>
+                }
+            </ol>
+            <hr>
         }
         @foreach (var k in Model.GivenKeys)
         {
@@ -46,8 +48,11 @@
                         @q.QuestionText
                         <br>
                     </label>
-                    <input type="text" class="form-control" access="false" id="@q.Key" 
-                     asp-for="SelectedOptions[q.Key]" maxlength="50">
+                    @if (q.HelpLines.Any())
+                    {
+                        @await Html.PartialAsync("_HelpTextLines", q)
+                    }
+                    <input type="text" class="form-control" access="false" id="@q.Key" asp-for="SelectedOptions[q.Key]" maxlength="50">
                 </div>
             </div><br>
         }
@@ -56,8 +61,11 @@
             <div class="formbuilder-radio-group form-group">
                 <label class="formbuilder-radio-group-label">
                     @r.QuestionText
-                    <br>
                 </label>
+                @if (r.HelpLines.Any())
+                {
+                    @await Html.PartialAsync("_HelpTextLines", r)
+                }
                 <div class="radio-group">
                     @foreach (var idx in r.Options)
                     {
@@ -75,7 +83,7 @@
 else
 {
     <h2>Ergebnisliste (@Model.TemplateBreadcrumb)</h2>
-    @foreach(var group in Model.ShowResultGroups)
+    @foreach (var group in Model.ShowResultGroups)
     {
         @if (!string.IsNullOrWhiteSpace(group.Key))
         {
@@ -93,17 +101,17 @@ else
                     @if (t.SubItems.Any())
                     {
                         <ul>
-                            @foreach(var s in t.SubItems)
+                            @foreach (var s in t.SubItems)
                             {
                                 <li>
-                                @if(Model.IsURL(s))
-                                {
-                                    <a href="@s" target="_blank">@s</a>
-                                }
-                                else
-                                {
-                                    @s
-                                }
+                                    @if (Model.IsURL(s, out string url, out string displaytext))
+                                    {
+                                        <a href="@url" target="_blank">@displaytext</a>
+                                    }
+                                    else
+                                    {
+                                        @s
+                                    }
                                 </li>
                             }
                         </ul>
@@ -116,5 +124,8 @@ else
             }
         </ol>
     }
-    <p><a asp-page="/Index" class="btn btn-primary">Zurück zur Startseite</a></p>
+    <p>
+        <a href=@Model.TemplateBaseURL class="btn btn-primary">Neue Ausführung</a>
+        <a asp-page="/Index" class="btn btn-primary">Zurück zur Startseite</a>
+    </p>
 }

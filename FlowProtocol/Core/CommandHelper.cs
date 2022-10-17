@@ -14,8 +14,8 @@ namespace FlowProtocol.Core
             {
                 Match match = reg.Match(argument);
                 if (match.Success)
-                {
-                    ret = match.Groups[1].Value.Trim();
+                {                    
+                    ret = argument.Substring(match.Groups[1].Index);
                     return ret;
                 }                            
             }
@@ -68,17 +68,17 @@ namespace FlowProtocol.Core
             Dictionary<string, string> assignments = new Dictionary<string, string>();
             if (!string.IsNullOrWhiteSpace(varExpression))
             {                   
-                Regex regSetAssignment = new Regex(@"^([A-Za-z0-9]*)\s*=(.*)");               
+                Regex regSetAssignment = new Regex(@"^([A-Za-z0-9]*)\s*=(.*)");
                 foreach(var idx in varExpression.Split(";"))
                 {
-                     string assignment = idx.Trim();
+                    string assignment = idx.Trim(' ');
                     if (regSetAssignment.IsMatch(assignment))
                     {
                         var m = regSetAssignment.Match(assignment);
                         string key = m.Groups[1].Value.Trim();
-                        if (!string.IsNullOrWhiteSpace(key))
+                        if (!string.IsNullOrEmpty(key))
                         {
-                            assignments[key] = m.Groups[2].Value.Trim();
+                            assignments[key] = assignment.Substring(m.Groups[2].Index).Trim(' ');
                         }
                     }
                 }

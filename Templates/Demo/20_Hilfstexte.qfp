@@ -1,0 +1,15 @@
+/// Der Textbaustein "Hallo Welt" wird in einer Form deiner Wahl ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+	>& Wählen sie "Ganz Normal", wenn Sie den Text in normaler Schreibweise ausgegeben haben wollen.
+	>& Sie können den Text auch in Großbuchstaben oder einen selbst gewählten Text ausgeben lassen.
+	>& https://github.com/maier-san/FlowProtocol|FlowProtocol bei GitHub
+	#a1: Ganz normal
+		>> Hallo Welt
+	#a2: In Großbuchstaben
+		>> HALLO WELT
+	#a3: Selbst wählen
+		~Input FO: Gewünschte Ausgabe
+			>& Geben Sie den Text ein, den Sie ausgegeben haben wollen.
+			>& Sie können auch Systemvariablen aus dem Anwenderhandbuch verwenden.
+		>> $FO

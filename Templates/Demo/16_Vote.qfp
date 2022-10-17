@@ -1,7 +1,13 @@
 /// Es wird eine Rangfolgenbestimmung durchgeführt
 //  Anwendungsbeispiel für die Befehlsreferenz
-~Vote Key=V; GroupSize=3; GroupName=Die besten Welten; DrawOption=egal
+~Vote Key=V; GroupSize=3; GroupName=Die besten Welten; DrawOption=egal; ResultVar=Erg; ResultSep=$CRLF;
 ?V: Welche Welt gefällt dir besser?
 	#w1: Waldwelt
 	#w2: Wasserwelt
-	#w3: Bergwelt	
+	#w3: Bergwelt
+~Execute
+~UrlEncode ErgRPO; ErgPO; ErgO;
+>> Abstimmen >> Wählen Sie einen Mail-Link
+	> mailto:xyz@abc.de?subject=W-Vote&body=$ErgRPO|Per Mail abstimmen (RPO)
+	> mailto:xyz@abc.de?subject=W-Vote&body=$ErgPO|Per Mail abstimmen (PO)
+	> mailto:xyz@abc.de?subject=W-Vote&body=$ErgO|Per Mail abstimmen (O)

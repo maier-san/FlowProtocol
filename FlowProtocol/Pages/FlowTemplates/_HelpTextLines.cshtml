@@ -1,0 +1,24 @@
+@using FlowProtocol.Core
+@model IElementWithHelpLines
+@if (@Model.HelpLines.Any())
+{
+    <ul>
+        <i>
+            <span style="color: #993366;">
+                @foreach (var hl in @Model.HelpLines)
+                {
+                    <li>
+                        @if (Model.IsURL(hl, out string url, out string displaytext))
+                        {
+                            <a href="@url" target="_blank">@displaytext</a>
+                        }
+                        else
+                        {
+                            @hl
+                        }
+                    </li>
+                }
+            </span>
+        </i>
+    </ul>
+}

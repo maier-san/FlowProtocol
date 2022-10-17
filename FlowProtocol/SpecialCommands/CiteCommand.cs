@@ -5,7 +5,8 @@ namespace FlowProtocol.SpecialCommands
 {
    public class CiteCommand : ISpecialCommand
     {
-        public List<ResultItem> RunCommand(Command cmd, Template template, Dictionary<string, string> selectedOptions, Action<ReadErrorItem> addError)
+        public List<ResultItem> RunCommand(Command cmd, Template template, Dictionary<string, string> selectedOptions,
+            Dictionary<string, string> globalVars, Action<ReadErrorItem> addError)
         {
             string groupname = CommandHelper.GetTextParameter(cmd, "GroupName", "", addError, false);
             List<ResultItem> result = new List<ResultItem>();
