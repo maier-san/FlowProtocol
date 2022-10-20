@@ -33,8 +33,9 @@ namespace FlowProtocol.Core
                 url = text;
                 displayText = text;
             }
-            return (url.StartsWith("https://") || url.StartsWith("http://")) && Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute)
-               || url.StartsWith("mailto:");
+            return url.StartsWith("https://")
+                || url.StartsWith("http://")
+                || url.StartsWith("mailto:");
         }
 
     }
