@@ -6,12 +6,14 @@ namespace FlowProtocol.Core
         public string Arguments { get; set; }
         // Vorlage für eine Fehlermeldung mit Dateiname, Zeilennummer u.s.w.
         public ReadErrorItem ErrorTemplate { get; set; }
+        public string KeyPath { get; set; }
 
         public Command(ReadErrorItem errorTemplate)
         {
             ComandName = string.Empty;
             Arguments = string.Empty;
             ErrorTemplate = errorTemplate;
+            KeyPath = string.Empty;
         }
 
         // Wendet eine Text-Operation auf die Text-Bestandteile des Command an
