@@ -97,7 +97,7 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regRestriction.Match(codeline);
-                                Restriction r = new Restriction(){Key = AddKeyNumber(m.Groups[1].Value.Trim(), ref keyindex), QuestionText = m.Groups[2].Value.Trim()};
+                                Restriction r = new Restriction(){Key = AddKeyNumber(m.Groups[1].Value.Trim()), QuestionText = m.Groups[2].Value.Trim()};
                                 parent.Restrictions.Add(r);
                                 ResttrictionStack.Push(new Tuple<int, Restriction>(indent, r));
                                 currentElementWithHelpLines = r;
@@ -194,7 +194,7 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regInputItem.Match(codeline);
-                                InputItem q = new InputItem(){ Key = AddKeyNumber(m.Groups[1].Value.Trim(), ref keyindex), QuestionText = m.Groups[2].Value.Trim()};
+                                InputItem q = new InputItem(){ Key = AddKeyNumber(m.Groups[1].Value.Trim()), QuestionText = m.Groups[2].Value.Trim()};
                                 parent.InputItems.Add(q);
                                 currentElementWithHelpLines = q;
                             }
@@ -231,7 +231,7 @@ namespace FlowProtocol.Core
         }
 
         // Ergänzt einen Key der mir ' endet um einen eindeutigen Index
-        private string AddKeyNumber(string key, ref int keyindex)
+        private string AddKeyNumber(string key)
         {;
             if (key.EndsWith("'"))
             {
