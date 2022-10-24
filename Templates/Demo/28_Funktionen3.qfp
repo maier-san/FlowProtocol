@@ -1,0 +1,10 @@
+/// Es werden wieder Welten gegrüßt
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F': Soll die Bergwelt gegrüßt werden?
+	#j: Ja
+		~Include HalloWelt5 welt=Bergwelt
+	#n: Nein
+?F': Soll die Wasserwelt gegrüßt werden?
+	#j: Ja
+		~Include HalloWelt5 welt=Wasserwelt
+	#n: Nein

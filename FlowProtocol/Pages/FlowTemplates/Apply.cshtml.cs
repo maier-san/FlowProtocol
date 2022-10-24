@@ -123,6 +123,12 @@ namespace FlowProtocol.Pages.FlowTemplates
                 else
                 {
                     GivenKeys.Add(q.Key);
+                    if (q.Key.Contains("_"))
+                    {
+                        // Autonummerierte Input-Keys auch noch als Variable verfügbar machen:
+                        string valvar = q.Key.Substring(0, q.Key.IndexOf('_')) + "value";
+                        GlobalVars[valvar] = SelectedOptions[q.Key];
+                    }
                 }
             }
         }
@@ -207,7 +213,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                     AddCommandError("C05", $"Der Aufruf der Funktionsdatei {templateFileName} überschreitet das Rekursionsmaximum von 100.", cmd);
                     return;
                 }
-                Template? subTemplate = LoadTemplate(templateFileName, assignments);
+                Template? subTemplate = LoadTemplate(templateFileName, assignments, cmd.KeyPath);
                 if (subTemplate == null)
                 {
                     AddCommandError("C03", $"Die Funktionsdatei {templateFileName} konnte nicht geladen werden.", cmd);
@@ -441,11 +447,11 @@ namespace FlowProtocol.Pages.FlowTemplates
             return RedirectToPage("./Apply", SelectedOptions);
         }
 
-        private Template? LoadTemplate(string templatefile, Dictionary<string, string>? assignments = null)
+        private Template? LoadTemplate(string templatefile, Dictionary<string, string>? assignments = null, string keypath = "")
         {
 
             TemplateReader tr = new TemplateReader();
-            Template? currentTemplate = tr.ReadTemplate(templatefile, assignments);
+            Template? currentTemplate = tr.ReadTemplate(templatefile, assignments, keypath);
             ReadErrors.AddRange(tr.ReadErrors);
             return currentTemplate;
         }

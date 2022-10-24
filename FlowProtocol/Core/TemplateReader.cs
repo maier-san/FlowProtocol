@@ -13,19 +13,22 @@ namespace FlowProtocol.Core
         private Stack<Tuple<int, Restriction>> ResttrictionStack = new Stack<Tuple<int, Restriction>>();
         // Fehler beim Einlesen
         public List<ReadErrorItem> ReadErrors { get; private set; }
+        public string KeyPath { get; set; }
         private int keyindex = 0;
-       
+
         public TemplateReader()
         {
             ReadErrors = new List<ReadErrorItem>();
+            KeyPath = string.Empty;
         }
 
         // Liest eine Template-Datei ein
         // filepath = der vollständige Dateipfad
-        public Template? ReadTemplate(string filepath, Dictionary<string, string>? assignments = null)
+        public Template? ReadTemplate(string filepath, Dictionary<string, string>? assignments = null, string keypath = "")
         {
             ReadErrors.Clear();
-            if (!File.Exists(filepath)) 
+            KeyPath = keypath;
+            if (!File.Exists(filepath))
             {
                 AddReadError("R01", "Vorlagendatei nicht gefunden.", filepath, 0, string.Empty);
                 return null;
@@ -39,7 +42,7 @@ namespace FlowProtocol.Core
             using (StreamReader sr = new StreamReader(filepath))
             {
                 Regex regDescription = new Regex("^///(.*)");
-                Regex regComment = new Regex("^//.*");                
+                Regex regComment = new Regex("^//.*");
                 Regex regRestriction = new Regex(@"^\?([A-Za-z0-9]*[']?):(.*)");
                 Regex regHelpText = new Regex("^>&(.*)");
                 Regex regOption = new Regex("^#([A-Za-z0-9]*):(.*)");
@@ -49,7 +52,7 @@ namespace FlowProtocol.Core
                 Regex regResultItem = new Regex("^>>(.*)");
                 Regex regExecute = new Regex(@"^~Execute");
                 Regex regInputItem = new Regex(@"^~Input ([A-Za-z0-9]*[']?):(.*)");
-                Regex regCommand = new Regex(@"^~([A-Za-z0-9]*)\s*(.*)");                      
+                Regex regCommand = new Regex(@"^~([A-Za-z0-9]*)\s*(.*)");
                 ResultItem? currentResultItem = null;
                 IElementWithHelpLines? currentElementWithHelpLines = null;
                 int linenumber = 0;
@@ -58,9 +61,9 @@ namespace FlowProtocol.Core
                     string? line = sr.ReadLine();
                     linenumber++;
                     if (!string.IsNullOrWhiteSpace(line))
-                    {                       
-                        line = line.Replace("\t", "    ");                       
-                        int indent = line.Length-line.TrimStart().Length;
+                    {
+                        line = line.Replace("\t", "    ");
+                        int indent = line.Length - line.TrimStart().Length;
                         line = ReplaceVariables(line, assignments);
                         string codeline = line.Trim();
                         if (string.IsNullOrWhiteSpace(codeline))
@@ -68,18 +71,18 @@ namespace FlowProtocol.Core
                             // Leerzeile: ignorieren
                         }
                         else if (regDescription.IsMatch(codeline))
-                        {                            
+                        {
                             if (!(main is Option))
                             { // Beschreibung nur für das Hauptelement hinzufügen und ansonsten ignorieren
                                 var m = regDescription.Match(codeline);
                                 string descriptionLine = m.Groups[1].Value.Trim();
                                 if (!string.IsNullOrWhiteSpace(descriptionLine))
                                 {
-                                    if (!string.IsNullOrWhiteSpace(main.Description)) 
+                                    if (!string.IsNullOrWhiteSpace(main.Description))
                                     {
                                         main.Description += Environment.NewLine + descriptionLine;
                                     }
-                                    else 
+                                    else
                                     {
                                         main.Description = descriptionLine;
                                     }
@@ -92,18 +95,18 @@ namespace FlowProtocol.Core
                             // Nur Kommentar: ignorieren
                         }
                         else if (regRestriction.IsMatch(codeline))
-                        {                           
+                        {
                             Template? parent = GetMatchingParentTemplate(indent, TemplateStack);
                             if (parent != null)
                             {
                                 var m = regRestriction.Match(codeline);
-                                Restriction r = new Restriction(){Key = AddKeyNumber(m.Groups[1].Value.Trim(), ref keyindex), QuestionText = m.Groups[2].Value.Trim()};
+                                Restriction r = new Restriction() { Key = AddKeyNumber(m.Groups[1].Value.Trim()), QuestionText = m.Groups[2].Value.Trim() };
                                 parent.Restrictions.Add(r);
                                 ResttrictionStack.Push(new Tuple<int, Restriction>(indent, r));
                                 currentElementWithHelpLines = r;
                             }
                             else AddReadError("R03", "Frage kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
-                            currentResultItem = null;                            
+                            currentResultItem = null;
                         }
                         else if (regOption.IsMatch(codeline))
                         {
@@ -111,7 +114,7 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regOption.Match(codeline);
-                                Option o = new Option(parent.Key){Key = m.Groups[1].Value.Trim(), OptionText = m.Groups[2].Value.Trim()};
+                                Option o = new Option(parent.Key) { Key = m.Groups[1].Value.Trim(), OptionText = m.Groups[2].Value.Trim() };
                                 parent.Options.Add(o);
                                 TemplateStack.Push(new Tuple<int, Template>(indent, o));
                             }
@@ -123,7 +126,7 @@ namespace FlowProtocol.Core
                         {
                             if (currentElementWithHelpLines != null)
                             {
-                                var m = regHelpText.Match(codeline);                                
+                                var m = regHelpText.Match(codeline);
                                 currentElementWithHelpLines.AddHelpLine(m.Groups[1].Value.Trim());
                             }
                             else AddReadError("R13", "Hilfetext kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
@@ -135,7 +138,7 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regGroupedResultItem.Match(codeline);
-                                ResultItem t = new ResultItem(){ResultItemGroup = m.Groups[1].Value.Trim(), ResultItemText = m.Groups[2].Value.Trim()};
+                                ResultItem t = new ResultItem() { ResultItemGroup = m.Groups[1].Value.Trim(), ResultItemText = m.Groups[2].Value.Trim() };
                                 parent.ResultItems.Add(t);
                                 currentResultItem = t;
                             }
@@ -148,7 +151,7 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regResultItem.Match(codeline);
-                                ResultItem t = new ResultItem(){ResultItemText = m.Groups[1].Value.Trim()};
+                                ResultItem t = new ResultItem() { ResultItemText = m.Groups[1].Value.Trim() };
                                 parent.ResultItems.Add(t);
                                 currentResultItem = t;
                             }
@@ -181,10 +184,10 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 Template t = new Template();
-                                parent.FollowTemplate = t;                                
+                                parent.FollowTemplate = t;
                                 TemplateStack.Push(new Tuple<int, Template>(indent, t));
                             }
-                            else AddReadError("R08", "Execute-Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);                            
+                            else AddReadError("R08", "Execute-Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
                             currentResultItem = null;
                             currentElementWithHelpLines = null;
                         }
@@ -194,12 +197,12 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regInputItem.Match(codeline);
-                                InputItem q = new InputItem(){ Key = AddKeyNumber(m.Groups[1].Value.Trim(), ref keyindex), QuestionText = m.Groups[2].Value.Trim()};
+                                InputItem q = new InputItem() { Key = AddKeyNumber(m.Groups[1].Value.Trim()), QuestionText = m.Groups[2].Value.Trim() };
                                 parent.InputItems.Add(q);
                                 currentElementWithHelpLines = q;
                             }
                             else AddReadError("R11", "Input-Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
-                            currentResultItem = null;                            
+                            currentResultItem = null;
                         }
                         else if (regCommand.IsMatch(codeline))
                         {
@@ -207,36 +210,41 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 // Fehler-Objekt erstellen für den Fall, dass bei der späteren Ausführung ein Fehler auftritt.
-                                ReadErrorItem errortemplate =  new ReadErrorItem()
+                                ReadErrorItem errortemplate = new ReadErrorItem()
                                 {
                                     ErrorCode = "C01",
-                                    ErrorText = "Beim Ausführen eines Befehls ist ein unbehandelter Fehler aufgetreten.", 
+                                    ErrorText = "Beim Ausführen eines Befehls ist ein unbehandelter Fehler aufgetreten.",
                                     FilePath = filepath,
                                     LineNumber = linenumber,
                                     Codeline = codeline.Trim()
                                 };
                                 var m = regCommand.Match(codeline);
-                                Command c = new Command(errortemplate){ComandName = m.Groups[1].Value.Trim(), Arguments = m.Groups[2].Value.Trim()};
+                                Command c = new Command(errortemplate) { ComandName = m.Groups[1].Value.Trim(), Arguments = m.Groups[2].Value.Trim() };
+                                if (c.ComandName == "Include")
+                                {
+                                    c.KeyPath = this.KeyPath + "_" + keyindex.ToString();
+                                }
                                 parent.Commands.Add(c);
                             }
-                            else AddReadError("R09", "Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);                            
+                            else AddReadError("R09", "Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
                             currentResultItem = null;
                             currentElementWithHelpLines = null;
                         }
-                        else AddReadError("R10", "Zeile nicht interpretierbar", filepath, linenumber, codeline);                        
+                        else AddReadError("R10", "Zeile nicht interpretierbar", filepath, linenumber, codeline);
                     }
-                }    
-            }     
-            return main;      
+                }
+            }
+            return main;
         }
 
         // Ergänzt einen Key der mir ' endet um einen eindeutigen Index
-        private string AddKeyNumber(string key, ref int keyindex)
-        {;
+        private string AddKeyNumber(string key)
+        {
+            ;
             if (key.EndsWith("'"))
             {
                 keyindex++;
-                key = key.Replace("'","_" + keyindex.ToString());
+                key = key.Replace("'", this.KeyPath + "_" + keyindex.ToString());
             }
             return key;
         }
@@ -244,14 +252,14 @@ namespace FlowProtocol.Core
         // Fügt einen Einlesefehler hinzu
         private void AddReadError(string errorCode, string errorText, string filepath, int linenumber, string codeline)
         {
-            ReadErrorItem rei =  new ReadErrorItem()
-                {
-                    ErrorCode = errorCode,
-                    ErrorText = errorText, 
-                    FilePath = filepath,
-                    LineNumber = linenumber,
-                    Codeline = codeline.Trim()
-                };
+            ReadErrorItem rei = new ReadErrorItem()
+            {
+                ErrorCode = errorCode,
+                ErrorText = errorText,
+                FilePath = filepath,
+                LineNumber = linenumber,
+                Codeline = codeline.Trim()
+            };
             ReadErrors.Add(rei);
         }
 
@@ -266,7 +274,7 @@ namespace FlowProtocol.Core
             T? ret = null;
             if (!list.Any()) return null;
             Tuple<int, T> p = list.Peek();
-            while (list.Any() && p.Item1 >= indent) 
+            while (list.Any() && p.Item1 >= indent)
             {
                 list.Pop();
                 p = list.Peek();
@@ -280,7 +288,7 @@ namespace FlowProtocol.Core
         {
             if (string.IsNullOrWhiteSpace(codeline)) return codeline;
             string ret = codeline;
-            foreach(var idx in assignments)
+            foreach (var idx in assignments)
             {
                 ret = ret.Replace("$" + idx.Key, idx.Value);
             }

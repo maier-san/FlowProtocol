@@ -1,0 +1,10 @@
+// Hallo-Welt-Funktion
+// Parameter $welt
+?F': Wie soll die $welt begrüßt werden?
+	#a1: Mit Hallo
+		>> Hallo $welt
+	#a2: Mit Aloah
+		>> Aloah $welt
+	#a3: Mit eigenem Gruß
+		~Input GF': Grußformel für $welt
+		>> $GFvalue $welt

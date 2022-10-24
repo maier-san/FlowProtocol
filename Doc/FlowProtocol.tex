@@ -26,7 +26,7 @@
 \newcommand{\Syntax}{\subsubsection*{Syntax}}
 \newcounter{bspcount}
 \newcommand{\Beispiel}{\stepcounter{bspcount}\subsubsection*{Beispiel~\arabic{bspcount}}}
-\newcommand{\webbox}[1]{\par\setlength{\fboxsep}{3mm}\fbox{\begin{minipage}{12cm}\textsf{#1}\end{minipage}\par}\par\vspace{3mm}}
+\newcommand{\webbox}[1]{\nopagebreak\par\setlength{\fboxsep}{3mm}\fbox{\begin{minipage}{12cm}\textsf{#1}\end{minipage}\par}\par\vspace{3mm}}
 \newcommand{\webhead}[2]{{\large  #1}\\[2mm]#2\\[1mm]\rule{\linewidth}{1pt}\\[3mm]}
 \newcommand{\webheadR}[1]{{\large  #1}\\}
 \newcommand{\fpinputbox}{\fbox{\rule[-1mm]{0mm}{4mm}\hspace*{6cm}}}
@@ -366,7 +366,7 @@ Die Antwort auf eine Frage kann in manchen Fällen die Antwort auf eine andere im
 Bei Auswahl der Antwort \glqq In Großbuchstaben\grqq\ für Frage \texttt{F1} wird für die Frage \texttt{F2a} die 
 Antwort \glqq Ja\grqq\  impliziert. Diese wird dann nicht mehr gestellt, sondern automatisch beantwortet. Im Falle der anderen Ant\-wort\-mög\-lich\-kei\-ten wird keine Antwort impliziert, sodass die Frage \texttt{F2a} in diesem Fall ganz normal gestellt und verarbeitet wird.
 
-\subsection{Autonummerierung}
+\subsection{Autonummerierung}\label{Autonummerierung}
 Das Durchnummerieren der Frageschlüssel kann in umfangreichen Dateien sehr müh\-sam werden, da diese zumeist nicht von oben nach unten aufgebaut werden, sondern ausgehend von einer ersten Ebene Stück für Stück in die Tiefe. Die Kontrolle über die Schlüssel benötigt man aber nur, wenn man mit Implikationen oder Wiederholungen arbeitet, oder die Gültigkeit von Links auch nach Erweiterungen der Vorlage sicherstellen möchte. Für alle anderen Fälle kann man die Schlüssel automatisch vergeben lassen.
 \Syntax
 \begin{verbatim}
@@ -387,7 +387,9 @@ Das Durchnummerieren der Frageschlüssel kann in umfangreichen Dateien sehr müh\-
     #z2: "Ich grüße dich!"
         >> Ich grüße dich!
 \end{verbatim}
-Die Apostrophzeichen in den Schlüsseln werden pro Datei durchnummeriert und im obigen Beispiel zu \verb|F_1| und \verb|F_2| ersetzt. Schlüssel ohne das \verb|'|-Zeichen bleiben unverändert und können für Implikationen oder Wiederholungen genutzt werden. Implikationen für automatisch nummerierte Schlüssel sind zwar ebenfalls möglich, aber aufgrund der fehlenden Transparenz keine gute Idee. Die Nummerierung erfolgt pro Datei, was bei der Verwendung von Funktionen (siehe Abschnitt~\ref{Funktionen}) berücksichtigt werden muss.
+Die Apostrophzeichen in den Schlüsseln werden pro Datei durchnummeriert und im obigen Beispiel zu \verb|F_1| und \verb|F_2| ersetzt. Schlüssel ohne das \verb|'|-Zeichen bleiben unverändert und können für Implikationen oder Wiederholungen genutzt werden. Implikationen für automatisch nummerierte Schlüssel sind zwar ebenfalls möglich, aber aufgrund der fehlenden Transparenz keine gute Idee. 
+
+Bei Verwendung von Funktionen (siehe Abschnitt~\ref{Funktionen}) erfolgt die Nummerierung dateiübergreifend und ist unabhängig von der Reihenfolge der Bearbeitung. Dafür wird die Nummerierung im Hintergrund in Form einer Gliederung aufgebaut, die bei tieferen Verschachtelungen eine größere Länge haben. Bei rekursiven Aufrufen mit beliebiger Tiefe wie in Abschnitt~\ref{ParametrisierteFunktionen} sollte man daher die Schlüssel lieber explizit mittels Parameter kontrollieren.
 
 \subsection{Ausführungen}
 Bei längeren Sequenzen und insbesondere bei der Verwendung von Wiederholungen und Implikationen ist es wünschenswert, zunächst einen Teil der Fragen vollständig abzuarbeiten, bevor die Fragen aus dem nachfolgenden Teil angezeigt werden. Dies ist mit dem \verb|~Execute|-Befehl möglich.
@@ -443,7 +445,7 @@ Mit der Funktionsdatei HalloWelt1.qff
 \end{verbatim}
 Neben der Erhöhung der Übersichtlichkeit hat die Verwendung von Funktionen viele weitere Vorteile. Auf technischer Ebene vereinfacht es die Verarbeitung, da eine Funktion erst dann geladen wird, wenn der entsprechende Pfad auch tatsächlich erreicht wird. Aus Anwendersicht ergibt sich der große Vorteil, dass man eine Funktion in verschiedenen Antwortzweigen aufrufen kann, und damit keinen doppelten Code pflegen muss. Entsprechend lassen sich Funktionen auch aus verschiedenen Vorlagen heraus aufrufen, sodass fachliche Einheiten ausgelagert und mehrfach wieder verwendet werden können. Mit geteilten Funktionen geht dies sogar für Vorlagen aus verschiedenen Anwendungsgruppen-Ordnern (siehe Abschnitt~\ref{GeteilteFunktionen}).
 
-\subsection{Parametrisierte Funktionen}
+\subsection{Parametrisierte Funktionen}\label{ParametrisierteFunktionen}
 Möchte man eine Funktion innerhalb einer Vorlage mehrfach ausführen, so stößt man auf das Problem, dass die dort eingetragenen Frage-Schlüssel für beide Aufrufe identisch sind, und so der zweite Aufruf automatisch die Antworten des ersten Aufrufs übernehmen würde. Zudem wäre die Anzeige der Fragen identisch, sodass man diese beim Beantworten nicht den jeweiligen Aufrufen zuordnen könnten. Um dieses Problem zu lösen, lassen sich Aufrufe parametrisieren.
 
 \Syntax
@@ -555,7 +557,7 @@ Additionen und Variablenzuweisungen können auch im gleichen \verb|~Set|-Befehl g
     #n: Nein
 \end{verbatim}
 
-\subsection{Schleifen}
+\subsection{Schleifen}\label{Schleifen}
 In machen Fällen möchte man eine Funktion wiederholt für eine beliebige Menge an Elementen aufrufen. Dies ist möglich, indem man das Hochzählen von Variablen mit den Parameterzuweisungen eines rekursiven Funktionsaufrufes kombiniert.
 
 \Beispiel
@@ -613,8 +615,6 @@ In manchen Fällen kann es sinnvoll sein, kurze Texte oder einzelne Begriffe abzu
 
 \Syntax
 \begin{verbatim}
-/// Formatierte Hallo-Welt-Ausgabe
-//  Anwendungsbeispiel für die Befehlsreferenz
 ~Input  <Eingabeschlüssel>: <Fragetext>
 \end{verbatim}
 Der Schlüssel dient wie bei den Fragen zur Verwaltung der Eingabe in der URL, und der Fragetext wird an der Oberfläche angezeigt. Der Zugriff auf die Eingabe erfolgt wie bei Variablen über den Eingabeschlüssel, indem man das \$-Zeichen voranstellt. Eine Eingabe kann ebenso wie die Antwort auf eine Frage mit dem \verb|~Implies|-Befehl impliziert werden. Die Zeichenzahl ist pro Antwort auf maximal 50 Zeichen beschränkt, und aufgrund der beschränkten Zeichenzahl in der URL sollte diese Funktion nicht überstrapaziert werden.
@@ -943,6 +943,43 @@ Diese Vorlage produziert folgende Ausgabe:
 \item Ergebnis z = Hallo+Welt
 \end{numlist}
 }
+
+\subsection{Eingabevariablen}
+Bei Funktionen, die mehrfach in einer Vorlage aufgerufen werden, bietet sich die automatische Nummerierung für Fragen und Eingaben an, um zu vermeiden, diese per Index-Parameter kontrollieren zu müssen (siehe Abschnitt~\ref{Autonummerierung} und \ref{Schleifen}). Für Fragen ergeben sich dadurch keine Einschränkungen, für Eingaben jedoch schon, da man hier ohne Kenntnis des zur Laufzeit expandierten Eingabeschlüssels nicht auf den Eingabewert zugreifen kann. \FlowProtocol\ löst dieses Problem dadurch, dass für Eingabe mit autonummerierten Eingabeschlüssel der Eingabewert zusätzlich in eine Variable übertragen wird, deren Zusammensetzung zur Designzeit bekannt ist. 
+\Syntax
+\begin{verbatim}
+~Input  <Eingabeschlüssel>': <Fragetext>
+~Set x = $<Eingabeschlüssel>value
+\end{verbatim}
+Es ist klar, dass sich diese Variable beim mehrfachen Aufruf einer Vorlage wiederholt und somit überschrieben wird, aber eine Verarbeitung im lokalen Kontext der Vorlage ist trotzdem möglich. Es empfiehlt sich daher, den festen Teil des Eingabeschlüssels innerhalb einer Funktionsdatei eindeutig zu wählen, und Kollisionen auszuschließen.
+
+\Beispiel
+\begin{verbatim}
+/// Es werden wieder Welten gegrüßt
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F': Soll die Bergwelt gegrüßt werden?
+    #j: Ja
+        ~Include HalloWelt5 welt=Bergwelt
+    #n: Nein
+?F': Soll die Wasserwelt gegrüßt werden?
+    #j: Ja
+        ~Include HalloWelt5 welt=Wasserwelt
+    #n: Nein
+\end{verbatim}
+mit Funktionsdatei
+\begin{verbatim}
+// Hallo-Welt-Funktion
+// Parameter $welt
+?F': Wie soll die $welt begrüßt werden?
+    #a1: Mit Hallo
+        >> Hallo $welt
+    #a2: Mit Aloah
+        >> Aloah $welt
+    #a3: Mit eigenem Gruß
+        ~Input GF': Grußformel für $welt
+        >> $GFvalue $welt
+\end{verbatim}
+Das Beispiel zeigt den typischen Anwendungsfall einer Funktion, die für verschiedene Variablenwerte aufgerufen werden kann, und die auch eine Eingabe pro Aufruf ermöglicht.
 
 \newpage
 \section{Systemvariablen}
