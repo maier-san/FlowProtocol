@@ -15,6 +15,7 @@ namespace FlowProtocol.Core
         public List<ReadErrorItem> ReadErrors { get; private set; }
         public string KeyPath { get; set; }
         private int keyindex = 0;
+        private int includeindex = 0;
 
         public TemplateReader()
         {
@@ -222,7 +223,8 @@ namespace FlowProtocol.Core
                                 Command c = new Command(errortemplate) { ComandName = m.Groups[1].Value.Trim(), Arguments = m.Groups[2].Value.Trim() };
                                 if (c.ComandName == "Include")
                                 {
-                                    c.KeyPath = this.KeyPath + "_" + keyindex.ToString();
+                                    includeindex++;
+                                    c.KeyPath = this.KeyPath + "_" + includeindex.ToString() + "_" + keyindex.ToString();
                                 }
                                 parent.Commands.Add(c);
                             }
