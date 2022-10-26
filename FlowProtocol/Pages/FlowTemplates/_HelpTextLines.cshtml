@@ -1,6 +1,6 @@
 @using FlowProtocol.Core
 @model IElementWithHelpLines
-@if (@Model.HelpLines.Any())
+@if (@Model != null && @Model.HelpLines.Any())
 {
     <ul>
         <i>
