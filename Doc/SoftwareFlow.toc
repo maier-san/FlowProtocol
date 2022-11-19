@@ -18,4 +18,5 @@
 \contentsline {subsection}{\numberline {3.4}Abnahme von Userstories}{20}{}%
 \contentsline {subsection}{\numberline {3.5}Sonstige Reflektionsfragen}{21}{}%
 \contentsline {section}{\numberline {4}Dynamische Anleitungen}{22}{}%
-\contentsline {subsection}{\numberline {4.1}Die \"Ubertragung von Anforderungen in Varianten}{22}{}%
+\contentsline {subsection}{\numberline {4.1}Konfigurator mit Codegenerierung}{22}{}%
+\contentsline {subsection}{\numberline {4.2}Anleitung zur Fehleranalyse}{23}{}%
