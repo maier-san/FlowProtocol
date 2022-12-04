@@ -11,12 +11,13 @@
 \contentsline {subsection}{\numberline {2.3}Fehlerpriorisierung nach Schweregrad}{12}{}%
 \contentsline {subsection}{\numberline {2.4}Rangfolgenbestimmung}{15}{}%
 \contentsline {subsection}{\numberline {2.5}Risikobewertung}{17}{}%
-\contentsline {section}{\numberline {3}Unterst\"utzung des Product Owners}{19}{}%
-\contentsline {subsection}{\numberline {3.1}Die Liebe zu Mustern}{19}{}%
-\contentsline {subsection}{\numberline {3.2}Formulierungshilfen f\"ur Userstories}{20}{}%
-\contentsline {subsection}{\numberline {3.3}Der Inhalt von Userstories}{21}{}%
-\contentsline {subsection}{\numberline {3.4}Abnahme von Userstories}{23}{}%
-\contentsline {subsection}{\numberline {3.5}Sonstige Reflektionsfragen}{24}{}%
-\contentsline {section}{\numberline {4}Dynamische Anleitungen}{25}{}%
-\contentsline {subsection}{\numberline {4.1}Konfigurator mit Codegenerierung}{25}{}%
-\contentsline {subsection}{\numberline {4.2}Anleitung zur Fehleranalyse}{26}{}%
+\contentsline {subsection}{\numberline {2.6}Mitarbeiterbewertungen}{19}{}%
+\contentsline {section}{\numberline {3}Unterst\"utzung des Product Owners}{21}{}%
+\contentsline {subsection}{\numberline {3.1}Die Liebe zu Mustern}{22}{}%
+\contentsline {subsection}{\numberline {3.2}Formulierungshilfen f\"ur Userstories}{23}{}%
+\contentsline {subsection}{\numberline {3.3}Der Inhalt von Userstories}{24}{}%
+\contentsline {subsection}{\numberline {3.4}Abnahme von Userstories}{26}{}%
+\contentsline {subsection}{\numberline {3.5}Sonstige Reflektionsfragen}{27}{}%
+\contentsline {section}{\numberline {4}Dynamische Anleitungen}{28}{}%
+\contentsline {subsection}{\numberline {4.1}Konfigurator mit Codegenerierung}{28}{}%
+\contentsline {subsection}{\numberline {4.2}Anleitung zur Fehleranalyse}{29}{}%
