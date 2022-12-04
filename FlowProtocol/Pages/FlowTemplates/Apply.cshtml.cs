@@ -416,20 +416,20 @@ namespace FlowProtocol.Pages.FlowTemplates
                 bool bOKA = Int32.TryParse(wertebereichA, out int wertA);
                 bool bOKB = Int32.TryParse(wertebereichB, out int wertB);
 
-                
+
                 if (string.IsNullOrEmpty(zvar))
                 {
                     AddCommandError("C07", $"Der Ausdruck {zvar} konnte nicht als gültige Zielvariable interpretiert werden.", cmd);
                 }
-                else if(!bOKA)
+                else if (!bOKA)
                 {
                     AddCommandError("C11", $"Der Ausdruck {wertebereichA} konnte nicht als natürliche Zahl interpretiert werden.", cmd);
                 }
-                else if(!bOKB)
+                else if (!bOKB)
                 {
                     AddCommandError("C11", $"Der Ausdruck {wertebereichB} konnte nicht als natürliche Zahl interpretiert werden.", cmd);
                 }
-                else if(wertA > wertB)
+                else if (wertA > wertB)
                 {
                     AddCommandError("C14", $"Die angegebenen Werte bilden kein gültiges Intervall.", cmd);
                 }
@@ -501,28 +501,32 @@ namespace FlowProtocol.Pages.FlowTemplates
 
         private string ReplaceGlobalVars(string input)
         {
-            foreach (var v in GlobalVars.OrderByDescending(x=>x.Key))
+            if (input.Contains('$'))
             {
-                input = input.Replace("$" + v.Key, v.Value);
-            }
-            foreach (var v in SelectedOptions.OrderByDescending(x=>x.Key))
-            {
-                input = input.Replace("$" + v.Key, v.Value);
-            }
-            // Systemvariablen
-            input = input.Replace("$MyResultURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path + this.HttpContext.Request.QueryString);
-            input = input.Replace("$MyBaseURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path);
-            input = input.Replace("$NewGuid", Guid.NewGuid().ToString());
-            input = input.Replace("$GetDateTime", $"{DateTime.Now:g}");
-            input = input.Replace("$GetDate", $"{DateTime.Now:d}");
-            input = input.Replace("$GetTime", $"{DateTime.Now:T}");
-            input = input.Replace("$CRLF", "\r\n");
-            input = input.Replace("$LF", "\n");
-            if (input.Contains("$Chr"))
-            {
-                for (int i = 1; i < 255; i++)
+                foreach (var v in GlobalVars.OrderByDescending(x => x.Key))
                 {
-                    input = input.Replace($"$Chr{i:000}", Convert.ToChar(i).ToString());
+                    input = input.Replace("$" + v.Key, v.Value);
+                }
+                foreach (var v in SelectedOptions.OrderByDescending(x => x.Key))
+                {
+                    input = input.Replace("$" + v.Key, v.Value);
+                }
+                // Systemvariablen
+                input = input.Replace("$MyResultURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path + this.HttpContext.Request.QueryString);
+                input = input.Replace("$MyBaseURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path);
+                input = input.Replace("$NewGuid", Guid.NewGuid().ToString());
+                input = input.Replace("$GetDateTime", $"{DateTime.Now:g}");
+                input = input.Replace("$GetDate", $"{DateTime.Now:d}");
+                input = input.Replace("$GetTime", $"{DateTime.Now:T}");
+                input = input.Replace("$GetYear", $"{DateTime.Now:yyyy}");
+                input = input.Replace("$CRLF", "\r\n");
+                input = input.Replace("$LF", "\n");
+                if (input.Contains("$Chr"))
+                {
+                    for (int i = 1; i < 255; i++)
+                    {
+                        input = input.Replace($"$Chr{i:000}", Convert.ToChar(i).ToString());
+                    }
                 }
             }
             return input;

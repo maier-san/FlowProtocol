@@ -523,6 +523,8 @@ Variablen können auch unabhängig von Funktionsparametern gesetzt und in Fragen, 
 \end{verbatim}
 Wird eine Variable in einer Frage oder Antwort verwendet, sollte durch die Struktur sichergestellt werden, dass die Frage, die für das Setzen der Variablen zuständig ist, zuvor ausgeführt wurde. Dies kann z.B. mit dem oben beschriebenen \verb|~Execute|-Befehl geschehen.
 
+Variablen werden in umgekehrter alphanumerischen Reihenfolge ersetzt, so dass eine Variable \verb|$ab| nicht unbeabsichtgterweise innerhalb der Variablen \verb|$abc| ersetzt wird, wenn bei Variablen gesetzt sind.
+
 \subsection{Additionen}\label{Additionen}
 Über Variablen lassen sich auch einfache Additionen durchführen, beispielsweise um Kosten, Aufwände oder Komplexität zu ermitteln, die sich aus den gewählten Ant\-wort\-mög\-lich\-kei\-ten zusammensetzen. Dies ist ebenfalls über den \verb|~Set|-Befehl möglich.
 \Syntax
@@ -981,14 +983,38 @@ mit Funktionsdatei
 \end{verbatim}
 Das Beispiel zeigt den typischen Anwendungsfall einer Funktion, die für verschiedene Variablenwerte aufgerufen werden kann, und die auch eine Eingabe pro Aufruf ermöglicht.
 
+\subsection{Zufallswerte}
+Manchmal benötigt man einen Zufallswert, z.B. als Schlüsselwert in Code-Fragmenten oder um den Anwender bei der zufälligen Auswahl einer Stichprobe zu unterstützen. Dieser kann über eine eingebaute Funktion erzeugt werden.
+\Syntax
+\begin{verbatim}
+~Random <Variable> = <Wert1> .. <Wert2>
+\end{verbatim}
+Der Wertebereich besteht aus den ganzzahligen Zahlen im Intervall [\verb|Wert1|,\verb|Wert2|], wobei die Intervallgrenzen eingeschlossen sind.
+\Beispiel
+\begin{verbatim}
+/// Die Welt wird nach dem Zufallsprinzip begrüßt
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Random auswahl=1..3
+~Implies F1=a$auswahl
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+    #a1: Ganz normal
+        >> Hallo Welt
+    #a2: In Großbuchstaben
+        >> HALLO WELT
+    #a3: Rückwärts
+        >> tleW ollaH
+\end{verbatim}
+Im Beispiel wir ein zufälliger Wert $x\in\{1,2,3\}$ der Variable \verb|auswahl| zugewiesen und dann, ergänzt durch das Zeichen \glqq a\grqq\ der Zielvariablen \verb|F1|. Die Frage wird damit nicht mehr ausgegeben.
+
 \newpage
 \section{Systemvariablen}
 Systemvariablen sind spezielle Variablen, die schon durch das System mit Werten belegt werden. Diese lassen sich wie andere Variablen abrufen und in Fragen, Ausgaben oder Variablenzuweisungen verwenden. Manche der Variablen sind vielmehr als Funktionen zu betrachten und dementsprechend auch mit \texttt{Get\dots} benannt. Im Abschnitt~\ref{eigeneURL} haben wir schon zwei Beispiele für Systemvariablen kennengelernt, mit denen die eigene URL abgerufen werden kann.
 \begin{description}
 \SysVar{NewGuid}{Gibt eine zufällige Guid zurück, z.B.\\\texttt{d817e626-d0b1-40c7-979a-a08b5d6df8a8}.}
 \SysVar{GetDateTime}{Gibt den aktuellen Zeitpunkt mit Datum und Uhrzeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{29.09.2022 17:26}.}
-\SysVar{GetDate}{Gibt das aktuelle Datum in der auf dem System eingestellten Formatierung zu\-rück, z.B.\ \texttt{29.09.2022}.}
-\SysVar{GetTime}{Gibt die aktuelle Zeit in der auf dem System eingestellten Formatierung zu\-rück, z.B.\ \texttt{17:26}.}
+\SysVar{GetDate}{Gibt das aktuelle Datum in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{29.09.2022}.}
+\SysVar{GetTime}{Gibt die aktuelle Zeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{17:26}.}
+\SysVar{GetYear}{Gibt das aktuelle Jahr im Format yyyy zurück, z.B.\ \texttt{2022}.}
 \SysVar{MyResultURL}{Gibt die URL der aktuellen Vorlageausführung inklusive Schlüs\-sel\-pa\-ra\-me\-ter zu\-rück, siehe auch Abschnitt~\ref{eigeneURL}.}
 \SysVar{MyBaseURL}{Gibt die URL der aktuellen Vorlageausführung ohne Schlüs\-sel\-pa\-ra\-me\-ter zurück, siehe auch Abschnitt~\ref{eigeneURL}.}
 \SysVar{CRLF}{Gibt die Zeichenfolge \texttt{\textbackslash r\textbackslash n} (Carriage Return + Line Feed) zurück, mit der ein Zeilenumbruch auf Windows-System erzeugt wird.}
@@ -1062,6 +1088,7 @@ Ausführungsfehler treten im Zusammenhang mit der Ausführung von Befehlen auf und
 \FehlerBeschreibungItem{C11}{Der Ausdruck $\dots$ konnte nicht als natürliche Zahl interpretiert werden.} Tritt auf, wenn der zweite Wert des \texttt{Round}-Befehls nicht als natürliche Zahl interpretiert werden kann.
 \FehlerBeschreibungItem{C12}{Der Ausdruck $\dots$ konnte nicht als Rundungsausdruck interpretiert werden.} Tritt auf, wenn ein im Zusammenhang mit einen \texttt{Round}-Befehl angegebener Audruck nicht wie in Abschnitt~\ref{Berechnungen} beschrieben interpretiert werden kann.
 \FehlerBeschreibungItem{C13}{Der Ausdruck $\dots$ konnte nicht als Ersetzungsausdruck interpretiert werden.} Tritt auf, wenn ein im Zusammenhang mit einen \texttt{Replace}-Befehl angegebener Audruck nicht wie in Abschnitt~\ref{Ersetzungen} beschrieben interpretiert werden kann.
+\FehlerBeschreibungItem{C14}{Die angegebenen Werte bilden kein gültiges Intervall.} Tritt auf, wenn für die beiden für den \texttt{Random}-Befehl angegebenen Intervallgrenzen kein gültiges Intervall bilden, also der erste Wert größer ist, als der zweite.
 \end{description}
 \newpage
 \section{Spezialbefehle}

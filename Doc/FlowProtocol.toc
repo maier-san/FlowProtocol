@@ -32,6 +32,7 @@
 \contentsline {subsection}{\numberline {2.25}Berechnungen und Rundungen}{26}{}%
 \contentsline {subsection}{\numberline {2.26}Ersetzungen}{27}{}%
 \contentsline {subsection}{\numberline {2.27}Eingabevariablen}{28}{}%
+\contentsline {subsection}{\numberline {2.28}Zufallswerte}{29}{}%
 \contentsline {section}{\numberline {3}Systemvariablen}{30}{}%
 \contentsline {section}{\numberline {4}Fehlermeldungen}{31}{}%
 \contentsline {subsection}{\numberline {4.1}Einlesefehler}{31}{}%
