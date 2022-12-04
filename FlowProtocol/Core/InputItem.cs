@@ -22,7 +22,8 @@ namespace FlowProtocol.Core
       // Wendet eine Text-Operation auf die Text-Bestandteile der Frage an.
       public void ApplyTextOperation(Func<string, string> conv)
       {
-         QuestionText = conv(QuestionText);         
+         QuestionText = conv(QuestionText);
+         HelpLines = CoreLib.ApplyTextOperationToList(HelpLines, conv);
       }
 
       // Prüft, ob ein String eine URL ist. Wird für die Partial-Views benötigt

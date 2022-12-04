@@ -31,7 +31,7 @@
       public void ApplyTextOperation(Func<string, string> conv)
       {
          QuestionText = conv(QuestionText);
-         HelpLines = CoreLib.ApplyTextOperationToList(HelpLines, conv);         
+         HelpLines = CoreLib.ApplyTextOperationToList(HelpLines, conv);
          foreach (var o in Options)
          {
             o.ApplyTextOperation(conv);
