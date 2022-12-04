@@ -458,11 +458,11 @@ namespace FlowProtocol.Pages.FlowTemplates
 
         private string ReplaceGlobalVars(string input)
         {
-            foreach (var v in GlobalVars)
+            foreach (var v in GlobalVars.OrderByDescending(x=>x.Key))
             {
                 input = input.Replace("$" + v.Key, v.Value);
             }
-            foreach (var v in SelectedOptions)
+            foreach (var v in SelectedOptions.OrderByDescending(x=>x.Key))
             {
                 input = input.Replace("$" + v.Key, v.Value);
             }

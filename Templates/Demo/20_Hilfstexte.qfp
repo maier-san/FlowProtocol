@@ -1,6 +1,7 @@
 /// Der Textbaustein "Hallo Welt" wird in einer Form deiner Wahl ausgegeben
 //  Anwendungsbeispiel für die Befehlsreferenz
 ~Set quelle=dem Anwenderhandbuch
+~Set quelle2=der Befehlsreferenz
 ?F1: Wie soll "Hallo Welt" ausgegeben werden?
 	>& Wählen sie "Ganz Normal", wenn Sie den Text in normaler Schreibweise ausgegeben haben wollen.
 	>& Sie können den Text auch in Großbuchstaben oder einen selbst gewählten Text ausgeben lassen.
@@ -12,5 +13,5 @@
 	#a3: Selbst wählen
 		~Input FO: Gewünschte Ausgabe
 			>& Geben Sie den Text ein, den Sie ausgegeben haben wollen.
-			>& Sie können auch Systemvariablen aus $quelle verwenden.
+			>& Sie können auch Systemvariablen aus $quelle2 verwenden.
 		>> $FO
