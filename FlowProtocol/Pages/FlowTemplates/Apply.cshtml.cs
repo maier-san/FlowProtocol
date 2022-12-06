@@ -161,8 +161,9 @@ namespace FlowProtocol.Pages.FlowTemplates
                     case "Set": RunCmd_Set(cmd); break;
                     case "UrlEncode": RunCmd_UrlEncode(cmd); break;
                     case "Calculate": RunCmd_Calculate(cmd); break;
-                    case "Round": RundCmd_Round(cmd); break;
-                    case "Replace": RundCmd_Replace(cmd); break;
+                    case "Round": RunCmd_Round(cmd); break;
+                    case "Replace": RunCmd_Replace(cmd); break;
+                    case "Random": RunCmd_Random(cmd); break;
                     case "Vote": sc = new VoteCommand(); break;
                     case "Cite": sc = new CiteCommand(); break;
                     default: AddCommandError("C02", $"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
@@ -334,7 +335,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             }
         }
 
-        private void RundCmd_Round(Command cmd)
+        private void RunCmd_Round(Command cmd)
         {
             string arguments = cmd.Arguments.Trim();
             Regex regRoundExpression = new Regex(@"^([A-Za-z0-9]*)\s*=\s*(-?[0-9.,]*)\s*\|\s*([0-9]*)");
@@ -376,7 +377,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             }
         }
 
-        private void RundCmd_Replace(Command cmd)
+        private void RunCmd_Replace(Command cmd)
         {
             string arguments = cmd.Arguments.Trim();
             Regex regReplace = new Regex(@"^([A-Za-z0-9]*)\s*=\s*(.*)\s*\|(.*)->(.*)");
@@ -394,6 +395,48 @@ namespace FlowProtocol.Pages.FlowTemplates
                 else
                 {
                     GlobalVars[zvar] = wert.Replace(sucheNach, ersetzeDurch);
+                }
+            }
+            else
+            {
+                AddCommandError("C13", $"Der Ausdruck {arguments} konnte nicht als Ersetzungsausdruck interpretiert werden.", cmd);
+            }
+        }
+
+        private void RunCmd_Random(Command cmd)
+        {
+            string arguments = cmd.Arguments.Trim();
+            Regex regReplace = new Regex(@"^([A-Za-z0-9]*)\s*=\s*(-?[0-9]*)\s*\.\.\s*(-?[0-9]*)");
+            if (regReplace.IsMatch(arguments))
+            {
+                var m = regReplace.Match(arguments);
+                string zvar = m.Groups[1].Value.Trim();
+                string wertebereichA = m.Groups[2].Value.Trim();
+                string wertebereichB = m.Groups[3].Value.Trim();
+                bool bOKA = Int32.TryParse(wertebereichA, out int wertA);
+                bool bOKB = Int32.TryParse(wertebereichB, out int wertB);
+
+
+                if (string.IsNullOrEmpty(zvar))
+                {
+                    AddCommandError("C07", $"Der Ausdruck {zvar} konnte nicht als gültige Zielvariable interpretiert werden.", cmd);
+                }
+                else if (!bOKA)
+                {
+                    AddCommandError("C11", $"Der Ausdruck {wertebereichA} konnte nicht als natürliche Zahl interpretiert werden.", cmd);
+                }
+                else if (!bOKB)
+                {
+                    AddCommandError("C11", $"Der Ausdruck {wertebereichB} konnte nicht als natürliche Zahl interpretiert werden.", cmd);
+                }
+                else if (wertA > wertB)
+                {
+                    AddCommandError("C14", $"Die angegebenen Werte bilden kein gültiges Intervall.", cmd);
+                }
+                else
+                {
+                    int rndval = new Random().Next(wertA, wertB + 1);
+                    GlobalVars[zvar] = rndval.ToString();
                 }
             }
             else
@@ -458,28 +501,32 @@ namespace FlowProtocol.Pages.FlowTemplates
 
         private string ReplaceGlobalVars(string input)
         {
-            foreach (var v in GlobalVars)
+            if (input.Contains('$'))
             {
-                input = input.Replace("$" + v.Key, v.Value);
-            }
-            foreach (var v in SelectedOptions)
-            {
-                input = input.Replace("$" + v.Key, v.Value);
-            }
-            // Systemvariablen
-            input = input.Replace("$MyResultURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path + this.HttpContext.Request.QueryString);
-            input = input.Replace("$MyBaseURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path);
-            input = input.Replace("$NewGuid", Guid.NewGuid().ToString());
-            input = input.Replace("$GetDateTime", $"{DateTime.Now:g}");
-            input = input.Replace("$GetDate", $"{DateTime.Now:d}");
-            input = input.Replace("$GetTime", $"{DateTime.Now:T}");
-            input = input.Replace("$CRLF", "\r\n");
-            input = input.Replace("$LF", "\n");
-            if (input.Contains("$Chr"))
-            {
-                for (int i = 1; i < 255; i++)
+                foreach (var v in GlobalVars.OrderByDescending(x => x.Key))
                 {
-                    input = input.Replace($"$Chr{i:000}", Convert.ToChar(i).ToString());
+                    input = input.Replace("$" + v.Key, v.Value);
+                }
+                foreach (var v in SelectedOptions.OrderByDescending(x => x.Key))
+                {
+                    input = input.Replace("$" + v.Key, v.Value);
+                }
+                // Systemvariablen
+                input = input.Replace("$MyResultURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path + this.HttpContext.Request.QueryString);
+                input = input.Replace("$MyBaseURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path);
+                input = input.Replace("$NewGuid", Guid.NewGuid().ToString());
+                input = input.Replace("$GetDateTime", $"{DateTime.Now:g}");
+                input = input.Replace("$GetDate", $"{DateTime.Now:d}");
+                input = input.Replace("$GetTime", $"{DateTime.Now:T}");
+                input = input.Replace("$GetYear", $"{DateTime.Now:yyyy}");
+                input = input.Replace("$CRLF", "\r\n");
+                input = input.Replace("$LF", "\n");
+                if (input.Contains("$Chr"))
+                {
+                    for (int i = 1; i < 255; i++)
+                    {
+                        input = input.Replace($"$Chr{i:000}", Convert.ToChar(i).ToString());
+                    }
                 }
             }
             return input;
