@@ -11,9 +11,8 @@ namespace FlowProtocol.Pages.FlowTemplates
     {
         public string TemplateBreadcrumb { get; set; }
         public List<string>? TemplateDescription { get; set; }
-        public List<Restriction> ShowRestrictions { get; set; }
+        private List<QueryItem> ShowQueryItems { get; set; }
         public Dictionary<string, List<ResultItem>> ShowResultGroups { get; set; }
-        public List<InputItem> ShowInputs { get; set; }
         private string TemplatePath { get; set; }
         private string TemplateDetailPath { get; set; }
         public List<ReadErrorItem> ReadErrors { get; set; }
@@ -24,11 +23,34 @@ namespace FlowProtocol.Pages.FlowTemplates
         public List<string> GivenKeys { get; set; }
         public string TemplateBaseURL { get; set; }
         private Dictionary<string, string> GlobalVars { get; set; }
+        private List<Tuple<string, Restriction?, InputItem?>> showQueryElements;
+
+        // Die Dreitupel bestehen aus Überschrift, Frage, Eingabeelement, 
+        // wobei jeweils nur eines der letzten beiden != null, aber dafür typisiert ist.
+        // Überschriften, die gleich sind, wie die vorherige, werden auf leer gesetzt.
+        public List<Tuple<string, Restriction?, InputItem?>> ShowQueryElements
+        {
+            get
+            {
+                if (!showQueryElements.Any())
+                {
+                    string currentShowSection = string.Empty;
+                    foreach (var q in ShowQueryItems)
+                    {
+                        string showSection = q.Section;
+                        if (showSection == currentShowSection) showSection = string.Empty;
+                        showQueryElements.Add(new Tuple<string, Restriction?, InputItem?>(showSection, q as Restriction, q as InputItem));
+                        currentShowSection = q.Section;
+                    }
+                }
+                return showQueryElements;
+            }
+        }
 
         public ApplyModel(IConfiguration configuration)
         {
             TemplatePath = configuration.GetValue<string>("TemplatePath");
-            ShowRestrictions = new List<Restriction>();
+            ShowQueryItems = new List<QueryItem>();
             ShowResultGroups = new Dictionary<string, List<ResultItem>>();
             SelectedOptions = new Dictionary<string, string>();
             GivenKeys = new List<string>();
@@ -36,8 +58,8 @@ namespace FlowProtocol.Pages.FlowTemplates
             TemplateDetailPath = string.Empty;
             TemplateBreadcrumb = "Unbekannte Vorlage";
             GlobalVars = new Dictionary<string, string>();
-            ShowInputs = new List<InputItem>();
             TemplateBaseURL = string.Empty;
+            showQueryElements = new List<Tuple<string, Restriction?, InputItem?>>();
         }
         public IActionResult OnGet(string template)
         {
@@ -78,7 +100,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                 {
                     // Frage noch unbeantwortet auf Seite übernehmen
                     SelectedOptions[r.Key] = string.Empty;
-                    ShowRestrictions.Add(r);
+                    ShowQueryItems.Add(r);
                 }
                 else
                 {
@@ -101,7 +123,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                     }
                 }
             }
-            if (!ShowRestrictions.Any() && !ShowInputs.Any() && t.FollowTemplate != null)
+            if (!ShowQueryItems.Any() && t.FollowTemplate != null)
             {
                 // Alle Fragen sind beantwortet und es gibt ein Folge-Template: ausführen
                 ExtractRestrictions(t.FollowTemplate);
@@ -118,7 +140,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                 {
                     // Eingabe noch nicht ausgefüllt: auf Seite übernehmen
                     SelectedOptions[q.Key] = string.Empty;
-                    ShowInputs.Add(q);
+                    ShowQueryItems.Add(q);
                 }
                 else
                 {
@@ -519,7 +541,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                 input = input.Replace("$GetDateTime", $"{DateTime.Now:g}");
                 input = input.Replace("$GetDate", $"{DateTime.Now:d}");
                 input = input.Replace("$GetTime", $"{DateTime.Now:T}");
-                input = input.Replace("$GetYear", $"{DateTime.Now:yyyy}");                
+                input = input.Replace("$GetYear", $"{DateTime.Now:yyyy}");
                 input = input.Replace("$CRLF", "\r\n");
                 input = input.Replace("$LF", "\n");
                 if (input.Contains("$Chr"))
