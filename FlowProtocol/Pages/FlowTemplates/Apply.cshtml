@@ -43,6 +43,10 @@
         @foreach (var q in Model.ShowInputs)
         {
             <div class="rendered-form">
+                @if (!string.IsNullOrEmpty(q.Section))
+                {
+                    <h3>@q.Section</h3>
+                }
                 <div class="formbuilder-text form-group">
                     <label for="@q.Key" class="formbuilder-text-label">
                         @q.QuestionText
@@ -58,6 +62,10 @@
         }
         @foreach (var r in Model.ShowRestrictions)
         {
+            @if (!string.IsNullOrEmpty(r.Section))
+            {
+                <h3>@r.Section</h3>
+            }
             <div class="formbuilder-radio-group form-group">
                 <label class="formbuilder-radio-group-label">
                     @r.QuestionText

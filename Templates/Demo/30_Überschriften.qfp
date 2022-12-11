@@ -1,0 +1,17 @@
+/// Der Textbaustein "Hallo Welt" wird in einer Form deiner Wahl ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+//+ Ausgabeform
+?F1: Wie soll "Hallo Welt" ausgegeben werden?	
+	#a1: Ganz normal
+		>> Hallo Welt
+	#a2: In Großbuchstaben
+		>> HALLO WELT
+	#a3: Selbst wählen
+		~Input FO: Gewünschte Ausgabe			
+		>> $FO
+//+ Ergänzung
+?F2: Soll noch eine Ergänzung dazu?
+	#j: Ja, "Ich mag dich!"
+		>> Ich mag dich!
+	#n: Nein
+	
