@@ -44,7 +44,7 @@ namespace FlowProtocol.Core
             using (StreamReader sr = new StreamReader(filepath))
             {
                 Regex regDescription = new Regex("^///(.*)");
-                Regex regSection = new Regex(@"^//\+(.*)");
+                Regex regSection = new Regex(@"^\+\+(.*)\+\+$");
                 Regex regComment = new Regex("^//.*");
                 Regex regRestriction = new Regex(@"^\?([A-Za-z0-9]*[']?):(.*)");
                 Regex regHelpText = new Regex("^>&(.*)");
