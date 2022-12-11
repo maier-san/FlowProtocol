@@ -27,7 +27,7 @@ namespace FlowProtocol.Pages.FlowTemplates
 
         // Die Dreitupel bestehen aus Überschrift, Frage, Eingabeelement, 
         // wobei jeweils nur eines der letzten beiden != null, aber dafür typisiert ist.
-        // Überschriften, die gleich sind, wie die vorherige, werden auf leer gesetzt.
+        // Überschriften, die gleich sind, wie die vorherige, werden auf leer
         public List<Tuple<string, Restriction?, InputItem?>> ShowQueryElements
         {
             get
@@ -80,78 +80,66 @@ namespace FlowProtocol.Pages.FlowTemplates
             }
             TemplateBaseURL = this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path;
             TemplateDescription = currentTemplate?.Description?.Split(Environment.NewLine).ToList();
-            if (currentTemplate != null) ExtractRestrictions(currentTemplate);
+            if (currentTemplate != null) ExtractQueryItems(currentTemplate);
             return Page();
         }
 
         /// <summary>
-        ///   Extrahiert die nächsten zu beantwortenden Fragen anhand der schon vorhandenen Antworten aus dem Template.
+        ///   Extrahiert die nächsten zu beantwortenden Fragen und Eingaben anhand der schon vorhandenen Antworten aus dem Template.
         /// </summary>
         /// <param name="t">Die aktuelle Template-Ebene</param>
-        private void ExtractRestrictions(Template t)
+        private void ExtractQueryItems(Template t)
         {
             RunCommand(t.Commands, ref t);
-            AddInputItems(t.InputItems);
             AddResultItems(t.ResultItems);
-            foreach (var r in t.Restrictions)
-            {
-                r.ApplyTextOperation(ReplaceGlobalVars);
-                if (!SelectedOptions.ContainsKey(r.Key))
-                {
-                    // Frage noch unbeantwortet auf Seite übernehmen
-                    SelectedOptions[r.Key] = string.Empty;
-                    ShowQueryItems.Add(r);
-                }
-                else
-                {
-                    GivenKeys.Add(r.Key);
-                    string selectedOption = SelectedOptions[r.Key];
-                    Option? o = r.Options.Find(x => x.Key == SelectedOptions[r.Key]);
-                    if (o == null)
-                    {
-                        // Antwort nicht in Liste: Suche nach x-Option
-                        o = r.Options.Find(x => x.Key == "x");
-                    }
-                    if (o != null)
-                    {
-                        // Antwort gefunden
-                        ExtractRestrictions(o as Template);
-                    }
-                    else
-                    {
-                        // Antwort unbekannt, keine x-Option gefunden: ignorieren                  
-                    }
-                }
-            }
-            if (!ShowQueryItems.Any() && t.FollowTemplate != null)
-            {
-                // Alle Fragen sind beantwortet und es gibt ein Folge-Template: ausführen
-                ExtractRestrictions(t.FollowTemplate);
-            }
-        }
-
-        // Fügt die noch offenen erreichbaren Eingaben hinzu
-        private void AddInputItems(List<InputItem> inputlist)
-        {
-            foreach (var q in inputlist)
+            foreach (var q in t.QueryItems)
             {
                 q.ApplyTextOperation(ReplaceGlobalVars);
                 if (!SelectedOptions.ContainsKey(q.Key))
                 {
-                    // Eingabe noch nicht ausgefüllt: auf Seite übernehmen
+                    // Frage noch unbeantwortet auf Seite übernehmen
                     SelectedOptions[q.Key] = string.Empty;
                     ShowQueryItems.Add(q);
                 }
                 else
                 {
                     GivenKeys.Add(q.Key);
-                    if (q.Key.Contains("_"))
+                    Restriction? res = q as Restriction;
+                    if (res != null)
                     {
-                        // Autonummerierte Input-Keys auch noch als Variable verfügbar machen:
-                        string valvar = q.Key.Substring(0, q.Key.IndexOf('_')) + "value";
-                        GlobalVars[valvar] = SelectedOptions[q.Key];
+                        string selectedOption = SelectedOptions[res.Key];
+                        Option? o = res.Options.Find(x => x.Key == SelectedOptions[res.Key]);
+                        if (o == null)
+                        {
+                            // Antwort nicht in Liste: Suche nach x-Option
+                            o = res.Options.Find(x => x.Key == "x");
+                        }
+                        if (o != null)
+                        {
+                            // Antwort gefunden
+                            ExtractQueryItems(o as Template);
+                        }
+                        else
+                        {
+                            // Antwort unbekannt, keine x-Option gefunden: ignorieren                  
+                        }
+                    }
+                    InputItem? inp = q as InputItem;
+                    if (inp != null)
+                    {
+                        if (q.Key.Contains("_"))
+                        {
+                            // Autonummerierte Input-Keys auch noch als Variable verfügbar machen:
+                            string valvar = q.Key.Substring(0, q.Key.IndexOf('_')) + "value";
+                            GlobalVars[valvar] = SelectedOptions[q.Key];
+                        }
                     }
                 }
+            }
+            if (!ShowQueryItems.Any() && t.FollowTemplate != null)
+            {
+                // Alle Fragen sind beantwortet und es gibt ein Folge-Template: ausführen
+                ExtractQueryItems(t.FollowTemplate);
             }
         }
 
@@ -242,7 +230,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                     AddCommandError("C03", $"Die Funktionsdatei {templateFileName} konnte nicht geladen werden.", cmd);
                     return;
                 }
-                ExtractRestrictions(subTemplate);
+                ExtractQueryItems(subTemplate);
             }
         }
 

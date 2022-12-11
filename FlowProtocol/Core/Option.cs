@@ -12,7 +12,6 @@
          Key = string.Empty;
          OptionText = string.Empty;
          RestrictionKey = restrictionKey;
-         Restrictions = new List<Restriction>();
          ResultItems = new List<ResultItem>();
       }
 

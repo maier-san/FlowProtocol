@@ -3,11 +3,13 @@ namespace FlowProtocol.Core
     // Schnittstelle für Elemente mit Hilfetexte
     public class QueryItem
     {
+        public string Key { get; set; }
         public string Section { get; set; }
         public List<string> HelpLines { get; set; }
 
         public QueryItem()
         {
+            Key = string.Empty;
             HelpLines = new List<string>();
             Section = string.Empty;
         }
@@ -25,7 +27,7 @@ namespace FlowProtocol.Core
         }
 
         // Wendet eine Text-Operation auf die Text-Bestandteile der Frage an.
-        protected void ApplyTextOperationIntern(Func<string, string> conv)
+        public virtual void ApplyTextOperation(Func<string, string> conv)
         {
             HelpLines = CoreLib.ApplyTextOperationToList(HelpLines, conv);
         }

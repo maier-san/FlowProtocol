@@ -110,7 +110,7 @@ namespace FlowProtocol.Core
                             {
                                 var m = regRestriction.Match(codeline);
                                 Restriction r = new Restriction() { Key = AddKeyNumber(m.Groups[1].Value.Trim()), QuestionText = m.Groups[2].Value.Trim(), Section = currentSection };
-                                parent.Restrictions.Add(r);
+                                parent.QueryItems.Add(r);
                                 ResttrictionStack.Push(new Tuple<int, Restriction>(indent, r));
                                 currentQueryItem = r;
                             }
@@ -207,7 +207,7 @@ namespace FlowProtocol.Core
                             {
                                 var m = regInputItem.Match(codeline);
                                 InputItem q = new InputItem() { Key = AddKeyNumber(m.Groups[1].Value.Trim()), QuestionText = m.Groups[2].Value.Trim(), Section = currentSection };
-                                parent.InputItems.Add(q);
+                                parent.QueryItems.Add(q);
                                 currentQueryItem = q;
                             }
                             else AddReadError("R11", "Input-Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
