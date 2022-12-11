@@ -515,10 +515,11 @@ namespace FlowProtocol.Pages.FlowTemplates
                 input = input.Replace("$MyResultURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path + this.HttpContext.Request.QueryString);
                 input = input.Replace("$MyBaseURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path);
                 input = input.Replace("$NewGuid", Guid.NewGuid().ToString());
+                input = input.Replace("$GetDateStamp", $"{DateTime.Now:yyyy-MM-dd}");
                 input = input.Replace("$GetDateTime", $"{DateTime.Now:g}");
                 input = input.Replace("$GetDate", $"{DateTime.Now:d}");
                 input = input.Replace("$GetTime", $"{DateTime.Now:T}");
-                input = input.Replace("$GetYear", $"{DateTime.Now:yyyy}");
+                input = input.Replace("$GetYear", $"{DateTime.Now:yyyy}");                
                 input = input.Replace("$CRLF", "\r\n");
                 input = input.Replace("$LF", "\n");
                 if (input.Contains("$Chr"))

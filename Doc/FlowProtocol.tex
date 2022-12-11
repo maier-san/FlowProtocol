@@ -1011,8 +1011,9 @@ Im Beispiel wir ein zufälliger Wert $x\in\{1,2,3\}$ der Variable \verb|auswahl| 
 Systemvariablen sind spezielle Variablen, die schon durch das System mit Werten belegt werden. Diese lassen sich wie andere Variablen abrufen und in Fragen, Ausgaben oder Variablenzuweisungen verwenden. Manche der Variablen sind vielmehr als Funktionen zu betrachten und dementsprechend auch mit \texttt{Get\dots} benannt. Im Abschnitt~\ref{eigeneURL} haben wir schon zwei Beispiele für Systemvariablen kennengelernt, mit denen die eigene URL abgerufen werden kann.
 \begin{description}
 \SysVar{NewGuid}{Gibt eine zufällige Guid zurück, z.B.\\\texttt{d817e626-d0b1-40c7-979a-a08b5d6df8a8}.}
-\SysVar{GetDateTime}{Gibt den aktuellen Zeitpunkt mit Datum und Uhrzeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{29.09.2022 17:26}.}
 \SysVar{GetDate}{Gibt das aktuelle Datum in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{29.09.2022}.}
+\SysVar{GetDateStamp}{Gibt das aktuelle Datum als alphanumerisch sortierbaren Datumstempel zurück, z.B.\ \texttt{2022-09-22}.}
+\SysVar{GetDateTime}{Gibt den aktuellen Zeitpunkt mit Datum und Uhrzeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{29.09.2022 17:26}.}
 \SysVar{GetTime}{Gibt die aktuelle Zeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{17:26}.}
 \SysVar{GetYear}{Gibt das aktuelle Jahr im Format yyyy zurück, z.B.\ \texttt{2022}.}
 \SysVar{MyResultURL}{Gibt die URL der aktuellen Vorlageausführung inklusive Schlüs\-sel\-pa\-ra\-me\-ter zu\-rück, siehe auch Abschnitt~\ref{eigeneURL}.}
