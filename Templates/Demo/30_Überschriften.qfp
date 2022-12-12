@@ -1,0 +1,16 @@
+/// Der Textbaustein "Hallo Welt" wird in einer Form deiner Wahl ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+++ Standardoptionen ++
+?F1: Wie soll "Hallo Welt" ausgegeben werden?	
+	#a1: Ganz normal
+		~Set gruss = Hallo Welt
+	#a2: In Großbuchstaben
+		~Set gruss = HALLO WELT
+~Input szeichen: Welches Satzzeichen soll ans Ende?
+++ Ergänzung ++
+?F2: Soll noch eine Ergänzung dazu?
+	#j: Ja, ", ich mag dich"
+		~Set gruss = $gruss, ich mag dich
+	#n: Nein
+~Execute	
+>> $gruss$szeichen

@@ -5,7 +5,7 @@
     ViewData["Title"] = "FlowProtocol Vorlage";
 }
 
-@if (Model.ShowRestrictions.Any() || Model.ShowInputs.Any())
+@if (Model.ShowQueryElements.Any())
 {
     <form method="post">
         <h2>Vorlage @Model.TemplateBreadcrumb</h2>
@@ -40,42 +40,50 @@
         {
             <input type="hidden" asp-for="SelectedOptions[k]" />
         }
-        @foreach (var q in Model.ShowInputs)
+        @foreach (var q in Model.ShowQueryElements)
         {
-            <div class="rendered-form">
-                <div class="formbuilder-text form-group">
-                    <label for="@q.Key" class="formbuilder-text-label">
-                        @q.QuestionText
-                        <br>
+            @if (!string.IsNullOrEmpty(q.Item1))
+            {
+                <h3>@q.Item1</h3>
+            }
+            if (q.Item2 != null)
+            { // Restriction
+                <div class="formbuilder-radio-group form-group">
+                    <label class="formbuilder-radio-group-label">
+                        @q.Item2.QuestionText
                     </label>
-                    @if (q.HelpLines.Any())
+                    @if (q.Item2.HelpLines.Any())
                     {
-                        @await Html.PartialAsync("_HelpTextLines", q)
+                        @await Html.PartialAsync("_HelpTextLines", q.Item2)
                     }
-                    <input type="text" class="form-control" access="false" id="@q.Key" asp-for="SelectedOptions[q.Key]" maxlength="50">
-                </div>
-            </div><br>
-        }
-        @foreach (var r in Model.ShowRestrictions)
-        {
-            <div class="formbuilder-radio-group form-group">
-                <label class="formbuilder-radio-group-label">
-                    @r.QuestionText
-                </label>
-                @if (r.HelpLines.Any())
-                {
-                    @await Html.PartialAsync("_HelpTextLines", r)
-                }
-                <div class="radio-group">
-                    @foreach (var idx in r.Options)
-                    {
-                        <div class="formbuilder-radio">
-                            <input value="@idx.Key" type="radio" asp-for="SelectedOptions[r.Key]" id="@idx.UniqueKey">
-                            <label for="@idx.UniqueKey">@idx.OptionText</label>
-                        </div>
-                    }
-                </div>
-            </div><br>
+                    <div class="radio-group">
+                        @foreach (var idx in q.Item2.Options)
+                        {
+                            <div class="formbuilder-radio">
+                                <input value="@idx.Key" type="radio" asp-for="SelectedOptions[q.Item2.Key]" id="@idx.UniqueKey">
+                                <label for="@idx.UniqueKey">@idx.OptionText</label>
+                            </div>
+                        }
+                    </div>
+                </div><br>
+            }
+            else if (q.Item3 != null)
+            { // InputItem
+                <div class="rendered-form">
+                    <div class="formbuilder-text form-group">
+                        <label for="@q.Item3.Key" class="formbuilder-text-label">
+                            @q.Item3.QuestionText
+                            <br>
+                        </label>
+                        @if (q.Item3.HelpLines.Any())
+                        {
+                            @await Html.PartialAsync("_HelpTextLines", q.Item3)
+                        }
+                        <input type="text" class="form-control" access="false" id="@q.Item3.Key" asp-for="SelectedOptions[q.Item3.Key]"
+                maxlength="50">
+                    </div>
+                </div><br>
+            }
         }
         <button type="submit" class="btn btn-primary">Weiter</button>
     </form>

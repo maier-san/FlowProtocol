@@ -6,3 +6,4 @@
 	> Datum mit Uhrzeit: $GetDateTime Uhr
 	> Uhrzeit: $GetTime Uhr
 	> So leicht wie $Chr065, $Chr066, $Chr067.
+	> Oder technisch: $GetDateStamp_XY

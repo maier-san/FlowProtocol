@@ -16,6 +16,7 @@ namespace FlowProtocol.Core
         public string KeyPath { get; set; }
         private int keyindex = 0;
         private int includeindex = 0;
+        private string currentSection = string.Empty;
 
         public TemplateReader()
         {
@@ -43,6 +44,7 @@ namespace FlowProtocol.Core
             using (StreamReader sr = new StreamReader(filepath))
             {
                 Regex regDescription = new Regex("^///(.*)");
+                Regex regSection = new Regex(@"^\+\+(.*)\+\+$");
                 Regex regComment = new Regex("^//.*");
                 Regex regRestriction = new Regex(@"^\?([A-Za-z0-9]*[']?):(.*)");
                 Regex regHelpText = new Regex("^>&(.*)");
@@ -55,7 +57,7 @@ namespace FlowProtocol.Core
                 Regex regInputItem = new Regex(@"^~Input ([A-Za-z0-9]*[']?):(.*)");
                 Regex regCommand = new Regex(@"^~([A-Za-z0-9]*)\s*(.*)");
                 ResultItem? currentResultItem = null;
-                IElementWithHelpLines? currentElementWithHelpLines = null;
+                QueryItem? currentQueryItem = null;
                 int linenumber = 0;
                 while (sr.Peek() != -1)
                 {
@@ -91,6 +93,12 @@ namespace FlowProtocol.Core
                             }
                             else AddReadError("R02", "Beschreibungskommentar auf untergeordneter Ebene wird ignoriert.", filepath, linenumber, codeline);
                         }
+                        else if (regSection.IsMatch(codeline))
+                        {
+                            var m = regSection.Match(codeline);
+                            currentSection = m.Groups[1].Value.Trim();
+
+                        }
                         else if (regComment.IsMatch(codeline))
                         {
                             // Nur Kommentar: ignorieren
@@ -101,10 +109,10 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regRestriction.Match(codeline);
-                                Restriction r = new Restriction() { Key = AddKeyNumber(m.Groups[1].Value.Trim()), QuestionText = m.Groups[2].Value.Trim() };
-                                parent.Restrictions.Add(r);
+                                Restriction r = new Restriction() { Key = AddKeyNumber(m.Groups[1].Value.Trim()), QuestionText = m.Groups[2].Value.Trim(), Section = currentSection };
+                                parent.QueryItems.Add(r);
                                 ResttrictionStack.Push(new Tuple<int, Restriction>(indent, r));
-                                currentElementWithHelpLines = r;
+                                currentQueryItem = r;
                             }
                             else AddReadError("R03", "Frage kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
                             currentResultItem = null;
@@ -121,14 +129,14 @@ namespace FlowProtocol.Core
                             }
                             else AddReadError("R04", "Antwort kann keinem Fragekontext zugeordnet werden.", filepath, linenumber, codeline);
                             currentResultItem = null;
-                            currentElementWithHelpLines = null;
+                            currentQueryItem = null;
                         }
                         else if (regHelpText.IsMatch(codeline))
                         {
-                            if (currentElementWithHelpLines != null)
+                            if (currentQueryItem != null)
                             {
                                 var m = regHelpText.Match(codeline);
-                                currentElementWithHelpLines.AddHelpLine(m.Groups[1].Value.Trim());
+                                currentQueryItem.AddHelpLine(m.Groups[1].Value.Trim());
                             }
                             else AddReadError("R13", "Hilfetext kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
                             currentResultItem = null;
@@ -144,7 +152,7 @@ namespace FlowProtocol.Core
                                 currentResultItem = t;
                             }
                             else AddReadError("R05", "Gruppierter Ausgabeeintrag kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
-                            currentElementWithHelpLines = null;
+                            currentQueryItem = null;
                         }
                         else if (regResultItem.IsMatch(codeline))
                         {
@@ -157,7 +165,7 @@ namespace FlowProtocol.Core
                                 currentResultItem = t;
                             }
                             else AddReadError("R06", "Ausgabeeintrag kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
-                            currentElementWithHelpLines = null;
+                            currentQueryItem = null;
                         }
                         else if (regCodeLine.IsMatch(codeline))
                         {
@@ -167,7 +175,7 @@ namespace FlowProtocol.Core
                                 currentResultItem.AddCodeLine(m.Groups[1].Value.TrimEnd());
                             }
                             else AddReadError("R12", "Codezeile kann keinem Ausgabeeintrag zugeordnet werden.", filepath, linenumber, codeline);
-                            currentElementWithHelpLines = null;
+                            currentQueryItem = null;
                         }
                         else if (regSubItem.IsMatch(codeline))
                         {
@@ -177,7 +185,7 @@ namespace FlowProtocol.Core
                                 currentResultItem.SubItems.Add(m.Groups[1].Value.Trim());
                             }
                             else AddReadError("R07", "Unterpunkt kann keinem Ausgabeeintrag zugeordnet werden.", filepath, linenumber, codeline);
-                            currentElementWithHelpLines = null;
+                            currentQueryItem = null;
                         }
                         else if (regExecute.IsMatch(codeline))
                         {
@@ -190,7 +198,7 @@ namespace FlowProtocol.Core
                             }
                             else AddReadError("R08", "Execute-Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
                             currentResultItem = null;
-                            currentElementWithHelpLines = null;
+                            currentQueryItem = null;
                         }
                         else if (regInputItem.IsMatch(codeline))
                         {
@@ -198,9 +206,9 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regInputItem.Match(codeline);
-                                InputItem q = new InputItem() { Key = AddKeyNumber(m.Groups[1].Value.Trim()), QuestionText = m.Groups[2].Value.Trim() };
-                                parent.InputItems.Add(q);
-                                currentElementWithHelpLines = q;
+                                InputItem q = new InputItem() { Key = AddKeyNumber(m.Groups[1].Value.Trim()), QuestionText = m.Groups[2].Value.Trim(), Section = currentSection };
+                                parent.QueryItems.Add(q);
+                                currentQueryItem = q;
                             }
                             else AddReadError("R11", "Input-Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
                             currentResultItem = null;
@@ -230,7 +238,7 @@ namespace FlowProtocol.Core
                             }
                             else AddReadError("R09", "Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
                             currentResultItem = null;
-                            currentElementWithHelpLines = null;
+                            currentQueryItem = null;
                         }
                         else AddReadError("R10", "Zeile nicht interpretierbar", filepath, linenumber, codeline);
                     }

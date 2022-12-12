@@ -29,7 +29,8 @@
 \newcommand{\webbox}[1]{\nopagebreak\par\setlength{\fboxsep}{3mm}\fbox{\begin{minipage}{12cm}\textsf{#1}\end{minipage}\par}\par\vspace{3mm}}
 \newcommand{\webhead}[2]{{\large  #1}\\[2mm]#2\\[1mm]\rule{\linewidth}{1pt}\\[3mm]}
 \newcommand{\webheadR}[1]{{\large  #1}\\}
-\newcommand{\fpinputbox}{\fbox{\rule[-1mm]{0mm}{4mm}\hspace*{6cm}}}
+\newcommand{\fpinputbox}{\fbox{\rule[-1mm]{0mm}{4mm}\hspace*{6cm}}\\[2mm]}
+\newcommand{\qsection}[1]{\vspace*{1mm}\textbf{\large #1}\\}
 \newenvironment{circlist}%
 {\begin{list}{$\bigcirc$}{%
 \setlength{\labelsep}{5pt}
@@ -1006,13 +1007,61 @@ Der Wertebereich besteht aus den ganzzahligen Zahlen im Intervall [\verb|Wert1|,
 \end{verbatim}
 Im Beispiel wir ein zufälliger Wert $x\in\{1,2,3\}$ der Variable \verb|auswahl| zugewiesen und dann, ergänzt durch das Zeichen \glqq a\grqq\ der Zielvariablen \verb|F1|. Die Frage wird damit nicht mehr ausgegeben.
 
+\subsection{Überschriften}
+Bei umfangreicheren Vorlagen ist es sinnvoll, die Fragen und Eingaben mit Hilfe von Überschriften zu gliedern.
+\begin{verbatim}
+++ <Überschrift> ++
+\end{verbatim}
+Überschriften können an beliebigen Stellen im Vorlagencode angegeben werden, und werden damit automatisch allen im Vorlagecode nachvolgenden Fragen und Eingaben zugeordnet, bis eine neue Überschrift festgelegt wird. Die Einrückung ist hierbei nicht von Belang.
+
+Bei an der Programmoberfläche wird die Überschrift oberhalb der Frage oder Eingabe ausgegeben, sofern sie sich von der zuletzt ausgegebenen Überschrift unterscheidet. Aufeinanderfolgende Fragen und Eingaben mit der gleichen Überschrift werden also unter derselben Überschrift zusammengefasst.
+\Beispiel
+\begin{verbatim}
+/// Ein weiterer Gruß an die Welt!
+//  Anwendungsbeispiel für die Befehlsreferenz
+++ Standardoptionen ++
+?F1: Wie soll "Hallo Welt" ausgegeben werden?    
+    #a1: Ganz normal
+        ~Set gruss = Hallo Welt
+    #a2: In Großbuchstaben
+        ~Set gruss = HALLO WELT
+~Input szeichen: Welches Satzzeichen soll ans Ende?
+++ Ergänzung ++
+?F2: Soll noch eine Ergänzung dazu?
+    #j: Ja, ", ich mag dich"
+        ~Set gruss = $gruss, ich mag dich
+    #n: Nein
+~Execute    
+>> $gruss$szeichen
+\end{verbatim}
+Dies führt zu folgender Darstellung
+\webbox{
+\webhead{Vorlage Demo, 30 Überschriften}{Ein weiterer Gruß an die Welt!}
+\qsection{Standardoptionen}
+Wie soll \dq Hallo Welt\dq\ ausgegeben werden? 
+\begin{circlist}
+\item Ganz normal
+\item In Großbuchstaben
+\end{circlist}
+ Welches Satzzeichen soll ans Ende?\\
+\fpinputbox
+\qsection{Ergänzung}
+Soll noch eine Ergänzung dazu? 
+\begin{circlist}
+\item Ja, \dq, ich mag dich\dq
+\item Nein
+\end{circlist}
+}
+Zu beachten ist, dass die Abfolge der Fragen und Eingaben aufgrund der Verschachtelung und der Möglichkeit, nur eine Teilmenge auf einer Seite zu beantworten, von der im Vorlagecode abweichen kann. Die Zuordnung der Überschriften erfolgt unabhängig davon und orientiert sich am Vorlagecode.
+
 \newpage
 \section{Systemvariablen}
 Systemvariablen sind spezielle Variablen, die schon durch das System mit Werten belegt werden. Diese lassen sich wie andere Variablen abrufen und in Fragen, Ausgaben oder Variablenzuweisungen verwenden. Manche der Variablen sind vielmehr als Funktionen zu betrachten und dementsprechend auch mit \texttt{Get\dots} benannt. Im Abschnitt~\ref{eigeneURL} haben wir schon zwei Beispiele für Systemvariablen kennengelernt, mit denen die eigene URL abgerufen werden kann.
 \begin{description}
 \SysVar{NewGuid}{Gibt eine zufällige Guid zurück, z.B.\\\texttt{d817e626-d0b1-40c7-979a-a08b5d6df8a8}.}
-\SysVar{GetDateTime}{Gibt den aktuellen Zeitpunkt mit Datum und Uhrzeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{29.09.2022 17:26}.}
 \SysVar{GetDate}{Gibt das aktuelle Datum in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{29.09.2022}.}
+\SysVar{GetDateStamp}{Gibt das aktuelle Datum als alphanumerisch sortierbaren Datumstempel zurück, z.B.\ \texttt{2022-09-22}.}
+\SysVar{GetDateTime}{Gibt den aktuellen Zeitpunkt mit Datum und Uhrzeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{29.09.2022 17:26}.}
 \SysVar{GetTime}{Gibt die aktuelle Zeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{17:26}.}
 \SysVar{GetYear}{Gibt das aktuelle Jahr im Format yyyy zurück, z.B.\ \texttt{2022}.}
 \SysVar{MyResultURL}{Gibt die URL der aktuellen Vorlageausführung inklusive Schlüs\-sel\-pa\-ra\-me\-ter zu\-rück, siehe auch Abschnitt~\ref{eigeneURL}.}
