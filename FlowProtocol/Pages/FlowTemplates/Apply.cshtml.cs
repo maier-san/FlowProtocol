@@ -173,6 +173,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                     case "Calculate": RunCmd_Calculate(cmd); break;
                     case "Round": RunCmd_Round(cmd); break;
                     case "Replace": RunCmd_Replace(cmd); break;
+                    case "CamelCase": RunCmd_CamelCase(cmd); break;
                     case "Random": RunCmd_Random(cmd); break;
                     case "Vote": sc = new VoteCommand(); break;
                     case "Cite": sc = new CiteCommand(); break;
@@ -410,6 +411,40 @@ namespace FlowProtocol.Pages.FlowTemplates
             else
             {
                 AddCommandError("C13", $"Der Ausdruck {arguments} konnte nicht als Ersetzungsausdruck interpretiert werden.", cmd);
+            }
+        }
+
+        private void RunCmd_CamelCase(Command cmd)
+        {
+            string arguments = cmd.Arguments.Trim();
+            Regex regReplace = new Regex(@"^([A-Za-z0-9]*)\s*=\s*(.*)");
+            if (regReplace.IsMatch(arguments))
+            {
+                var m = regReplace.Match(arguments);
+                string zvar = m.Groups[1].Value.Trim();
+                string ccwert = m.Groups[2].Value.Trim();
+                ccwert = ccwert.Replace("ä", "ae", false, null)
+                               .Replace("ö", "oe", false, null)
+                               .Replace("ü", "ue", false, null)
+                               .Replace("Ä", "Ae", false, null)
+                               .Replace("Ö", "Oe", false, null)
+                               .Replace("Ü", "Ue", false, null)
+                               .Replace("ß", "ss", false, null);
+                ccwert = Regex.Replace(ccwert, @"[^\w]", "_");
+                ccwert = Regex.Replace(ccwert, @"__*", "_");
+                while (ccwert.Contains('_'))
+                {
+                    int pos = ccwert.IndexOf('_');
+                    if (pos + 2 < ccwert.Length)
+                    {
+                        ccwert = ccwert.Substring(0, pos) + ccwert.Substring(pos + 1, 1).ToUpper() + ccwert.Substring(pos + 2);
+                    }
+                    else
+                    {
+                        ccwert = ccwert.Replace("_", "");
+                    }
+                }
+                GlobalVars[zvar] = ccwert;
             }
         }
 

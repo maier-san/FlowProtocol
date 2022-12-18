@@ -1,0 +1,6 @@
+/// Ein Gruß wird in CamelCase-Schreibweise umgewandelt
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Set gruss = Hallo, du süße Honigwelt!
+~CamelCase ccgruss = $gruss
+>> Vorgabe = $gruss
+>> CamelCase = $ccgruss
