@@ -1054,6 +1054,31 @@ Soll noch eine Ergänzung dazu?
 }
 Zu beachten ist, dass die Abfolge der Fragen und Eingaben aufgrund der Verschachtelung und der Möglichkeit, nur eine Teilmenge auf einer Seite zu beantworten, von der im Vorlagecode abweichen kann. Die Zuordnung der Überschriften erfolgt unabhängig davon und orientiert sich am Vorlagecode.
 
+\subsection{CamelCase-Umwandlung}
+Möchte man eine Vorlage erstellen, die für eine zu implementierende Programmfunktion die einzubauenden Codepassagen ausgibt, steht man vor der Herausforderung, dass dort Steuerelemente, Klassen oder Methoden in Anlehnung an die Funktion benannt werden sollten, und sich diese Bennungen an Syntaxregeln und Codekonventionen orientieren müssen. Als Programmierer wählt man hier üblicherweise die CamelCase-Schreibweise, wandelt zuvor die Umlaute um und entfernt die Nichtwortzeichen. Diese Arbeit könnte man natürlich auch vom Anwender der Vorlage verlangen und eine entsprechende Eingabe abfragen, da man aber höchstwahrscheinlich schon die sprechende Funktionsbenennung als Eingabewert abgefragt hat, kann man diese auch mit einer eingebauten Funktion in die CamelCase-Schreibweise umwandeln.
+\begin{verbatim}
+~CamelCase <Variable> = <Wert>
+\end{verbatim}
+Der Wert kann hierbei eine beliebige Zeichenkette sein.
+\Beispiel
+\begin{verbatim}
+/// Ein Gruß wird in CamelCase-Schreibweise umgewandelt
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Set gruss = Hallo, du süße Honigwelt!
+~CamelCase ccgruss = $gruss
+>> Vorgabe = $gruss
+>> CamelCase = $ccgruss
+\end{verbatim}
+Dies führt zu folgender Ausgabe:
+\webbox{
+\webheadR{Ergebnisliste (Demo, 31 CamelCase)}
+\begin{numlist}
+\item Vorgabe = Hallo, du süße Honigwelt! 
+\item CamelCase = HalloDuSuesseHonigwelt 
+\end{numlist}
+}
+Zu beachten ist, dass innerhalb der Wortzeichen aktuell nur die Umlaute ä, ö, ü, Ä, Ö, Ü und das ß ersetzt werden. Die Ersetzung der diakritischen Zeichen aus dem nichtdeutschen Sprachraum folgt voraussichtlich in einer zukünftigen Version. Bis dahin kann eine solche Ersetzung mit dem \verb|~Replace|-Befehl (siehe Abschnitt~\ref{Ersetzungen}) innerhalb der Vorlage selbst umgesetzt werden.
+
 \newpage
 \section{Systemvariablen}
 Systemvariablen sind spezielle Variablen, die schon durch das System mit Werten belegt werden. Diese lassen sich wie andere Variablen abrufen und in Fragen, Ausgaben oder Variablenzuweisungen verwenden. Manche der Variablen sind vielmehr als Funktionen zu betrachten und dementsprechend auch mit \texttt{Get\dots} benannt. Im Abschnitt~\ref{eigeneURL} haben wir schon zwei Beispiele für Systemvariablen kennengelernt, mit denen die eigene URL abgerufen werden kann.

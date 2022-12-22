@@ -69,10 +69,10 @@ namespace FlowProtocol.SpecialCommands
                             votingsum[i2] += 1;
                         }
                     }
-                    t.Restrictions.Add(ncres);
+                    t.QueryItems.Add(ncres);
                 }
             }
-            template.Restrictions.Remove(res);
+            template.QueryItems.Remove(res);
             t.FollowTemplate = orgfollow;
             return votingsum;
         }
