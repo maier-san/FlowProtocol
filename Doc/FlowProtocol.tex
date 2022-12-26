@@ -1007,7 +1007,7 @@ Der Wertebereich besteht aus den ganzzahligen Zahlen im Intervall [\verb|Wert1|,
 \end{verbatim}
 Im Beispiel wir ein zufälliger Wert $x\in\{1,2,3\}$ der Variable \verb|auswahl| zugewiesen und dann, ergänzt durch das Zeichen \glqq a\grqq\ der Zielvariablen \verb|F1|. Die Frage wird damit nicht mehr ausgegeben.
 
-\subsection{Überschriften}
+\subsection{Überschriften}\label{Ueberschriften}
 Bei umfangreicheren Vorlagen ist es sinnvoll, die Fragen und Eingaben mit Hilfe von Überschriften zu gliedern.
 \begin{verbatim}
 ++ <Überschrift> ++
@@ -1163,6 +1163,7 @@ Ausführungsfehler treten im Zusammenhang mit der Ausführung von Befehlen auf und
 \FehlerBeschreibungItem{C12}{Der Ausdruck $\dots$ konnte nicht als Rundungsausdruck interpretiert werden.} Tritt auf, wenn ein im Zusammenhang mit einen \texttt{Round}-Befehl angegebener Audruck nicht wie in Abschnitt~\ref{Berechnungen} beschrieben interpretiert werden kann.
 \FehlerBeschreibungItem{C13}{Der Ausdruck $\dots$ konnte nicht als Ersetzungsausdruck interpretiert werden.} Tritt auf, wenn ein im Zusammenhang mit einen \texttt{Replace}-Befehl angegebener Audruck nicht wie in Abschnitt~\ref{Ersetzungen} beschrieben interpretiert werden kann.
 \FehlerBeschreibungItem{C14}{Die angegebenen Werte bilden kein gültiges Intervall.} Tritt auf, wenn für die beiden für den \texttt{Random}-Befehl angegebenen Intervallgrenzen kein gültiges Intervall bilden, also der erste Wert größer ist, als der zweite.
+\FehlerBeschreibungItem{C15}{Die Listendatei {listfilepath} konnte nicht gefunden werden.} Tritt auf, wenn beim Fragelisten-Befehl \verb|~ForEach| (siehe Abschnitt~\ref{Fragelisten}) die angegebene Fragedatei nicht gefunden werden kann. 
 \end{description}
 \newpage
 \section{Spezialbefehle}
@@ -1274,4 +1275,69 @@ Antwortprotokoll
 \end{itemize}
 \end{numlist}
 }
+
+\subsection{Fragelisten}\label{Fragelisten}
+In manchen Fällen besteht eine Vorlage aus einer größeren Menge von Fragen, die sich nur im Text, nicht jedoch in den Antwortmöglichkeiten unterscheiden, und auf die man folglich jeweils dasselbe Frageschema anwenden möchte. Der Fragelisten-Befehl ermöglich eine solche Vorgehensweise und verwendet dabei ähnlich wie die Funktionen eine eigene Datei.
+\Syntax
+\begin{verbatim}
+~ForEach Key=<F-Schlüssel>; List=<Listendatei>; IndexVar=<Var>
+            [;Take=<A>]  [;GroupBy=<B>]
+\end{verbatim}
+Mit \texttt{F-Schlüssel} wird der Schlüssel der Frage angegeben, die für jedes der Elemente in der Liste verwendet werden soll. Mit \texttt{Listendatei} wird auf die Datei verwiesen, die die Aufzählung der Elemente enthält. Diese muss sich auf derselben Ebene befinden und als Dateiendung \texttt{.qfl} für \glqq Quick Flow List\grqq\ haben. \texttt{IndexVar} gibt die Variable an, in die die einzelnen Zeilen der Datei eingelesen werden. Diese kann in der gewohnten Notation innerhalb der Frage, den Antworten und den Ausgaben verwendet werden. Durch die optionalen Parameter kann man die Liste auf eine Auswahl von zufällig gewählten \texttt{A} Stück beschränken und diese bei der Abfrage in Gruppen von je \texttt{B} Stück zusammenfassen lassen.
+\Beispiel
+\begin{verbatim}
+/// Eine Liste von Welten wird durchlaufen
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Set fcount=0; gcont=0
+~ForEach Key=F1; List=FEList; IndexVar=idxWelt; Take=4; GroupBy=2;
+?F1: Ich mag die $idxWeltwelt.
+    #j: Ja
+        >> Mag-ich-Welten >> $idxWelt
+        ~Set fancount+=1; gcount+=1
+    #n: Nein
+        >> Sonstige Welten >> $idxWelt
+        ~Set gcount+=1
+~Execute
+>> Auswertung >> Ich mag $fancount von $gcount Welten
+\end{verbatim}
+Das obige Beispiel wählt aus der nachfolgenden Liste $4$ Elemente per Zufall aus und gruppiert diese auf zwei Eingabeseiten. Die Liste ist dabei als Datei FEList.qfl mit folgendem Inhalt gegeben:
+\begin{verbatim}
+// Aufzählungen für gesunde Welten
+[Obst]
+Apfel
+Birnen
+Bananen
+Zitronen
+[Gemüse]
+Blumenkohl
+Kolrabi
+Zuchini
+Kartoffeln
+\end{verbatim}
+Die Syntax der Listendateien erlaubt Kommenarzeilen (\verb|//|) und Gruppierungen mittels eckiger Klammern. Die Gruppierungen werden bei der Eingabe als Überschriften ausgegeben (siehe Abschnitt~\ref{Ueberschriften}) und können dazu verwendet werden, den Inhalt der Liste zusätzlich zu gliedern.
+
+Die erste Seite könnte dabei wie folgt aussehen:
+\webbox{
+\webhead{Vorlage Demo, 32 ForEach}{Eine Liste von Welten wird durchlaufen}
+\qsection{Obst}
+Ich mag die Birnenwelt. 
+\begin{circlist}
+\item Ja
+\item Nein
+\end{circlist}
+\qsection{Gemüse}
+Ich mag die Kolrabiwelt. 
+\begin{circlist}
+\item Ja
+\item Nein
+\end{circlist}
+}
+
+Ein praktischer Anwendungsfall dieser Funktion besteht darin, ein abgegrenztes Wissensgebiet mit Hilfe vieler einzelner Reflektionsaussagen zu beschreiben, und diese dann in Form einer solchen Liste bereitzustellen. Eine solche Reflektionsaussage könnte zum Beispiel lauten \glqq Ich weiß wie man einen neuen Kontextmenüeintrag erstellt.\grqq\ Jemand, der feststellen möchte, ob er dieses Wissensgebiet beherrscht, kann sich nun diese Fragen auflisten lassen und den einzelnen Aussagen zustimmen oder nicht. Als Ergebnis bekommt er eine Auswertung über den Grad seines Wissens und eine Auflistung der Aussagen, die seine noch vorhandenen Wissenlücken beschreiben. 
+
+Man beachte, dass hier bewusst darauf verzichtet wird, das Wissen explizit durch Vorgabe entsprechender Auswahlmöglichkeiten abzufragen, um die Erfassung der Fragen, die hier ohne jede Syntaxkenntnis möglich ist, so einfach wie möglich zu halten.
+
+Durch die Möglichkeit, sich nur eine kleine zufällige Teilmenge an Aussagen vorlegen zu lassen, hat man zusätzlich auch ein Instrument, um das Wissengebiet regelmäßig stichprobenartig zu überprüfen.
+
+
 \end{document}

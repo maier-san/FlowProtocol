@@ -42,3 +42,4 @@
 \contentsline {section}{\numberline {5}Spezialbefehle}{38}{}%
 \contentsline {subsection}{\numberline {5.1}Rangfolgenbestimmung}{38}{}%
 \contentsline {subsection}{\numberline {5.2}Zitatmodus}{40}{}%
+\contentsline {subsection}{\numberline {5.3}Fragelisten}{41}{}%
