@@ -177,14 +177,20 @@ namespace FlowProtocol.Pages.FlowTemplates
                     case "Random": RunCmd_Random(cmd); break;
                     case "Vote": sc = new VoteCommand(); break;
                     case "Cite": sc = new CiteCommand(); break;
+                    case "ForEach": sc = new ForEachCommand(TemplateDetailPath); break;
                     default: AddCommandError("C02", $"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
                 }
                 if (sc != null)
                 {
                     List<ResultItem> erg = sc.RunCommand(cmd, t, SelectedOptions, GlobalVars, ReadErrors.Add);
-                    if (erg != null)
+                    if (erg != null && erg.Any())
                     {
                         t.ResultItems.AddRange(erg);
+                    }
+                    // Seed-Wert für den Zufallsgenerator unsichtbar binden
+                    if (SelectedOptions.ContainsKey("_rseed") && !GivenKeys.Contains("_rseed"))
+                    {
+                        GivenKeys.Add("_rseed");
                     }
                 }
             }

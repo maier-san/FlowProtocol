@@ -1,0 +1,13 @@
+/// Eine Liste von Welten wird durchlaufen
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Set fcount=0; gcont=0
+~ForEach Key=F1; List=ForEachList; IndexVar=idxWelt; Take=4; GroupBy=2;
+?F1: Ich mag die $idxWeltwelt.
+	#j: Ja
+		>> Mag-ich-Welten >> $idxWelt
+		~Set fancount+=1; gcount+=1
+	#n: Nein
+		>> Sonstige Welten >> $idxWelt
+		~Set gcount+=1
+~Execute
+>> Auswertung >> Ich mag $fancount von $gcount Welten
