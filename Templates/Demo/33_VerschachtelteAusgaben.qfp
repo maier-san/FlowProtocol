@@ -1,0 +1,9 @@
+/// Der Textbaustein "Hallo Welt" wird ausgegeben
+//  Anwendungsbeispiel für die Befehlsreferenz
+>> Die Begrüßung kann beginnen
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+	#a1: Ganz normal
+		>> Hallo Welt
+	#a2: In Großbuchstaben
+		>> HALLO WELT
+>> Die Begrüßung ist vorbei		
