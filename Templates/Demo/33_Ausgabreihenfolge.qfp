@@ -1,9 +1,11 @@
-/// Der Textbaustein "Hallo Welt" wird ausgegeben
+/// Auf die Reihenfolge kommt es an
 //  Anwendungsbeispiel für die Befehlsreferenz
 >> Die Begrüßung kann beginnen
 ?F1: Wie soll "Hallo Welt" ausgegeben werden?
-	#a1: Ganz normal
+	#a1: Verschachtelt
 		>> Hallo Welt
+		~Include Schachtelgruss
+		>> Zurück in der alten Welt
 	#a2: In Großbuchstaben
 		>> HALLO WELT
 >> Die Begrüßung ist vorbei		

@@ -102,7 +102,7 @@ else
             <h4>Allgemein</h4>
         }
         <ol>
-            @foreach (var t in group.Value)
+            @foreach (var t in group.Value.OrderBy(x => x.SortPath))
             {
                 <li>
                     @t.ResultItemText

@@ -14,6 +14,7 @@ namespace FlowProtocol.Core
         // Fehler beim Einlesen
         public List<ReadErrorItem> ReadErrors { get; private set; }
         public string KeyPath { get; set; }
+        public string SortPath {get; set; }
         private int keyindex = 0;
         private int includeindex = 0;
         private string currentSection = string.Empty;
@@ -22,14 +23,16 @@ namespace FlowProtocol.Core
         {
             ReadErrors = new List<ReadErrorItem>();
             KeyPath = string.Empty;
+            SortPath = string.Empty;
         }
 
         // Liest eine Template-Datei ein
         // filepath = der vollständige Dateipfad
-        public Template? ReadTemplate(string filepath, Dictionary<string, string>? assignments = null, string keypath = "")
+        public Template? ReadTemplate(string filepath, Dictionary<string, string>? assignments = null, string keypath = "", string sortpath = "")
         {
             ReadErrors.Clear();
             KeyPath = keypath;
+            SortPath = sortpath;
             if (!File.Exists(filepath))
             {
                 AddReadError("R01", "Vorlagendatei nicht gefunden.", filepath, 0, string.Empty);
@@ -63,6 +66,7 @@ namespace FlowProtocol.Core
                 {
                     string? line = sr.ReadLine();
                     linenumber++;
+                    string currentsortpath = SortPath + linenumber.ToString("D6");
                     if (!string.IsNullOrWhiteSpace(line))
                     {
                         line = line.Replace("\t", "    ");
@@ -147,7 +151,7 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regGroupedResultItem.Match(codeline);
-                                ResultItem t = new ResultItem() { ResultItemGroup = m.Groups[1].Value.Trim(), ResultItemText = m.Groups[2].Value.Trim() };
+                                ResultItem t = new ResultItem() { ResultItemGroup = m.Groups[1].Value.Trim(), ResultItemText = m.Groups[2].Value.Trim(), SortPath = currentsortpath };
                                 parent.ResultItems.Add(t);
                                 currentResultItem = t;
                             }
@@ -160,7 +164,7 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regResultItem.Match(codeline);
-                                ResultItem t = new ResultItem() { ResultItemText = m.Groups[1].Value.Trim() };
+                                ResultItem t = new ResultItem() { ResultItemText = m.Groups[1].Value.Trim(), SortPath = currentsortpath };
                                 parent.ResultItems.Add(t);
                                 currentResultItem = t;
                             }
@@ -233,6 +237,7 @@ namespace FlowProtocol.Core
                                 {
                                     includeindex++;
                                     c.KeyPath = this.KeyPath + "_" + includeindex.ToString() + "_" + keyindex.ToString();
+                                    c.SortPath = currentsortpath;
                                 }
                                 parent.Commands.Add(c);
                             }

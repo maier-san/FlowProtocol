@@ -1,0 +1,8 @@
+// Hallo-Welt-Funktion
+>> Start der verschachtelten Begrüßung
+?U: Wie soll die verschachtelte Welt begrüßt werden?
+	#a1: Mit Hallo
+		>> Hallo verschachtelte Welt
+	#a2: Mit Aloah
+		>> Aloah verschachtelte Welt
+>> Ende der verschachtelten Begrüßung

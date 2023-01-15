@@ -209,7 +209,7 @@ Welcher Zusatz soll ergänzt werden?
 }
 Die Benutzerführung erlaubt es, auch nur einen Teil der angezeigten Fragen zu beantworten und dann die Weiter-Schaltfläche zu betätigen. In diesem Fall werden die nicht beantworteten Fragen einfach auf der Folgeseite erneut angezeigt.
 
-\subsection{Verschachtelungen}
+\subsection{Verschachtelungen}\label{Verschachtelungen}
 Die Verschachtelung von Fragen ist das Hauptprinzip der Anwendung. Auf diese Weise kann gezielt ins Detail gegangen werden, wenn der entsprechende Fall vorliegt, und man kann Fragen weglassen, wenn sie nicht relevant sind.
 \Beispiel
 \begin{verbatim}
@@ -1339,5 +1339,46 @@ Man beachte, dass hier bewusst darauf verzichtet wird, das Wissen explizit durch
 
 Durch die Möglichkeit, sich nur eine kleine zufällige Teilmenge an Aussagen vorlegen zu lassen, hat man zusätzlich auch ein Instrument, um das Wissengebiet regelmäßig stichprobenartig zu überprüfen.
 
-
+\newpage
+\section{Erklärende Beispiele}
+\subsection{Reihenfolge bei Verschachtelungen}
+Sowohl über die Verschachtelungen von Fragen (siehe Abschnitt~\ref{Verschachtelungen}), als auch über den Aufruf von Funktionen (siehe Abschnitt~\ref{Funktionen} und \ref{ParametrisierteFunktionen}) werden die Ausgaben in einer verschachtelten Struktur angeordnet, bei der die Aufrufe tieferer Verschachtelungsebenen im Code der Vorlage auch mit einer bestimmten Position, z.B.\ zwischen Ausgabe $A$ und $B$ assoziiert sind. Bei der Erzeugung der Ausgabe wird diese Reihenfolge innerhalb der einzelnen Ausgabegruppe wiederhergestellt:
+\Beispiel
+\begin{verbatim}
+/// Auf die Reihenfolge kommt es an
+//  Anwendungsbeispiel für die Befehlsreferenz
+>> Die Begrüßung kann beginnen
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+    #a1: Verschachtelt
+        >> Hallo Welt
+        ~Include Schachtelgruss
+        >> Zurück in der alten Welt
+    #a2: In Großbuchstaben
+        >> HALLO WELT
+>> Die Begrüßung ist vorbei    
+\end{verbatim}
+mit Funktionsdatei Schachtelgruss.qff
+\begin{verbatim}
+>> Start der verschachtelten Begrüßung
+?U: Wie soll die verschachtelte Welt begrüßt werden?
+    #a1: Mit Hallo
+        >> Hallo verschachtelte Welt
+    #a2: Mit Aloah
+        >> Aloah verschachtelte Welt
+>> Ende der verschachtelten Begrüßung    
+\end{verbatim}
+Beantwortet man die erste Frage mit \glqq Verschachtelt\grqq\ und die zweite mit \glqq Mit Aloah\grqq\ , dann bekommt man folgende Ausgabe:
+\webbox{
+\webhead{Vorlage Demo, 33 Ausgabreihenfolge}{Auf die Reihenfolge kommt es an}
+\begin{numlist}
+\item Die Begrüßung kann beginnen
+\item Hallo Welt
+\item Start der verschachtelten Begrüßung
+\item Aloah verschachtelte Welt
+\item Ende der verschachtelten Begrüßung
+\item Zurück in der alten Welt
+\item Die Begrüßung ist vorbei
+\end{numlist}
+}
+Zu beachten ist, dass sich die Reihenfolge bei gruppierten Ausgaben  nur innerhalb der Gruppen auswirkt.
 \end{document}

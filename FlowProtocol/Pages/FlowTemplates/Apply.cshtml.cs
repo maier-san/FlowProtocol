@@ -231,7 +231,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                     AddCommandError("C05", $"Der Aufruf der Funktionsdatei {templateFileName} überschreitet das Rekursionsmaximum von 100.", cmd);
                     return;
                 }
-                Template? subTemplate = LoadTemplate(templateFileName, assignments, cmd.KeyPath);
+                Template? subTemplate = LoadTemplate(templateFileName, assignments, cmd.KeyPath, cmd.SortPath);
                 if (subTemplate == null)
                 {
                     AddCommandError("C03", $"Die Funktionsdatei {templateFileName} konnte nicht geladen werden.", cmd);
@@ -541,11 +541,11 @@ namespace FlowProtocol.Pages.FlowTemplates
             return RedirectToPage("./Apply", SelectedOptions);
         }
 
-        private Template? LoadTemplate(string templatefile, Dictionary<string, string>? assignments = null, string keypath = "")
+        private Template? LoadTemplate(string templatefile, Dictionary<string, string>? assignments = null, string keypath = "", string sortpath = "")
         {
 
             TemplateReader tr = new TemplateReader();
-            Template? currentTemplate = tr.ReadTemplate(templatefile, assignments, keypath);
+            Template? currentTemplate = tr.ReadTemplate(templatefile, assignments, keypath, sortpath);
             ReadErrors.AddRange(tr.ReadErrors);
             return currentTemplate;
         }
