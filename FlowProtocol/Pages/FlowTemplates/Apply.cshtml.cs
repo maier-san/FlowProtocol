@@ -141,6 +141,42 @@ namespace FlowProtocol.Pages.FlowTemplates
                 // Alle Fragen sind beantwortet und es gibt ein Folge-Template: ausführen
                 ExtractQueryItems(t.FollowTemplate);
             }
+            if (!ShowQueryItems.Any())
+            {
+                MakeCodeSummery();
+            }
+        }
+
+        // Kopiert den Code innerhalb jeder Gruppe nach unten und löscht die leeren Ausgaben
+        private void MakeCodeSummery()
+        {                       
+            foreach (var g in ShowResultGroups)
+            {
+                ResultItem? csCopyTarget = null;
+                List<ResultItem> removelist = new List<ResultItem>();
+                foreach (var r in g.Value.OrderByDescending(x => x.SortPath))
+                {
+                    if (r.CodeBlock.Trim() == "~CodeSummaryStart")
+                    {
+                        csCopyTarget = null;
+                        if (string.IsNullOrWhiteSpace(r.ResultItemText)) removelist.Add(r);
+                    }
+                    if (csCopyTarget != null && !string.IsNullOrWhiteSpace(r.CodeBlock))
+                    {
+                        csCopyTarget.CodeBlock = r.CodeBlock + "\n" + csCopyTarget.CodeBlock;
+                        if (string.IsNullOrWhiteSpace(r.ResultItemText)) removelist.Add(r);
+                    }
+                    if (r.CodeBlock.Trim() == "~CodeSummaryMove")
+                    {
+                        csCopyTarget = r;
+                        csCopyTarget.CodeBlock = string.Empty;
+                    }
+                }
+                foreach(var r in removelist)
+                {
+                    g.Value.Remove(r);
+                }
+            }
         }
 
         // Fügt die Ergebnispunkte in die Ergebnisgruppen hinzu
