@@ -1,0 +1,21 @@
+/// Hallo Welt mit Codegenerierung
+//  Anwendungsbeispiel für die Befehlsreferenz
+>> Codebeispiel >> Kommentar einfügen
+	>|// Das kleine Codebeispiel
+>> Codebeispiel >>
+	>|~CodeSummaryStart
+>> Codebeispiel >>
+	>|public void HalloWelt()
+	>|{
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+	#a1: Ganz normal
+		>> Codebeispiel >> Ausgabe von Hallo Welt			
+			>|    Console.Writeline("Hallo Welt");
+	#a2: In Großbuchstaben
+		>> Codebeispiel >> Ausgabe von HALLO WELT
+			>|    Console.Writeline("HALLO WELT");
+>> Codebeispiel >>
+	>|}
+>> Codebeispiel >> Kompletter Code
+	> Einfach abtippen:
+	>|~CodeSummaryMove

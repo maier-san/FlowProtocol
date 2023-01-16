@@ -141,6 +141,42 @@ namespace FlowProtocol.Pages.FlowTemplates
                 // Alle Fragen sind beantwortet und es gibt ein Folge-Template: ausführen
                 ExtractQueryItems(t.FollowTemplate);
             }
+            if (!ShowQueryItems.Any())
+            {
+                MakeCodeSummery();
+            }
+        }
+
+        // Kopiert den Code innerhalb jeder Gruppe nach unten und löscht die leeren Ausgaben
+        private void MakeCodeSummery()
+        {                       
+            foreach (var g in ShowResultGroups)
+            {
+                ResultItem? csCopyTarget = null;
+                List<ResultItem> removelist = new List<ResultItem>();
+                foreach (var r in g.Value.OrderByDescending(x => x.SortPath))
+                {
+                    if (r.CodeBlock.Trim() == "~CodeSummaryStart")
+                    {
+                        csCopyTarget = null;
+                        if (string.IsNullOrWhiteSpace(r.ResultItemText)) removelist.Add(r);
+                    }
+                    if (csCopyTarget != null && !string.IsNullOrWhiteSpace(r.CodeBlock))
+                    {
+                        csCopyTarget.CodeBlock = r.CodeBlock + "\n" + csCopyTarget.CodeBlock;
+                        if (string.IsNullOrWhiteSpace(r.ResultItemText)) removelist.Add(r);
+                    }
+                    if (r.CodeBlock.Trim() == "~CodeSummaryMove")
+                    {
+                        csCopyTarget = r;
+                        csCopyTarget.CodeBlock = string.Empty;
+                    }
+                }
+                foreach(var r in removelist)
+                {
+                    g.Value.Remove(r);
+                }
+            }
         }
 
         // Fügt die Ergebnispunkte in die Ergebnisgruppen hinzu
@@ -231,7 +267,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                     AddCommandError("C05", $"Der Aufruf der Funktionsdatei {templateFileName} überschreitet das Rekursionsmaximum von 100.", cmd);
                     return;
                 }
-                Template? subTemplate = LoadTemplate(templateFileName, assignments, cmd.KeyPath);
+                Template? subTemplate = LoadTemplate(templateFileName, assignments, cmd.KeyPath, cmd.SortPath);
                 if (subTemplate == null)
                 {
                     AddCommandError("C03", $"Die Funktionsdatei {templateFileName} konnte nicht geladen werden.", cmd);
@@ -541,11 +577,11 @@ namespace FlowProtocol.Pages.FlowTemplates
             return RedirectToPage("./Apply", SelectedOptions);
         }
 
-        private Template? LoadTemplate(string templatefile, Dictionary<string, string>? assignments = null, string keypath = "")
+        private Template? LoadTemplate(string templatefile, Dictionary<string, string>? assignments = null, string keypath = "", string sortpath = "")
         {
 
             TemplateReader tr = new TemplateReader();
-            Template? currentTemplate = tr.ReadTemplate(templatefile, assignments, keypath);
+            Template? currentTemplate = tr.ReadTemplate(templatefile, assignments, keypath, sortpath);
             ReadErrors.AddRange(tr.ReadErrors);
             return currentTemplate;
         }
