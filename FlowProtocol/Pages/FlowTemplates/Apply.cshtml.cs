@@ -156,9 +156,10 @@ namespace FlowProtocol.Pages.FlowTemplates
                 List<ResultItem> removelist = new List<ResultItem>();
                 foreach (var r in g.Value.OrderByDescending(x => x.SortPath))
                 {
-                    if (r.CodeBlock.Trim() == "~CodeSummaryStart")
+                    if (r.CodeBlock.Trim() == "~StartCodeSummary")
                     {
                         csCopyTarget = null;
+                        r.CodeBlock = string.Empty;
                         if (string.IsNullOrWhiteSpace(r.ResultItemText)) removelist.Add(r);
                     }
                     if (csCopyTarget != null && !string.IsNullOrWhiteSpace(r.CodeBlock))
@@ -166,7 +167,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                         csCopyTarget.CodeBlock = r.CodeBlock + "\n" + csCopyTarget.CodeBlock;
                         if (string.IsNullOrWhiteSpace(r.ResultItemText)) removelist.Add(r);
                     }
-                    if (r.CodeBlock.Trim() == "~CodeSummaryMove")
+                    if (r.CodeBlock.Trim() == "~InsertCodeSummary")
                     {
                         csCopyTarget = r;
                         csCopyTarget.CodeBlock = string.Empty;
