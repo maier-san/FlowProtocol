@@ -61,6 +61,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             TemplateBaseURL = string.Empty;
             showQueryElements = new List<Tuple<string, Restriction?, InputItem?>>();
         }
+
         public IActionResult OnGet(string template)
         {
             string templateDec = HttpUtility.UrlDecode(template);
@@ -90,51 +91,13 @@ namespace FlowProtocol.Pages.FlowTemplates
         /// <param name="t">Die aktuelle Template-Ebene</param>
         private void ExtractQueryItems(Template t)
         {
-            RunCommand(t.Commands, ref t);
-            AddResultItems(t.ResultItems);
-            foreach (var q in t.QueryItems)
+            foreach (var fidx in t.FlowItems.OrderBy(x => x.SortPath))
             {
-                q.ApplyTextOperation(ReplaceGlobalVars);
-                if (!SelectedOptions.ContainsKey(q.Key))
-                {
-                    // Frage noch unbeantwortet auf Seite übernehmen
-                    SelectedOptions[q.Key] = string.Empty;
-                    ShowQueryItems.Add(q);
-                }
-                else
-                {
-                    GivenKeys.Add(q.Key);
-                    Restriction? res = q as Restriction;
-                    if (res != null)
-                    {
-                        string selectedOption = SelectedOptions[res.Key];
-                        Option? o = res.Options.Find(x => x.Key == SelectedOptions[res.Key]);
-                        if (o == null)
-                        {
-                            // Antwort nicht in Liste: Suche nach x-Option
-                            o = res.Options.Find(x => x.Key == "x");
-                        }
-                        if (o != null)
-                        {
-                            // Antwort gefunden
-                            ExtractQueryItems(o as Template);
-                        }
-                        else
-                        {
-                            // Antwort unbekannt, keine x-Option gefunden: ignorieren                  
-                        }
-                    }
-                    InputItem? inp = q as InputItem;
-                    if (inp != null)
-                    {
-                        if (q.Key.Contains("_"))
-                        {
-                            // Autonummerierte Input-Keys auch noch als Variable verfügbar machen:
-                            string valvar = q.Key.Substring(0, q.Key.IndexOf('_')) + "value";
-                            GlobalVars[valvar] = SelectedOptions[q.Key];
-                        }
-                    }
-                }
+
+                RunByType<Command>(fidx, x => RunCommand(x, ref t));
+                RunByType<ResultItem>(fidx, AddResultItem);
+                RunByType<QueryItem>(fidx, ShowQueryItem);
+
             }
             if (!ShowQueryItems.Any() && t.FollowTemplate != null)
             {
@@ -147,9 +110,66 @@ namespace FlowProtocol.Pages.FlowTemplates
             }
         }
 
+        private void RunByType<T>(FlowItem f, Action<T> H) where T : FlowItem
+        {
+            if (f is T)
+            {
+                T? fc = f as T;
+                if (fc != null)
+                {
+                    H(fc);
+                }
+            }
+        }
+
+        private void ShowQueryItem(QueryItem q)
+        {
+            q.ApplyTextOperation(ReplaceGlobalVars);
+            if (!SelectedOptions.ContainsKey(q.Key))
+            {
+                // Frage noch unbeantwortet auf Seite übernehmen
+                SelectedOptions[q.Key] = string.Empty;
+                ShowQueryItems.Add(q);
+            }
+            else
+            {
+                GivenKeys.Add(q.Key);
+                Restriction? res = q as Restriction;
+                if (res != null)
+                {
+                    string selectedOption = SelectedOptions[res.Key];
+                    Option? o = res.Options.Find(x => x.Key == SelectedOptions[res.Key]);
+                    if (o == null)
+                    {
+                        // Antwort nicht in Liste: Suche nach x-Option
+                        o = res.Options.Find(x => x.Key == "x");
+                    }
+                    if (o != null)
+                    {
+                        // Antwort gefunden
+                        ExtractQueryItems(o as Template);
+                    }
+                    else
+                    {
+                        // Antwort unbekannt, keine x-Option gefunden: ignorieren                  
+                    }
+                }
+                InputItem? inp = q as InputItem;
+                if (inp != null)
+                {
+                    if (q.Key.Contains("_"))
+                    {
+                        // Autonummerierte Input-Keys auch noch als Variable verfügbar machen:
+                        string valvar = q.Key.Substring(0, q.Key.IndexOf('_')) + "value";
+                        GlobalVars[valvar] = SelectedOptions[q.Key];
+                    }
+                }
+            }
+        }
+
         // Kopiert den Code innerhalb jeder Gruppe nach unten und löscht die leeren Ausgaben
         private void MakeCodeSummery()
-        {                       
+        {
             foreach (var g in ShowResultGroups)
             {
                 ResultItem? csCopyTarget = null;
@@ -173,7 +193,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                         csCopyTarget.CodeBlock = string.Empty;
                     }
                 }
-                foreach(var r in removelist)
+                foreach (var r in removelist)
                 {
                     g.Value.Remove(r);
                 }
@@ -181,54 +201,49 @@ namespace FlowProtocol.Pages.FlowTemplates
         }
 
         // Fügt die Ergebnispunkte in die Ergebnisgruppen hinzu
-        private void AddResultItems(List<ResultItem> resultlist)
+        private void AddResultItem(ResultItem item)
         {
-            foreach (var item in resultlist)
+            item.ApplyTextOperation(ReplaceGlobalVars);
+            if (!ShowResultGroups.ContainsKey(item.ResultItemGroup))
             {
-                item.ApplyTextOperation(ReplaceGlobalVars);
-                if (!ShowResultGroups.ContainsKey(item.ResultItemGroup))
-                {
-                    ShowResultGroups[item.ResultItemGroup] = new List<ResultItem>();
-                }
-                ShowResultGroups[item.ResultItemGroup].Add(item);
+                ShowResultGroups[item.ResultItemGroup] = new List<ResultItem>();
             }
+            ShowResultGroups[item.ResultItemGroup].Add(item);
         }
 
         // Führt die Laufzeitbefehle aus
-        private void RunCommand(List<Command> commandlist, ref Template t)
+        private void RunCommand(Command cmd, ref Template t)
         {
-            foreach (var cmd in commandlist)
+
+            cmd.ApplyTextOperation(ReplaceGlobalVars);
+            ISpecialCommand? sc = null;
+            switch (cmd.ComandName)
             {
-                cmd.ApplyTextOperation(ReplaceGlobalVars);
-                ISpecialCommand? sc = null;
-                switch (cmd.ComandName)
+                case "Implies": RunCmd_Implies(cmd); break;
+                case "Include": RunCmd_Include(cmd); break;
+                case "Set": RunCmd_Set(cmd); break;
+                case "UrlEncode": RunCmd_UrlEncode(cmd); break;
+                case "Calculate": RunCmd_Calculate(cmd); break;
+                case "Round": RunCmd_Round(cmd); break;
+                case "Replace": RunCmd_Replace(cmd); break;
+                case "CamelCase": RunCmd_CamelCase(cmd); break;
+                case "Random": RunCmd_Random(cmd); break;
+                case "Vote": sc = new VoteCommand(); break;
+                case "Cite": sc = new CiteCommand(); break;
+                case "ForEach": sc = new ForEachCommand(TemplateDetailPath); break;
+                default: AddCommandError("C02", $"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
+            }
+            if (sc != null)
+            {
+                List<ResultItem> erg = sc.RunCommand(cmd, t, SelectedOptions, GlobalVars, ReadErrors.Add);
+                if (erg != null && erg.Any())
                 {
-                    case "Implies": RunCmd_Implies(cmd); break;
-                    case "Include": RunCmd_Include(cmd); break;
-                    case "Set": RunCmd_Set(cmd); break;
-                    case "UrlEncode": RunCmd_UrlEncode(cmd); break;
-                    case "Calculate": RunCmd_Calculate(cmd); break;
-                    case "Round": RunCmd_Round(cmd); break;
-                    case "Replace": RunCmd_Replace(cmd); break;
-                    case "CamelCase": RunCmd_CamelCase(cmd); break;
-                    case "Random": RunCmd_Random(cmd); break;
-                    case "Vote": sc = new VoteCommand(); break;
-                    case "Cite": sc = new CiteCommand(); break;
-                    case "ForEach": sc = new ForEachCommand(TemplateDetailPath); break;
-                    default: AddCommandError("C02", $"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
+                    t.FlowItems.AddRange(erg);
                 }
-                if (sc != null)
+                // Seed-Wert für den Zufallsgenerator unsichtbar binden
+                if (SelectedOptions.ContainsKey("_rseed") && !GivenKeys.Contains("_rseed"))
                 {
-                    List<ResultItem> erg = sc.RunCommand(cmd, t, SelectedOptions, GlobalVars, ReadErrors.Add);
-                    if (erg != null && erg.Any())
-                    {
-                        t.FlowItems.AddRange(erg);
-                    }
-                    // Seed-Wert für den Zufallsgenerator unsichtbar binden
-                    if (SelectedOptions.ContainsKey("_rseed") && !GivenKeys.Contains("_rseed"))
-                    {
-                        GivenKeys.Add("_rseed");
-                    }
+                    GivenKeys.Add("_rseed");
                 }
             }
         }
