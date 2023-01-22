@@ -34,6 +34,7 @@ namespace FlowProtocol.SpecialCommands
 
             // Gruppen in Fragen umformen und mit den gegebenen Antworten abgleichen:
             bool notfirstrun = false;
+            int lcount = 0;
             foreach (var idg in compareGroups)
             {
                 if (notfirstrun)
@@ -49,7 +50,13 @@ namespace FlowProtocol.SpecialCommands
                     Option i2 = iop.Item2;
 
                     // Eingaben zu Paar i1,i2 abfragen:
-                    Restriction ncres = new Restriction() { Key = res.Key + "_" + i1.Key + i2.Key, QuestionText = res.QuestionText };
+                    lcount++;
+                    Restriction ncres = new Restriction() 
+                    { 
+                        Key = res.Key + "_" + i1.Key + i2.Key, 
+                        QuestionText = res.QuestionText,
+                        SortPath = res.SortPath + lcount.ToString("D6")
+                    };
                     ncres.Options.Add(new Option(ncres.Key) { Key = i1.Key, OptionText = i1.OptionText });
                     ncres.Options.Add(new Option(ncres.Key) { Key = i2.Key, OptionText = i2.OptionText });
                     int val = 1;
@@ -69,10 +76,10 @@ namespace FlowProtocol.SpecialCommands
                             votingsum[i2] += 1;
                         }
                     }
-                    t.QueryItems.Add(ncres);
+                    t.FlowItems.Add(ncres);
                 }
             }
-            template.QueryItems.Remove(res);
+            template.FlowItems.Remove(res);
             t.FollowTemplate = orgfollow;
             return votingsum;
         }

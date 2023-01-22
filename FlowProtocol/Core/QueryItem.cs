@@ -1,13 +1,13 @@
 namespace FlowProtocol.Core
 {
     // Schnittstelle für Elemente mit Hilfetexte
-    public class QueryItem
+    public class QueryItem : FlowItem
     {
         public string Key { get; set; }
         public string Section { get; set; }
         public List<string> HelpLines { get; set; }
 
-        public QueryItem()
+        public QueryItem() : base()
         {
             Key = string.Empty;
             HelpLines = new List<string>();

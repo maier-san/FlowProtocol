@@ -47,7 +47,8 @@ namespace FlowProtocol.SpecialCommands
                 {
                     Key = res.Key + '_' + lcount.ToString(),
                     QuestionText = res.QuestionText.Replace("$" + indexVar, idx.Item1),
-                    HelpLines = res.HelpLines
+                    HelpLines = res.HelpLines,
+                    SortPath = res.SortPath + lcount.ToString("D6")
                 };
                 if (!string.IsNullOrEmpty(idx.Item2)) q.Section = idx.Item2;
                 foreach (var oidx in res.Options)
@@ -65,7 +66,7 @@ namespace FlowProtocol.SpecialCommands
                             ResultItemText = ridx.ResultItemText.Replace("$" + indexVar, idx.Item1),
                             CodeBlock = ridx.CodeBlock.Replace("$" + indexVar, idx.Item1)
                         };
-                        o.ResultItems.Add(r);
+                        o.FlowItems.Add(r);
                         foreach (var rsidx in ridx.SubItems)
                         {
                             r.SubItems.Add(rsidx.Replace("$" + indexVar, idx.Item1));
@@ -79,13 +80,13 @@ namespace FlowProtocol.SpecialCommands
                             Arguments = cidx.Arguments.Replace("$" + indexVar, idx.Item1),
                             KeyPath = cidx.KeyPath
                         };
-                        o.Commands.Add(c);
+                        o.FlowItems.Add(c);
                     }
                     q.Options.Add(o);
                 }
-                t.QueryItems.Add(q);
+                t.FlowItems.Add(q);
             }
-            template.QueryItems.Remove(res);
+            template.FlowItems.Remove(res);
             t.FollowTemplate = orgfollow;
         }
 

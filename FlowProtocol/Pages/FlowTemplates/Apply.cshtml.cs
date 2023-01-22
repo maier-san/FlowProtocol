@@ -222,7 +222,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                     List<ResultItem> erg = sc.RunCommand(cmd, t, SelectedOptions, GlobalVars, ReadErrors.Add);
                     if (erg != null && erg.Any())
                     {
-                        t.ResultItems.AddRange(erg);
+                        t.FlowItems.AddRange(erg);
                     }
                     // Seed-Wert für den Zufallsgenerator unsichtbar binden
                     if (SelectedOptions.ContainsKey("_rseed") && !GivenKeys.Contains("_rseed"))

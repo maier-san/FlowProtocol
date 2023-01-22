@@ -113,8 +113,14 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regRestriction.Match(codeline);
-                                Restriction r = new Restriction() { Key = AddKeyNumber(m.Groups[1].Value.Trim()), QuestionText = m.Groups[2].Value.Trim(), Section = currentSection };
-                                parent.QueryItems.Add(r);
+                                Restriction r = new Restriction() 
+                                {
+                                    Key = AddKeyNumber(m.Groups[1].Value.Trim()), 
+                                    QuestionText = m.Groups[2].Value.Trim(), 
+                                    Section = currentSection,
+                                    SortPath = currentsortpath
+                                };
+                                parent.FlowItems.Add(r);
                                 ResttrictionStack.Push(new Tuple<int, Restriction>(indent, r));
                                 currentQueryItem = r;
                             }
@@ -152,7 +158,7 @@ namespace FlowProtocol.Core
                             {
                                 var m = regGroupedResultItem.Match(codeline);
                                 ResultItem t = new ResultItem() { ResultItemGroup = m.Groups[1].Value.Trim(), ResultItemText = m.Groups[2].Value.Trim(), SortPath = currentsortpath };
-                                parent.ResultItems.Add(t);
+                                parent.FlowItems.Add(t);
                                 currentResultItem = t;
                             }
                             else AddReadError("R05", "Gruppierter Ausgabeeintrag kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
@@ -165,7 +171,7 @@ namespace FlowProtocol.Core
                             {
                                 var m = regResultItem.Match(codeline);
                                 ResultItem t = new ResultItem() { ResultItemText = m.Groups[1].Value.Trim(), SortPath = currentsortpath };
-                                parent.ResultItems.Add(t);
+                                parent.FlowItems.Add(t);
                                 currentResultItem = t;
                             }
                             else AddReadError("R06", "Ausgabeeintrag kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
@@ -210,8 +216,14 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regInputItem.Match(codeline);
-                                InputItem q = new InputItem() { Key = AddKeyNumber(m.Groups[1].Value.Trim()), QuestionText = m.Groups[2].Value.Trim(), Section = currentSection };
-                                parent.QueryItems.Add(q);
+                                InputItem q = new InputItem() 
+                                    {
+                                        Key = AddKeyNumber(m.Groups[1].Value.Trim()), 
+                                        QuestionText = m.Groups[2].Value.Trim(), 
+                                        Section = currentSection,
+                                        SortPath = currentsortpath
+                                    };
+                                parent.FlowItems.Add(q);
                                 currentQueryItem = q;
                             }
                             else AddReadError("R11", "Input-Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
@@ -232,14 +244,18 @@ namespace FlowProtocol.Core
                                     Codeline = codeline.Trim()
                                 };
                                 var m = regCommand.Match(codeline);
-                                Command c = new Command(errortemplate) { ComandName = m.Groups[1].Value.Trim(), Arguments = m.Groups[2].Value.Trim() };
+                                Command c = new Command(errortemplate) 
+                                {
+                                    ComandName = m.Groups[1].Value.Trim(), 
+                                    Arguments = m.Groups[2].Value.Trim(),
+                                    SortPath = currentsortpath
+                                };
                                 if (c.ComandName == "Include")
                                 {
                                     includeindex++;
                                     c.KeyPath = this.KeyPath + "_" + includeindex.ToString() + "_" + keyindex.ToString();
-                                    c.SortPath = currentsortpath;
                                 }
-                                parent.Commands.Add(c);
+                                parent.FlowItems.Add(c);
                             }
                             else AddReadError("R09", "Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
                             currentResultItem = null;
