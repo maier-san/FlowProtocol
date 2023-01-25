@@ -236,7 +236,7 @@ Soll \dq Hallo Welt\dq zusätzlich rückwärts ausgegeben werden?
 \end{circlist}
 }
 
-\subsection{Gruppierungen}
+\subsection{Gruppierungen}\label{Gruppierungen}
 Das Ergebnis einer Bearbeitung kann in vielen Fällen mehr als eine Liste sein. Eine Vorlage zur Analyse kann zum einen den Ist-Stand erfassen, mögliche Lö\-sungs\-an\-sä\-tze formulieren und die noch ausstehenden Analyse-Maßnahmen auf"|listen. Zu diesem Zweck können die Ausgaben in einer sehr einfachen Form gruppiert werden.
 
 \Syntax
@@ -275,7 +275,7 @@ Die Alternativen
 \end{numlist}
 }
 \subsection{Unterpunkte}\label{Unterpunkte}
-Ausgaben können je nach Vorlage selbst wieder Tätigkeiten oder Aufgaben beschreiben, die sich aus verschiedenen Schritten zusammensetzen, oder bei denen mehrere Teilaspekte zu berücksichtigen sind. Diese lassen sich in Form von Unterpunkten auf"|listen. Ein Unterpunkt, der mit der Protokollkennung \glqq https://\grqq\  beginnt und als Link erkannt wird, wird dabei in der Ausgabe als ausführbarer Link dargestellt. Man kann sogar ganze Codesequenzen als Unterpunkt formatieren (siehe Abschnitt~\ref{Codesequenzen}).
+Ausgaben können je nach Vorlage selbst wieder Tätigkeiten oder Aufgaben beschreiben, die sich aus verschiedenen Schritten zusammensetzen, oder bei denen mehrere Teilaspekte zu berücksichtigen sind. Diese lassen sich in Form von Unterpunkten auf"|listen. Ein Unterpunkt, der mit der Protokollkennung \glqq https://\grqq\  beginnt und als Link erkannt wird, wird dabei in der Ausgabe als ausführbarer Link dargestellt. Man kann sogar ganze Codeblöcke als Unterpunkt formatieren (siehe Abschnitt~\ref{Codebloecke}).
 
 \Syntax
 \begin{verbatim}
@@ -640,11 +640,11 @@ Wird im obigen Beispiel die Antwort  Ja gewählt, so wird im nächsten Schritt die
 Welche Welt möchtest du grüßen?\\
 \fpinputbox
 }
-\subsection{Codesequenzen}\label{Codesequenzen}
+\subsection{Codebloecke}\label{Codebloecke}
 In der Softwareentwicklung und insbesondere bei der Pflege und Weiterentwicklung gro\-ßer Systeme gibt es zahlreiche Komponenten und Bausteine, die immer nach dem grund\-sätz\-lich selben Muster auf-, oder eingebaut werden. Oft gibt es dabei Varianten, bei denen man den einen oder anderen Aufruf mehr oder weniger benötigt, und die Benennung der Elemente muss ebenfalls angepasst werden. 
-Es kann die Arbeit deutlich vereinfachen, wenn man mit \FlowProtocol eine Vorlage für eine Anleitung erstellt, die die relevanten Abhängigkeiten abfragt, und dem Entwickler die notwendigen Implementierungsschritte beschreibt. Noch besser ist es, wenn man eine Stufe weiter geht, und die einzelnen Codefragmente direkt durch die Vorlage erstellen lässt, so dass man diese ausschneiden und in den Produktivcode einfügen kann. Hierfür gibt es die Möglichkeit, ganze Codesequenzen ausgeben zu lassen.
+Es kann die Arbeit deutlich vereinfachen, wenn man mit \FlowProtocol eine Vorlage für eine Anleitung erstellt, die die relevanten Abhängigkeiten abfragt, und dem Entwickler die notwendigen Implementierungsschritte beschreibt. Noch besser ist es, wenn man eine Stufe weiter geht, und die einzelnen Codefragmente direkt durch die Vorlage erstellen lässt, so dass man diese ausschneiden und in den Produktivcode einfügen kann. Hierfür gibt es die Möglichkeit, ganze Codeblöcke ausgeben zu lassen.
 
-Die Syntax ist ähnlich zu der der Unterpunkte (siehe Abschnitt~\ref{Unterpunkte}). Codesequenzen und Unterpunkte lassen sich auch innerhalb desselben Ausgabeeintrags kombinieren, die Ausgabe erfolgt jedoch blockweise, d.h.\ zuerst die Unterpunkte und dann der Codeblock.
+Die Syntax ist ähnlich zu der der Unterpunkte (siehe Abschnitt~\ref{Unterpunkte}). Codeblöcke und Unterpunkte lassen sich auch innerhalb desselben Ausgabeeintrags kombinieren, die Ausgabe erfolgt jedoch blockweise, d.h.\ zuerst die Unterpunkte und dann der Codeblock.
 
 \Syntax
 \begin{verbatim}
@@ -1009,6 +1009,7 @@ Im Beispiel wir ein zufälliger Wert $x\in\{1,2,3\}$ der Variable \verb|auswahl| 
 
 \subsection{Überschriften}\label{Ueberschriften}
 Bei umfangreicheren Vorlagen ist es sinnvoll, die Fragen und Eingaben mit Hilfe von Überschriften zu gliedern.
+\Syntax
 \begin{verbatim}
 ++ <Überschrift> ++
 \end{verbatim}
@@ -1056,6 +1057,7 @@ Zu beachten ist, dass die Abfolge der Fragen und Eingaben aufgrund der Verschach
 
 \subsection{CamelCase-Umwandlung}
 Möchte man eine Vorlage erstellen, die für eine zu implementierende Programmfunktion die einzubauenden Codepassagen ausgibt, steht man vor der Herausforderung, dass dort Steuerelemente, Klassen oder Methoden in Anlehnung an die Funktion benannt werden sollten, und sich diese Bennungen an Syntaxregeln und Codekonventionen orientieren müssen. Als Programmierer wählt man hier üblicherweise die CamelCase-Schreibweise, wandelt zuvor die Umlaute um und entfernt die Nichtwortzeichen. Diese Arbeit könnte man natürlich auch vom Anwender der Vorlage verlangen und eine entsprechende Eingabe abfragen, da man aber höchstwahrscheinlich schon die sprechende Funktionsbenennung als Eingabewert abgefragt hat, kann man diese auch mit einer eingebauten Funktion in die CamelCase-Schreibweise umwandeln.
+\Syntax
 \begin{verbatim}
 ~CamelCase <Variable> = <Wert>
 \end{verbatim}
@@ -1078,6 +1080,68 @@ Dies führt zu folgender Ausgabe:
 \end{numlist}
 }
 Zu beachten ist, dass innerhalb der Wortzeichen aktuell nur die Umlaute ä, ö, ü, Ä, Ö, Ü und das ß ersetzt werden. Die Ersetzung der diakritischen Zeichen aus dem nichtdeutschen Sprachraum folgt voraussichtlich in einer zukünftigen Version. Bis dahin kann eine solche Ersetzung mit dem \verb|~Replace|-Befehl (siehe Abschnitt~\ref{Ersetzungen}) innerhalb der Vorlage selbst umgesetzt werden.
+
+\subsection{Codesequenzen}
+In Abschnitt~\ref{Codebloecke} wird die Möglichkeit beschrieben Codeblöcke in der Ausgabe darzustellen. Zusammen mit der Möglichkeit, dort Variablen zu ersetzen, kann man sehr gut kleinere Programmcodeelemente anpassen und ausgeben. Sobald man jedoch den Programmcode in einem einzigen Block in Abhängigkeit verschachtelter Fragen und Antworten aus kleineren Blöcken zusammensetzen möchte, stößt man hierbei an Grenzen. Hierfür gibt es den Befehl \verb|~InsertCodeSummary|, der eine Sequent aus vorangehenden Codeblöcken in einem Codeblock zusammenfassen kann.
+\Syntax
+\begin{verbatim}
+>> <Ausgabe Text>
+    >|~InsertCodeSummary
+\end{verbatim}
+Ergänzend dazu gibt es den Befehl \verb|~StartCodeSummary|, mit dem der Anfang für diese Zusammenfassung gekennzeichnet wird.
+\Syntax
+\begin{verbatim}
+>> <Ausgabe Text>
+    >|~StartCodeSummary
+\end{verbatim}
+Beide Befehle wirken nur, wenn sie nicht in Verbindung mit anderen Codezeilen verwendet werden und beziehen sich immer auf die jeweilige Ausgabegruppe (siehe Abschnitt~\ref{Gruppierungen}). Die Befehle selbst werden nicht ausgegeben. Mit Hilfe der beiden Befehle können mehrere Zusammenfassungen innerhalb einer Gruppe erzeugt werden.
+
+Grundsätzlich wird der Code für die Zusammenfassung kopiert, also an der ursprünglichen Stelle und in der Zusammenfassung ausgegeben. Steht der Code jedoch in einer leeren Ausgabe, also einer die selbst keinen Text enthält, so wird die ganze Ausgabe beim Zusammenfassen entfernt, so dass der Code nur noch in der Zusammenfassung erscheint. 
+\Beispiel
+\begin{verbatim}
+/// Hallo Welt mit Codegenerierung
+//  Anwendungsbeispiel für die Befehlsreferenz
+>> Codebeispiel >> Kommentar einfügen
+    >|// Das kleine Codebeispiel
+>> Codebeispiel >>
+    >|~StartCodeSummary
+>> Codebeispiel >>
+    >|public void HalloWelt()
+    >|{
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+    #a1: Ganz normal
+        >> Codebeispiel >> Ausgabe von Hallo Welt            
+            >|    Console.Writeline("Hallo Welt");
+    #a2: In Großbuchstaben
+        >> Codebeispiel >> Ausgabe von HALLO WELT
+            >|    Console.Writeline("HALLO WELT");
+>> Codebeispiel >>
+    >|}
+>> Codebeispiel >> Kompletter Code
+    > Einfach abtippen:
+    >|~InsertCodeSummary
+\end{verbatim}
+In diesem Beispiel beginnt die Zusammenfassung erst in der zweiten Ausgabe, so dass der erste Codeblock nur zusammen mit der ersten Ausgabe ausgegeben wird. Die zweite Ausgabe mit dem Startbefehl ist leer und wird daher nicht ausgegeben. Die dritte Ausgabe ist ebenfalls leer, liegt aber innerhalb der Zusammenfassung und wird durch sie entfernt. Der Prozedurkopf erscheint daher nur in der Zusammenfassung, genauso wie die schließende Klammer am Ende. Der durch die Frage variable Code in der Mitte hängt für beide Antworten an einer nicht leeren Ausgabe und wird somit sowohl dort, als auch in der Zusammenfassung ausgegeben.
+
+Entscheidet man sich für die Großbuchstaben, erhält man folgende Ausgabe:
+\webbox{
+\webheadR{Ergebnisliste (Demo, 34 Codesequenzen)}\\
+Codebeispiel
+\begin{numlist}
+\item Kommentar einfügen\\
+\texttt{// Das kleine Codebeispiel}
+\item  Ausgabe von HALLO WELT\\
+\hspace*{2ex}\texttt{    Console.Writeline(\dq HALLO WELT\dq);}
+\item Kompletter Code
+\begin{itemize}
+\item Einfach abtippen:
+\end{itemize}
+\texttt{public void HalloWelt()}\\
+\texttt{\{}\\
+\hspace*{2ex}\texttt{    Console.Writeline(\dq HALLO WELT\dq);}\\
+\texttt{\}}
+\end{numlist}
+}
 
 \newpage
 \section{Systemvariablen}
@@ -1380,5 +1444,5 @@ Beantwortet man die erste Frage mit \glqq Verschachtelt\grqq\ und die zweite mit
 \item Die Begrüßung ist vorbei
 \end{numlist}
 }
-Zu beachten ist, dass sich die Reihenfolge bei gruppierten Ausgaben  nur innerhalb der Gruppen auswirkt.
+Zu beachten ist, dass sich die Reihenfolge bei gruppierten Ausgaben nur innerhalb der Gruppen auswirkt.
 \end{document}

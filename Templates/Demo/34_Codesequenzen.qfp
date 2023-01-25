@@ -3,7 +3,7 @@
 >> Codebeispiel >> Kommentar einfügen
 	>|// Das kleine Codebeispiel
 >> Codebeispiel >>
-	>|~CodeSummaryStart
+	>|~StartCodeSummary
 >> Codebeispiel >>
 	>|public void HalloWelt()
 	>|{
@@ -18,4 +18,4 @@
 	>|}
 >> Codebeispiel >> Kompletter Code
 	> Einfach abtippen:
-	>|~CodeSummaryMove
+	>|~InsertCodeSummary
