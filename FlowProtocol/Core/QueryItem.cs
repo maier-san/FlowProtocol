@@ -27,8 +27,9 @@ namespace FlowProtocol.Core
         }
 
         // Wendet eine Text-Operation auf die Text-Bestandteile der Frage an.
-        public virtual void ApplyTextOperation(Func<string, string> conv)
+        public override void ApplyTextOperation(Func<string, string> conv)
         {
+            base.ApplyTextOperation(conv);
             HelpLines = CoreLib.ApplyTextOperationToList(HelpLines, conv);
         }
     }

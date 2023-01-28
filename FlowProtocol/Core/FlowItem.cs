@@ -8,5 +8,9 @@ namespace FlowProtocol.Core
         {
             SortPath = string.Empty;
         }
+
+        public virtual void ApplyTextOperation(Func<string, string> conv)
+        {
+        }
     }       
 }

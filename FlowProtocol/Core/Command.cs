@@ -17,8 +17,9 @@ namespace FlowProtocol.Core
         }
 
         // Wendet eine Text-Operation auf die Text-Bestandteile des Command an
-        public void ApplyTextOperation(Func<string, string> conv)
+        public override void ApplyTextOperation(Func<string, string> conv)
         {
+            base.ApplyTextOperation(conv);
             Arguments = conv(Arguments);
         }
     }

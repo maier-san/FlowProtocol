@@ -16,8 +16,9 @@
         }
 
         // Wendet eine Text-Operation auf die Text-Bestandteile Ergebniseintrags an.
-        public void ApplyTextOperation(Func<string, string> conv)
+        public override void ApplyTextOperation(Func<string, string> conv)
         {
+            base.ApplyTextOperation(conv);
             ResultItemGroup = conv(ResultItemGroup);
             ResultItemText = conv(ResultItemText);
             SubItems = CoreLib.ApplyTextOperationToList(SubItems, conv);

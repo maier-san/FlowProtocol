@@ -99,6 +99,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             // Dann alles andere (Befehle, Ausgaben und Abfragen)
             foreach (var fidx in t.FlowItems.OrderBy(x => x.SortPath))
             {
+                fidx.ApplyTextOperation(ReplaceGlobalVars);
                 RunByType<Command>(fidx, RunCommand);
                 RunByType<ResultItem>(fidx, AddResultItem);
                 RunByType<QueryItem>(fidx, ShowQueryItem);
@@ -128,7 +129,6 @@ namespace FlowProtocol.Pages.FlowTemplates
 
         private void ShowQueryItem(QueryItem q)
         {
-            q.ApplyTextOperation(ReplaceGlobalVars);
             if (!SelectedOptions.ContainsKey(q.Key))
             {
                 // Frage noch unbeantwortet auf Seite übernehmen
@@ -207,7 +207,6 @@ namespace FlowProtocol.Pages.FlowTemplates
         // Fügt die Ergebnispunkte in die Ergebnisgruppen hinzu
         private void AddResultItem(ResultItem item)
         {
-            item.ApplyTextOperation(ReplaceGlobalVars);
             if (!ShowResultGroups.ContainsKey(item.ResultItemGroup))
             {
                 ShowResultGroups[item.ResultItemGroup] = new List<ResultItem>();
@@ -218,7 +217,6 @@ namespace FlowProtocol.Pages.FlowTemplates
         // Führt die Laufzeitbefehle aus
         private void RunCommand(Command cmd)
         {
-            cmd.ApplyTextOperation(ReplaceGlobalVars);
             switch (cmd.ComandName)
             {
                 case "Implies": RunCmd_Implies(cmd); break;
@@ -238,8 +236,7 @@ namespace FlowProtocol.Pages.FlowTemplates
         }
 
         private void RunSpecialCommand(Command cmd, ref Template t)
-        {
-            cmd.ApplyTextOperation(ReplaceGlobalVars);
+        {            
             ISpecialCommand? sc = null;
             switch (cmd.ComandName)
             {
@@ -249,6 +246,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             }
             if (sc != null)
             {
+                cmd.ApplyTextOperation(ReplaceGlobalVars);
                 List<ResultItem> erg = sc.RunCommand(cmd, t, SelectedOptions, GlobalVars, ReadErrors.Add);
                 if (erg != null && erg.Any())
                 {
