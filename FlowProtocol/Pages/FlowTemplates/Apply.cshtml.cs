@@ -91,13 +91,17 @@ namespace FlowProtocol.Pages.FlowTemplates
         /// <param name="t">Die aktuelle Template-Ebene</param>
         private void ExtractQueryItems(Template t)
         {
+            // Zuerst die Spezialbefehle, weil die die Struktur nochmal ändern können
+            foreach (var fidx in t.Commands.OrderBy(x => x.SortPath))
+            {
+                RunByType<Command>(fidx, x => RunSpecialCommand(x, ref t));
+            }
+            // Dann alles andere (Befehle, Ausgaben und Abfragen)
             foreach (var fidx in t.FlowItems.OrderBy(x => x.SortPath))
             {
-
-                RunByType<Command>(fidx, x => RunCommand(x, ref t));
+                RunByType<Command>(fidx, RunCommand);
                 RunByType<ResultItem>(fidx, AddResultItem);
                 RunByType<QueryItem>(fidx, ShowQueryItem);
-
             }
             if (!ShowQueryItems.Any() && t.FollowTemplate != null)
             {
@@ -212,11 +216,9 @@ namespace FlowProtocol.Pages.FlowTemplates
         }
 
         // Führt die Laufzeitbefehle aus
-        private void RunCommand(Command cmd, ref Template t)
+        private void RunCommand(Command cmd)
         {
-
             cmd.ApplyTextOperation(ReplaceGlobalVars);
-            ISpecialCommand? sc = null;
             switch (cmd.ComandName)
             {
                 case "Implies": RunCmd_Implies(cmd); break;
@@ -228,10 +230,22 @@ namespace FlowProtocol.Pages.FlowTemplates
                 case "Replace": RunCmd_Replace(cmd); break;
                 case "CamelCase": RunCmd_CamelCase(cmd); break;
                 case "Random": RunCmd_Random(cmd); break;
+                case "Vote": break;
+                case "Cite": break;
+                case "ForEach": break;
+                default: AddCommandError("C02", $"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
+            }
+        }
+
+        private void RunSpecialCommand(Command cmd, ref Template t)
+        {
+            cmd.ApplyTextOperation(ReplaceGlobalVars);
+            ISpecialCommand? sc = null;
+            switch (cmd.ComandName)
+            {
                 case "Vote": sc = new VoteCommand(); break;
                 case "Cite": sc = new CiteCommand(); break;
                 case "ForEach": sc = new ForEachCommand(TemplateDetailPath); break;
-                default: AddCommandError("C02", $"Der Befehl {cmd.ComandName} ist nicht bekannt und kann nicht ausgeführt werden.", cmd); break;
             }
             if (sc != null)
             {

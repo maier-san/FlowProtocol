@@ -13,7 +13,7 @@ namespace FlowProtocol.SpecialCommands
             string resVar = CommandHelper.GetTextParameter(cmd, "ResultVar", "", addError, true);
             string resSep = CommandHelper.GetTextParameter(cmd, "ResultSep", "", addError, true);
             Dictionary<Option, int> votingsum = SetCrossTemplates(template, res, selectedOptions, drawoption);
-            List<ResultItem> result = CreateResultlist(votingsum, groupname, resVar, resSep, globalVars);
+            List<ResultItem> result = CreateResultlist(votingsum, groupname, resVar, resSep, globalVars, cmd.SortPath);
             return result;
         }
 
@@ -51,9 +51,9 @@ namespace FlowProtocol.SpecialCommands
 
                     // Eingaben zu Paar i1,i2 abfragen:
                     lcount++;
-                    Restriction ncres = new Restriction() 
-                    { 
-                        Key = res.Key + "_" + i1.Key + i2.Key, 
+                    Restriction ncres = new Restriction()
+                    {
+                        Key = res.Key + "_" + i1.Key + i2.Key,
                         QuestionText = res.QuestionText,
                         SortPath = res.SortPath + lcount.ToString("D6")
                     };
@@ -167,11 +167,12 @@ namespace FlowProtocol.SpecialCommands
         }
 
         private List<ResultItem> CreateResultlist(Dictionary<Option, int> votingsum, string groupname,
-            string resVar, string resSep, Dictionary<string, string> globalVars)
+            string resVar, string resSep, Dictionary<string, string> globalVars, string sortpath)
         {
             List<ResultItem> result = new List<ResultItem>();
             int ranking = 0;
             int previousvalue = -1;
+            int resindex = 0;
             string resVarValRPO = string.Empty;
             string resVarValPO = string.Empty;
             string resVarValO = string.Empty;
@@ -182,10 +183,12 @@ namespace FlowProtocol.SpecialCommands
                     ranking++;
                     previousvalue = idx.Value;
                 }
+                resindex++;
                 ResultItem ri = new ResultItem()
                 {
                     ResultItemGroup = groupname,
-                    ResultItemText = $"Platz {ranking} ({idx.Value} Punkte) {idx.Key.OptionText}"
+                    ResultItemText = $"Platz {ranking} ({idx.Value} Punkte) {idx.Key.OptionText}",
+                    SortPath = sortpath + resindex.ToString("D5")
                 };
                 result.Add(ri);
                 AddTextWithSeparator(ref resVarValRPO, resSep, $"Platz {ranking}, {idx.Value} Punkte, {idx.Key.OptionText}");
