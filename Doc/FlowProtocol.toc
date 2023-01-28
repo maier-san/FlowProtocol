@@ -36,13 +36,14 @@
 \contentsline {subsection}{\numberline {2.29}\"Uberschriften}{30}{}%
 \contentsline {subsection}{\numberline {2.30}CamelCase-Umwandlung}{31}{}%
 \contentsline {subsection}{\numberline {2.31}Codesequenzen}{32}{}%
-\contentsline {section}{\numberline {3}Systemvariablen}{34}{}%
-\contentsline {section}{\numberline {4}Fehlermeldungen}{35}{}%
-\contentsline {subsection}{\numberline {4.1}Einlesefehler}{35}{}%
-\contentsline {subsection}{\numberline {4.2}Ausf\"uhrungsfehler}{37}{}%
-\contentsline {section}{\numberline {5}Spezialbefehle}{39}{}%
-\contentsline {subsection}{\numberline {5.1}Rangfolgenbestimmung}{39}{}%
-\contentsline {subsection}{\numberline {5.2}Zitatmodus}{41}{}%
-\contentsline {subsection}{\numberline {5.3}Fragelisten}{42}{}%
-\contentsline {section}{\numberline {6}Erkl\"arende Beispiele}{44}{}%
-\contentsline {subsection}{\numberline {6.1}Reihenfolge bei Verschachtelungen}{44}{}%
+\contentsline {subsection}{\numberline {2.32}Datum- und Uhrzeit-Formatierung}{34}{}%
+\contentsline {section}{\numberline {3}Systemvariablen}{35}{}%
+\contentsline {section}{\numberline {4}Fehlermeldungen}{36}{}%
+\contentsline {subsection}{\numberline {4.1}Einlesefehler}{36}{}%
+\contentsline {subsection}{\numberline {4.2}Ausf\"uhrungsfehler}{38}{}%
+\contentsline {section}{\numberline {5}Spezialbefehle}{40}{}%
+\contentsline {subsection}{\numberline {5.1}Rangfolgenbestimmung}{40}{}%
+\contentsline {subsection}{\numberline {5.2}Zitatmodus}{42}{}%
+\contentsline {subsection}{\numberline {5.3}Fragelisten}{43}{}%
+\contentsline {section}{\numberline {6}Erkl\"arende Beispiele}{45}{}%
+\contentsline {subsection}{\numberline {6.1}Reihenfolge bei Verschachtelungen}{45}{}%

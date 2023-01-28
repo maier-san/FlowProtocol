@@ -1,0 +1,12 @@
+/// Auf die Reihenfolge kommt es an
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Set Welt = Pizzawelt
+>> Ich mag meine $Welt
+~Set Welt = Gemüsewelt
+>> Ich mag deine $Welt
+?F1: Brauchen wir die $Welt?
+	#j: Ja, wir brauchen die $Welt!
+		>> Wir brauchen die $Welt!
+		~Set Welt = Pommeswelt
+	#n: Nein wir brauchen die $Welt nicht.	
+>> Ich mag auch seine $Welt.

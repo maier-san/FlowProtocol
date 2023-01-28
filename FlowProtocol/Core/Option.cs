@@ -11,8 +11,7 @@
       {
          Key = string.Empty;
          OptionText = string.Empty;
-         RestrictionKey = restrictionKey;
-         ResultItems = new List<ResultItem>();
+         RestrictionKey = restrictionKey;         
       }
 
       // Wendet eine Text-Operation auf die Text-Bestandteile der Frage an.

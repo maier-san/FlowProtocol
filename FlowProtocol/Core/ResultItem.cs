@@ -1,25 +1,24 @@
 ﻿namespace FlowProtocol.Core
 {
-    public class ResultItem
+    public class ResultItem : FlowItem
     {
         public string ResultItemText { get; set; }
         public string ResultItemGroup { get; set; }
         public List<string> SubItems { get; set; }
         public string CodeBlock { get; set; }
-        public string SortPath { get; set; }
-
-        public ResultItem()
+        
+        public ResultItem() : base()
         {
             ResultItemText = string.Empty;
             ResultItemGroup = string.Empty;
             SubItems = new List<string>();
-            CodeBlock = string.Empty;
-            SortPath = string.Empty;
+            CodeBlock = string.Empty;            
         }
 
         // Wendet eine Text-Operation auf die Text-Bestandteile Ergebniseintrags an.
-        public void ApplyTextOperation(Func<string, string> conv)
+        public override void ApplyTextOperation(Func<string, string> conv)
         {
+            base.ApplyTextOperation(conv);
             ResultItemGroup = conv(ResultItemGroup);
             ResultItemText = conv(ResultItemText);
             SubItems = CoreLib.ApplyTextOperationToList(SubItems, conv);

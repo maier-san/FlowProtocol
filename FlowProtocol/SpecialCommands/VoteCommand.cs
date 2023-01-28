@@ -13,7 +13,7 @@ namespace FlowProtocol.SpecialCommands
             string resVar = CommandHelper.GetTextParameter(cmd, "ResultVar", "", addError, true);
             string resSep = CommandHelper.GetTextParameter(cmd, "ResultSep", "", addError, true);
             Dictionary<Option, int> votingsum = SetCrossTemplates(template, res, selectedOptions, drawoption);
-            List<ResultItem> result = CreateResultlist(votingsum, groupname, resVar, resSep, globalVars);
+            List<ResultItem> result = CreateResultlist(votingsum, groupname, resVar, resSep, globalVars, cmd.SortPath);
             return result;
         }
 
@@ -34,6 +34,7 @@ namespace FlowProtocol.SpecialCommands
 
             // Gruppen in Fragen umformen und mit den gegebenen Antworten abgleichen:
             bool notfirstrun = false;
+            int lcount = 0;
             foreach (var idg in compareGroups)
             {
                 if (notfirstrun)
@@ -49,7 +50,13 @@ namespace FlowProtocol.SpecialCommands
                     Option i2 = iop.Item2;
 
                     // Eingaben zu Paar i1,i2 abfragen:
-                    Restriction ncres = new Restriction() { Key = res.Key + "_" + i1.Key + i2.Key, QuestionText = res.QuestionText };
+                    lcount++;
+                    Restriction ncres = new Restriction()
+                    {
+                        Key = res.Key + "_" + i1.Key + i2.Key,
+                        QuestionText = res.QuestionText,
+                        SortPath = res.SortPath + lcount.ToString("D6")
+                    };
                     ncres.Options.Add(new Option(ncres.Key) { Key = i1.Key, OptionText = i1.OptionText });
                     ncres.Options.Add(new Option(ncres.Key) { Key = i2.Key, OptionText = i2.OptionText });
                     int val = 1;
@@ -69,10 +76,10 @@ namespace FlowProtocol.SpecialCommands
                             votingsum[i2] += 1;
                         }
                     }
-                    t.QueryItems.Add(ncres);
+                    t.FlowItems.Add(ncres);
                 }
             }
-            template.QueryItems.Remove(res);
+            template.FlowItems.Remove(res);
             t.FollowTemplate = orgfollow;
             return votingsum;
         }
@@ -160,11 +167,12 @@ namespace FlowProtocol.SpecialCommands
         }
 
         private List<ResultItem> CreateResultlist(Dictionary<Option, int> votingsum, string groupname,
-            string resVar, string resSep, Dictionary<string, string> globalVars)
+            string resVar, string resSep, Dictionary<string, string> globalVars, string sortpath)
         {
             List<ResultItem> result = new List<ResultItem>();
             int ranking = 0;
             int previousvalue = -1;
+            int resindex = 0;
             string resVarValRPO = string.Empty;
             string resVarValPO = string.Empty;
             string resVarValO = string.Empty;
@@ -175,10 +183,12 @@ namespace FlowProtocol.SpecialCommands
                     ranking++;
                     previousvalue = idx.Value;
                 }
+                resindex++;
                 ResultItem ri = new ResultItem()
                 {
                     ResultItemGroup = groupname,
-                    ResultItemText = $"Platz {ranking} ({idx.Value} Punkte) {idx.Key.OptionText}"
+                    ResultItemText = $"Platz {ranking} ({idx.Value} Punkte) {idx.Key.OptionText}",
+                    SortPath = sortpath + resindex.ToString("D5")
                 };
                 result.Add(ri);
                 AddTextWithSeparator(ref resVarValRPO, resSep, $"Platz {ranking}, {idx.Value} Punkte, {idx.Key.OptionText}");

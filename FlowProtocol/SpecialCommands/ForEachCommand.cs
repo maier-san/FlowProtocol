@@ -21,17 +21,19 @@ namespace FlowProtocol.SpecialCommands
             int groupBy = CommandHelper.GetIntParameter(cmd, "GroupBy", 0, addError, true);
             var list = ReadList(listfilename, cmd, addError);
             TakeSelection(ref list, take, selectedOptions);
-            SetListTemplates(list, template, res, indexVar, groupBy);
+            SetListTemplates(list, template, res, indexVar, groupBy, cmd.SortPath);
             return new List<ResultItem>();
         }
 
-        private void SetListTemplates(List<Tuple<string, string>> list, Template template, Restriction? res, string indexVar, int groupBy)
+        private void SetListTemplates(List<Tuple<string, string>> list, Template template, Restriction? res, string indexVar, 
+            int groupBy, string sortpath)
         {
             Template t = template;
             Template? orgfollow = template.FollowTemplate;
-            if (res == null) return;
-            int lcount = 0;
+            if (res == null) return;            
             int gcount = 0;
+            int lcount = 0;
+            string elementsortpath = sortpath + lcount.ToString("D6");
             foreach (var idx in list)
             {
                 if (groupBy > 0 && gcount >= groupBy)
@@ -47,7 +49,8 @@ namespace FlowProtocol.SpecialCommands
                 {
                     Key = res.Key + '_' + lcount.ToString(),
                     QuestionText = res.QuestionText.Replace("$" + indexVar, idx.Item1),
-                    HelpLines = res.HelpLines
+                    HelpLines = res.HelpLines,
+                    SortPath = elementsortpath + res.SortPath 
                 };
                 if (!string.IsNullOrEmpty(idx.Item2)) q.Section = idx.Item2;
                 foreach (var oidx in res.Options)
@@ -63,9 +66,10 @@ namespace FlowProtocol.SpecialCommands
                         {
                             ResultItemGroup = ridx.ResultItemGroup.Replace("$" + indexVar, idx.Item1),
                             ResultItemText = ridx.ResultItemText.Replace("$" + indexVar, idx.Item1),
-                            CodeBlock = ridx.CodeBlock.Replace("$" + indexVar, idx.Item1)
+                            CodeBlock = ridx.CodeBlock.Replace("$" + indexVar, idx.Item1),
+                            SortPath = elementsortpath + ridx.SortPath
                         };
-                        o.ResultItems.Add(r);
+                        o.FlowItems.Add(r);
                         foreach (var rsidx in ridx.SubItems)
                         {
                             r.SubItems.Add(rsidx.Replace("$" + indexVar, idx.Item1));
@@ -77,15 +81,16 @@ namespace FlowProtocol.SpecialCommands
                         {
                             ComandName = cidx.ComandName,
                             Arguments = cidx.Arguments.Replace("$" + indexVar, idx.Item1),
-                            KeyPath = cidx.KeyPath
+                            KeyPath = cidx.KeyPath,
+                            SortPath = elementsortpath + cidx.SortPath
                         };
-                        o.Commands.Add(c);
+                        o.FlowItems.Add(c);
                     }
                     q.Options.Add(o);
                 }
-                t.QueryItems.Add(q);
+                t.FlowItems.Add(q);
             }
-            template.QueryItems.Remove(res);
+            template.FlowItems.Remove(res);
             t.FollowTemplate = orgfollow;
         }
 
