@@ -24,6 +24,7 @@ namespace FlowProtocol.Pages.FlowTemplates
         public string TemplateBaseURL { get; set; }
         private Dictionary<string, string> GlobalVars { get; set; }
         private List<Tuple<string, Restriction?, InputItem?>> showQueryElements;
+        private string CurrentFormat = string.Empty;
 
         // Die Dreitupel bestehen aus Überschrift, Frage, Eingabeelement, 
         // wobei jeweils nur eines der letzten beiden != null, aber dafür typisiert ist.
@@ -228,6 +229,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                 case "Replace": RunCmd_Replace(cmd); break;
                 case "CamelCase": RunCmd_CamelCase(cmd); break;
                 case "Random": RunCmd_Random(cmd); break;
+                case "SetDateTimeFormat": RundCmd_SetDateTimeFormat(cmd); break;
                 case "Vote": break;
                 case "Cite": break;
                 case "ForEach": break;
@@ -236,7 +238,7 @@ namespace FlowProtocol.Pages.FlowTemplates
         }
 
         private void RunSpecialCommand(Command cmd, ref Template t)
-        {            
+        {
             ISpecialCommand? sc = null;
             switch (cmd.ComandName)
             {
@@ -560,6 +562,13 @@ namespace FlowProtocol.Pages.FlowTemplates
             }
         }
 
+        // Setzt die Datum-Uhrzeit-Formatierung für dem SetDateTimeFormat-Befehl
+        private void RundCmd_SetDateTimeFormat(Command cmd)
+        {
+            string arguments = cmd.Arguments.Trim();
+            if (arguments == "default") CurrentFormat = string.Empty; else CurrentFormat = arguments;
+        }
+
         // Fügt einen Fehler beim ausführend eines Commandos hinzu
         private void AddCommandError(string errorCode, string errorText, Command cmd)
         {
@@ -631,12 +640,18 @@ namespace FlowProtocol.Pages.FlowTemplates
                 input = input.Replace("$MyBaseURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path);
                 input = input.Replace("$NewGuid", Guid.NewGuid().ToString());
                 input = input.Replace("$GetDateStamp", $"{DateTime.Now:yyyy-MM-dd}");
-                input = input.Replace("$GetDateTime", $"{DateTime.Now:g}");
                 input = input.Replace("$GetDate", $"{DateTime.Now:d}");
+                input = input.Replace("$GetDateTime", $"{DateTime.Now:g}");
                 input = input.Replace("$GetTime", $"{DateTime.Now:T}");
                 input = input.Replace("$GetYear", $"{DateTime.Now:yyyy}");
                 input = input.Replace("$CRLF", "\r\n");
                 input = input.Replace("$LF", "\n");
+                if (input.Contains("$GetFDateTime"))
+                {
+                    string nowstring = $"{DateTime.Now:g}";
+                    if (!string.IsNullOrEmpty(CurrentFormat)) nowstring = DateTime.Now.ToString(CurrentFormat);
+                    input = input.Replace("$GetFDateTime", nowstring);
+                }
                 if (input.Contains("$Chr"))
                 {
                     for (int i = 1; i < 255; i++)

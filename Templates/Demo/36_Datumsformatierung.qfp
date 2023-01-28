@@ -1,0 +1,6 @@
+/// Formatiertes Datum
+//  Anwendungsbeispiel für die Befehlsreferenz
+~SetDateTimeFormat dd. MMM yy
+>> Heute ist der $GetFDateTime.
+~SetDateTimeFormat dddd
+>> Und das ist ein $GetFDateTime.
