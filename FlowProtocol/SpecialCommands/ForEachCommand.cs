@@ -19,20 +19,22 @@ namespace FlowProtocol.SpecialCommands
             string indexVar = CommandHelper.GetTextParameter(cmd, "IndexVar", "", addError, false);
             int take = CommandHelper.GetIntParameter(cmd, "Take", 0, addError, true);
             int groupBy = CommandHelper.GetIntParameter(cmd, "GroupBy", 0, addError, true);
+            string arrayListDiv = CommandHelper.GetTextParameter(cmd, "ArrayList", "", addError, true);
             var list = ReadList(listfilename, cmd, addError);
             TakeSelection(ref list, take, selectedOptions);
-            SetListTemplates(list, template, res, indexVar, groupBy, cmd.SortPath);
+            SetListTemplates(list, template, res, indexVar, groupBy, arrayListDiv, cmd.SortPath);
             return new List<ResultItem>();
         }
 
-        private void SetListTemplates(List<Tuple<string, string>> list, Template template, Restriction? res, string indexVar, 
-            int groupBy, string sortpath)
+        private void SetListTemplates(List<Tuple<string, string>> list, Template template, Restriction? res, string indexVar,
+            int groupBy, string arrayListDiv, string sortpath)
         {
             Template t = template;
             Template? orgfollow = template.FollowTemplate;
-            if (res == null) return;            
+            if (res == null) return;
             int gcount = 0;
             int lcount = 0;
+            if (arrayListDiv == "1") arrayListDiv = ";";
             string elementsortpath = sortpath + lcount.ToString("D6");
             foreach (var idx in list)
             {
@@ -45,14 +47,34 @@ namespace FlowProtocol.SpecialCommands
                 }
                 lcount++;
                 gcount++;
+
+                Func<string, string> repItems = (x => x.Replace("$" + indexVar, idx.Item1));
+                if (!string.IsNullOrEmpty(arrayListDiv))
+                {
+                    // Der Listeneintrag wird in mehrere Elemente aufgeteilt, die Ersetzungsfunktion überschrieben.
+                    List<string> itemsplits = idx.Item1.Split(arrayListDiv).ToList();
+                    repItems = x =>
+                    {
+                        int jidx = 0;
+                        foreach (var sp in itemsplits)
+                        {
+                            x = x.Replace("$" + indexVar + jidx.ToString("D1"), sp);
+                            jidx++;
+                            if (jidx > 9) break;
+                        }
+                        return x;
+                    };
+                }
+
                 Restriction q = new Restriction()
                 {
                     Key = res.Key + '_' + lcount.ToString(),
-                    QuestionText = res.QuestionText.Replace("$" + indexVar, idx.Item1),
+                    QuestionText = res.QuestionText,
                     HelpLines = res.HelpLines,
-                    SortPath = elementsortpath + res.SortPath 
+                    SortPath = elementsortpath + res.SortPath
                 };
                 if (!string.IsNullOrEmpty(idx.Item2)) q.Section = idx.Item2;
+
                 foreach (var oidx in res.Options)
                 {
                     Option o = new Option(q.Key)
@@ -64,29 +86,32 @@ namespace FlowProtocol.SpecialCommands
                     {
                         ResultItem r = new ResultItem()
                         {
-                            ResultItemGroup = ridx.ResultItemGroup.Replace("$" + indexVar, idx.Item1),
-                            ResultItemText = ridx.ResultItemText.Replace("$" + indexVar, idx.Item1),
-                            CodeBlock = ridx.CodeBlock.Replace("$" + indexVar, idx.Item1),
+                            ResultItemGroup = ridx.ResultItemGroup,
+                            ResultItemText = ridx.ResultItemText,
+                            CodeBlock = ridx.CodeBlock,
                             SortPath = elementsortpath + ridx.SortPath
                         };
                         o.FlowItems.Add(r);
                         foreach (var rsidx in ridx.SubItems)
                         {
-                            r.SubItems.Add(rsidx.Replace("$" + indexVar, idx.Item1));
+                            r.SubItems.Add(rsidx);
                         }
+                        r.ApplyTextOperation(repItems);
                     }
                     foreach (var cidx in oidx.Commands)
                     {
                         Command c = new Command(cidx.ErrorTemplate)
                         {
                             ComandName = cidx.ComandName,
-                            Arguments = cidx.Arguments.Replace("$" + indexVar, idx.Item1),
+                            Arguments = cidx.Arguments,
                             KeyPath = cidx.KeyPath,
                             SortPath = elementsortpath + cidx.SortPath
                         };
                         o.FlowItems.Add(c);
+                        c.ApplyTextOperation(repItems);
                     }
                     q.Options.Add(o);
+                    q.ApplyTextOperation(repItems);
                 }
                 t.FlowItems.Add(q);
             }
