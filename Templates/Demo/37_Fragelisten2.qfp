@@ -1,0 +1,8 @@
+/// Eine Liste von Lebensmitteln
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Set fcount=0; gcont=0
+~ForEach Key=F1; List=ForEachList2; IndexVar=idxL; Take=4; GroupBy=2; ArrayList=1
+?F1: Mag ich $idxL0?
+	#j: Ja, ich mag $idxL0
+		>> Probier mal $idxL1.		
+	#n: Nein		

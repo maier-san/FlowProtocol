@@ -1374,9 +1374,10 @@ In manchen Fällen besteht eine Vorlage aus einer größeren Menge von Fragen, die 
 \Syntax
 \begin{verbatim}
 ~ForEach Key=<F-Schlüssel>; List=<Listendatei>; IndexVar=<Var>
-            [;Take=<A>]  [;GroupBy=<B>]
+            [;Take=<A>] [;GroupBy=<B>] [; ArrayList=<Trennzeichen>]
 \end{verbatim}
 Mit \texttt{F-Schlüssel} wird der Schlüssel der Frage angegeben, die für jedes der Elemente in der Liste verwendet werden soll. Mit \texttt{Listendatei} wird auf die Datei verwiesen, die die Aufzählung der Elemente enthält. Diese muss sich auf derselben Ebene befinden und als Dateiendung \texttt{.qfl} für \glqq Quick Flow List\grqq\ haben. \texttt{IndexVar} gibt die Variable an, in die die einzelnen Zeilen der Datei eingelesen werden. Diese kann in der gewohnten Notation innerhalb der Frage, den Antworten und den Ausgaben verwendet werden. Durch die optionalen Parameter kann man die Liste auf eine Auswahl von zufällig gewählten \texttt{A} Stück beschränken und diese bei der Abfrage in Gruppen von je \texttt{B} Stück zusammenfassen lassen.
+
 \Beispiel
 \begin{verbatim}
 /// Eine Liste von Welten wird durchlaufen
@@ -1426,9 +1427,39 @@ Ich mag die Kolrabiwelt.
 \end{circlist}
 }
 
+Der Parameter \texttt{ArrayList} ermöglicht die Angabe eines Trennzeichens, z.B.\ \texttt{|}, mit dem meherere Elemente pro Zeile angegeben werden können. Wird hier ein Zeichen angegeben, so wird jede Zeile der Liste über das Zeichen aufgeteilt und die Teilstücke den Variablen \texttt{IndexVar0} bis  \texttt{IndexVar9} zugewiesen. Es werden maximal diese zehn Variablen zugewiesen. Möchte man den Strichpunkt als Trennzeichen verwenden, so muss man \verb|ArrayList=1| angeben.
+\Beispiel
+\begin{verbatim}
+/// Eine Liste von Lebensmitteln
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Set fcount=0; gcont=0
+~ForEach Key=F1; List=ForEachList2; IndexVar=idxL; Take=4;
+         GroupBy=2; ArrayList=1
+?F1: Mag ich $idxL0?
+    #j: Ja, ich mag $idxL0
+        >> Probier mal $idxL1.        
+    #n: Nein
+\end{verbatim}
+mit der Liste
+\begin{verbatim}
+// Lebensmittel und Gerichte
+[Obst]
+Äpfel;Apfelkuchen
+Birnen;Birnendicksaft
+Bananen;Schokobananen
+Zitronen;Zitronensorbet
+[Gemüse]
+Blumenkohl;Blumenkohlpfanne
+Kohlrabi;Kohlrabikompott
+Zuchini;Zuchiniauflauf
+Kartoffeln;Pommes
+\end{verbatim}
+Für die erste Zeile wird die Variable \verb|$idxL0| in der Frage und der Antwortmöglichkeit durch \glqq Äpfel\grqq\ ersetzt, und die Variable \verb|$idxL1| in der Ausgabe durch \glqq Apfelkuchen\grqq.
+
+\subsubsection*{Anwendungsbeispiel}
 Ein praktischer Anwendungsfall dieser Funktion besteht darin, ein abgegrenztes Wissensgebiet mit Hilfe vieler einzelner Reflektionsaussagen zu beschreiben, und diese dann in Form einer solchen Liste bereitzustellen. Eine solche Reflektionsaussage könnte zum Beispiel lauten \glqq Ich weiß wie man einen neuen Kontextmenüeintrag erstellt.\grqq\ Jemand, der feststellen möchte, ob er dieses Wissensgebiet beherrscht, kann sich nun diese Fragen auflisten lassen und den einzelnen Aussagen zustimmen oder nicht. Als Ergebnis bekommt er eine Auswertung über den Grad seines Wissens und eine Auflistung der Aussagen, die seine noch vorhandenen Wissenlücken beschreiben. 
 
-Man beachte, dass hier bewusst darauf verzichtet wird, das Wissen explizit durch Vorgabe entsprechender Auswahlmöglichkeiten abzufragen, um die Erfassung der Fragen, die hier ohne jede Syntaxkenntnis möglich ist, so einfach wie möglich zu halten.
+Man beachte, dass hier bewusst darauf verzichtet wird, das Wissen explizit durch Vorgabe entsprechender Auswahlmöglichkeiten abzufragen, um die Erfassung der Fragen, die hier ohne jede Syntaxkenntnis möglich ist, so einfach wie möglich zu halten. Durch Einsatz einer zweidimensionalen Liste könnte man jede Aussage um einen Punktewert anreichern oder die Information hinterlegen, von wo oder beim wem das damit verbundene Wissen bezogen werden kann.
 
 Durch die Möglichkeit, sich nur eine kleine zufällige Teilmenge an Aussagen vorlegen zu lassen, hat man zusätzlich auch ein Instrument, um das Wissengebiet regelmäßig stichprobenartig zu überprüfen.
 
