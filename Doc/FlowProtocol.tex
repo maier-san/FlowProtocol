@@ -1422,9 +1422,14 @@ In manchen Fällen besteht eine Vorlage aus einer größeren Menge von Fragen, die 
 \Syntax
 \begin{verbatim}
 ~ForEach Key=<F-Schlüssel>; List=<Listendatei>; IndexVar=<Var>
-            [;Take=<A>] [;GroupBy=<B>] [;ArrayList=<Trennzeichen>]
+            [;Take=<A>] [;GroupBy=<B>] [;GroupFilter=<C>]
+            [;ArrayList=<Trennzeichen>]
 \end{verbatim}
-Mit \texttt{F-Schlüssel} wird der Schlüssel der Frage angegeben, die für jedes der Elemente in der Liste verwendet werden soll. Mit \texttt{Listendatei} wird auf die Datei verwiesen, die die Aufzählung der Elemente enthält. Diese muss sich auf derselben Ebene befinden und als Dateiendung \texttt{.qfl} für \glqq Quick Flow List\grqq\ haben. \texttt{IndexVar} gibt die Variable an, in die die einzelnen Zeilen der Datei eingelesen werden. Diese kann in der gewohnten Notation innerhalb der Frage, den Antworten und den Ausgaben verwendet werden. Durch die optionalen Parameter kann man die Liste auf eine Auswahl von zufällig gewählten \texttt{A} Stück beschränken und diese bei der Abfrage in Gruppen von je \texttt{B} Stück zusammenfassen lassen.
+Mit \texttt{F-Schlüssel} wird der Schlüssel der Frage angegeben, die für jedes der Elemente in der Liste verwendet werden soll. Mit \texttt{Listendatei} wird auf die Datei verwiesen, die die Aufzählung der Elemente enthält. Diese muss sich auf derselben Ebene befinden und als Dateiendung \texttt{.qfl} für \glqq Quick Flow List\grqq\ haben. \texttt{IndexVar} gibt die Variable an, in die die einzelnen Zeilen der Datei eingelesen werden. Diese kann in der gewohnten Notation innerhalb der Frage, den Antworten und den Ausgaben verwendet werden. Durch die optionalen Parameter kann man die Liste auf eine Auswahl von zufällig gewählten \texttt{A} Stück beschränken und diese bei der Abfrage in Gruppen von je \texttt{B} Stück zusammenfassen lassen. Mit dem Gruppenfilter \texttt{C} lässt sich die Auswahl der Elemente aus der Liste auf bestimmte Gruppen beschränken. Diese können mit \texttt{+} aufgezählt werden:
+\begin{verbatim}
+GroupFilter=Obst+Gemüde
+\end{verbatim}
+Wird kein Gruppenfilter angegeben, so erfolgt keine Einschränkung durch Gruppen.
 
 \Beispiel
 \begin{verbatim}
@@ -1456,7 +1461,7 @@ Kolrabi
 Zuchini
 Kartoffeln
 \end{verbatim}
-Die Syntax der Listendateien erlaubt Kommenarzeilen (\verb|//|) und Gruppierungen mittels eckiger Klammern. Die Gruppierungen werden bei der Eingabe als Überschriften ausgegeben (siehe Abschnitt~\ref{Ueberschriften}) und können dazu verwendet werden, den Inhalt der Liste zusätzlich zu gliedern.
+Die Syntax der Listendateien erlaubt Kommenarzeilen (\verb|//|) und Gruppierungen mittels eckiger Klammern. Die Gruppierungen werden bei der Eingabe als Überschriften ausgegeben (siehe Abschnitt~\ref{Ueberschriften}) und können dazu verwendet werden, den Inhalt der Liste zusätzlich zu gliedern. Durch die \texttt{GroupFilter}-Option kann die Auswahl von Elementen zusätzlich auf einzelne Gruppen beschränkt werden.
 
 Die erste Seite könnte dabei wie folgt aussehen:
 \webbox{
