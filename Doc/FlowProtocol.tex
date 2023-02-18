@@ -887,7 +887,7 @@ Bei Wahl der Option \glqq Selbst wählen\grqq\ werden die Hilfetexte auch dort be
 Neben den einfachen Additionen aus Abschnitt~\ref{Additionen} kann es manchmal notwendig sein, mit Zahlen und Variablen zu rechnen. Für die Anwendung der Grundrechenoperationen gibt es den Befehl \verb|~Calculate|.
 \Syntax
 \begin{verbatim}
-~Caluculate <Variable> = <Wert1> <Operator> <Wert2>
+~Calculate <Variable> = <Wert1> <Operator> <Wert2>
 \end{verbatim}
 Wert 1 und Wert 2 sind Gleitkommaausdrücke in der Formatierung des Systems und der Operator ist eines der Zeichen \verb|+|, \verb|-|, \verb|*|, \verb|/|. Das Ergebnis wird der angegebenen Variablen zugewiesen.
 
@@ -1171,6 +1171,53 @@ Wie man sieht, kann man die Formatierung zwishen verschiedenen Ausgaben ändern. 
 
 Zu beachten ist, dass auch hier die Kultureinstellungen des Servers verwendet werden, was insbesondere bei den Textformaten wie \verb|dddd| usw.\ einen Unterschied macht. Die beliebige Komposition der Zahlenwerte ist jedoch ohne weiteres möglich.
 
+\subsection{Bedingte Zuweisungen}\label{BedingteZuweisungen}
+Manche Funktionen oder Berechnungen erfordern die Auswertung von Bedingungen. Mit dem Befehl \verb|~SetIf| kann eine Zuweisung an eine Variable unter einer Bedingung erfolgen, die als logischer Ausdruck angegeben werden kann.
+\Syntax
+\begin{verbatim}
+~SetIf <Variable> = <Wert> <<< <Bedingung>
+\end{verbatim}
+Die Zuweisung erfolgt genau dann, wenn die Bedingung als wahr ausgewertet wird. Im Gegensatz zum \verb|~Set|-Befehl kann hier nur eine Variable zugewiesen werden. Die Bedingung wird dabei als Disjunktion von Konjunktionen angegeben, also als Veroderung von Und-Ausdrücken:
+\begin{verbatim}
+<Kon1> [|| <Kon2> ...]
+\end{verbatim}
+Jede Konjunktion ist wieder als Und-Verknüpfung von einem oder mehreren Vergleichsausdrücken aufgebaut:
+\begin{verbatim}
+<Vgl1> [&& <Vgl2> ...]
+\end{verbatim}
+Ein Vergleichsausdruck kann wiederum folgende Form haben:
+\begin{verbatim}
+<s1> == <s2>
+<s1> != <s2>
+<z1> <> <z2>
+<z1> <= <z2>
+<z1> >= <z2>
+<z1> < <z2>
+<z1> > <z2>
+\end{verbatim}
+Hier stehen die Ausdrücke \verb|<s1>| und \verb|<s2>|  für beliebige Zeichenfolgen und \verb|<z1>| und \verb|<z2>| für Werte, die sich zum Auswertungszeitpunkt als Gleitkommazahl interpretieren lassen. Man beachte dabei die Unterscheidung der beiden Ungleich-Operatoren \verb|!=| für Texte und \verb|<>| für Zahlen. Klammerungen und unäre Negationen sind nicht Bestandteil der Bedingungssyntax und auch nicht notwendig, da sich über die disjunktive Form und mit den verfügbaren Vergleichsoperatoren alle logischen Kombinationen abbilden lassen. Umschließende Leerzeichen werden vor der Auswertung entfernt und nicht beim Vergleich berücksichtigt.
+
+Anstelle eines Vergleichsausdruckes kann auch direkt ein Wahrheitswert \texttt{1} oder \texttt{true} für wahr und \texttt{0} oder \texttt{false} für falsch angegeben werden. Damit können Zwischenergebnisse berechnet und wieder erneut in Bedingungen eingesetzt werden. 
+
+\Beispiel
+\begin{verbatim}
+/// Bedingte Zuweisungen
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Input w: Eine Zahl zwischen 0 und 10 eingeben
+~Execute
+~Set z=vom Rand; p=nicht prim
+~SetIf z=aus der Mitte <<< $w>=4 && $w<=6
+~SetIf p=prim <<< $w==2 || $w==3 || $w==5 || $w==7
+>> Die Zahl $w ist
+    > $z
+    > $p
+\end{verbatim}
+Das obige Beispiel fragt eine Zahl zwischen 0 und 10 ab und bestimmt anhand von zwei Bedingungen Eigenschaften, die nachfolgend ausgegeben werden. 
+
+Beim Anwenden von bedingten Zuweisungen sollte man darauf achten, dass die Variablen schon zuvor mit dem Wert belegt wurden, der im Fall der nicht erfüllten Bedingung gesetzt sein soll. Versäumt man dies, bleibt die Variable unbelegt und wird in der nachfolgenden Verarbeitung nicht ersetzt.
+
+Die logische Auswertung innerhalb des Ausdrucks erfolgt von links nach rechts und wird jeweils abgebrochen, sobald der Ergebniswert in einer Konjunktion oder der äußeren Disjunktion feststeht. 
+
 \newpage
 \section{Systemvariablen}\label{Systemvariablen}
 Systemvariablen sind spezielle Variablen, die schon durch das System mit Werten belegt werden. Diese lassen sich wie andere Variablen abrufen und in Fragen, Ausgaben oder Variablenzuweisungen verwenden. Manche der Variablen sind vielmehr als Funktionen zu betrachten und dementsprechend auch mit \texttt{Get\dots} benannt. Im Abschnitt~\ref{eigeneURL} haben wir schon zwei Beispiele für Systemvariablen kennengelernt, mit denen die eigene URL abgerufen werden kann.
@@ -1256,7 +1303,8 @@ Ausführungsfehler treten im Zusammenhang mit der Ausführung von Befehlen auf und
 \FehlerBeschreibungItem{C12}{Der Ausdruck $\dots$ konnte nicht als Rundungsausdruck interpretiert werden.} Tritt auf, wenn ein im Zusammenhang mit einen \texttt{Round}-Befehl angegebener Audruck nicht wie in Abschnitt~\ref{Berechnungen} beschrieben interpretiert werden kann.
 \FehlerBeschreibungItem{C13}{Der Ausdruck $\dots$ konnte nicht als Ersetzungsausdruck interpretiert werden.} Tritt auf, wenn ein im Zusammenhang mit einen \texttt{Replace}-Befehl angegebener Audruck nicht wie in Abschnitt~\ref{Ersetzungen} beschrieben interpretiert werden kann.
 \FehlerBeschreibungItem{C14}{Die angegebenen Werte bilden kein gültiges Intervall.} Tritt auf, wenn für die beiden für den \texttt{Random}-Befehl angegebenen Intervallgrenzen kein gültiges Intervall bilden, also der erste Wert größer ist, als der zweite.
-\FehlerBeschreibungItem{C15}{Die Listendatei {listfilepath} konnte nicht gefunden werden.} Tritt auf, wenn beim Fragelisten-Befehl \verb|~ForEach| (siehe Abschnitt~\ref{Fragelisten}) die angegebene Fragedatei nicht gefunden werden kann. 
+\FehlerBeschreibungItem{C15}{Die Listendatei $\dots$ konnte nicht gefunden werden.} Tritt auf, wenn beim Fragelisten-Befehl \verb|~ForEach| (siehe Abschnitt~\ref{Fragelisten}) die angegebene Fragedatei nicht gefunden werden kann. 
+\FehlerBeschreibungItem{C16}{Der Ausdruck $\dots$ konnte nicht als Vergleichsterm interpretiert werden.} Tritt auf, wenn bei einer bedingten Zuweisung ein Ausdruck nicht als Vergleichsterm interpretiert werden kann. Siehe Abschnitt~\ref{BedingteZuweisungen}.
 \end{description}
 \newpage
 \section{Spezialbefehle}
@@ -1374,7 +1422,7 @@ In manchen Fällen besteht eine Vorlage aus einer größeren Menge von Fragen, die 
 \Syntax
 \begin{verbatim}
 ~ForEach Key=<F-Schlüssel>; List=<Listendatei>; IndexVar=<Var>
-            [;Take=<A>] [;GroupBy=<B>] [; ArrayList=<Trennzeichen>]
+            [;Take=<A>] [;GroupBy=<B>] [;ArrayList=<Trennzeichen>]
 \end{verbatim}
 Mit \texttt{F-Schlüssel} wird der Schlüssel der Frage angegeben, die für jedes der Elemente in der Liste verwendet werden soll. Mit \texttt{Listendatei} wird auf die Datei verwiesen, die die Aufzählung der Elemente enthält. Diese muss sich auf derselben Ebene befinden und als Dateiendung \texttt{.qfl} für \glqq Quick Flow List\grqq\ haben. \texttt{IndexVar} gibt die Variable an, in die die einzelnen Zeilen der Datei eingelesen werden. Diese kann in der gewohnten Notation innerhalb der Frage, den Antworten und den Ausgaben verwendet werden. Durch die optionalen Parameter kann man die Liste auf eine Auswahl von zufällig gewählten \texttt{A} Stück beschränken und diese bei der Abfrage in Gruppen von je \texttt{B} Stück zusammenfassen lassen.
 

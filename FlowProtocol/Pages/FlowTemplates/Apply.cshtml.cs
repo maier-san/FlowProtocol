@@ -223,6 +223,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                 case "Implies": RunCmd_Implies(cmd); break;
                 case "Include": RunCmd_Include(cmd); break;
                 case "Set": RunCmd_Set(cmd); break;
+                case "SetIf": RundCmd_SetIf(cmd); break;
                 case "UrlEncode": RunCmd_UrlEncode(cmd); break;
                 case "Calculate": RunCmd_Calculate(cmd); break;
                 case "Round": RunCmd_Round(cmd); break;
@@ -334,6 +335,101 @@ namespace FlowProtocol.Pages.FlowTemplates
                     AddCommandError("C04", $"Der Wert der Variablen ${a.Key} konnte nicht als ganze Zahl interpretiert werden.", cmd);
                 }
             }
+        }
+
+        private void RundCmd_SetIf(Command cmd)
+        {
+            string arguments = cmd.Arguments;
+            Regex regSetIfExpression = new Regex(@"^([A-Za-z0-9]*)\s*=\s*(.*)<<<(.*)");
+            if (regSetIfExpression.IsMatch(arguments))
+            {
+                var m = regSetIfExpression.Match(arguments);
+                string zvar = m.Groups[1].Value.Trim();
+                string wert = m.Groups[2].Value.Trim();
+                string cond = m.Groups[3].Value.Trim();
+                bool condIsTrue = EvaluateCondition(cond, cmd);
+                if (condIsTrue) GlobalVars[zvar] = wert;
+            }
+        }
+
+        private bool EvaluateCondition(string cond, Command cmd)
+        {
+            foreach (var disterm in cond.Split("||"))
+            {
+                bool bdis = EvaluateDisTerm(disterm, cmd);
+                if (bdis) return true;
+            }
+            return false;
+        }
+
+        private bool EvaluateDisTerm(string disterm, Command cmd)
+        {
+            foreach (var conterm in disterm.Split("&&"))
+            {
+                bool bcon = EvaluateConTerm(conterm, cmd);
+                if (!bcon) return false;
+            }
+            return true;
+        }
+
+        private bool EvaluateConTerm(string conterm, Command cmd)
+        {
+            conterm = conterm.Trim();
+            if (conterm == "1" || conterm == "true") return true;
+            if (conterm == "0" || conterm == "false") return false;
+            bool erg = false;
+            if (CheckCompSTerm(conterm, "==", (x, y) => x == y, out erg, cmd)) return erg;
+            if (CheckCompSTerm(conterm, "!=", (x, y) => x != y, out erg, cmd)) return erg;
+            if (CheckCompDTerm(conterm, "<>", (x, y) => x != y, out erg, cmd)) return erg;
+            if (CheckCompDTerm(conterm, "<=", (x, y) => x <= y, out erg, cmd)) return erg;
+            if (CheckCompDTerm(conterm, ">=", (x, y) => x >= y, out erg, cmd)) return erg;
+            if (CheckCompDTerm(conterm, "<", (x, y) => x < y, out erg, cmd)) return erg;
+            if (CheckCompDTerm(conterm, ">", (x, y) => x > y, out erg, cmd)) return erg;            
+            AddCommandError("C16", $"Der Ausdruck {conterm} konnte nicht als Vergleichsterm interpretiert werden.", cmd);
+            return false;
+        }
+
+        private bool CheckCompSTerm(string conterm, string scop, Func<string, string, bool> lcop, out bool erg, Command cmd)
+        {
+            Regex regCompTerm = new Regex(@"(.*)" + scop + "(.*)");
+            if (regCompTerm.IsMatch(conterm))
+            {
+                var m = regCompTerm.Match(conterm);
+                string wert1 = m.Groups[1].Value.Trim();
+                string wert2 = m.Groups[2].Value.Trim();
+                erg = lcop(wert1, wert2);
+                return true;
+            }
+            erg = false;
+            return false;
+        }
+        private bool CheckCompDTerm(string conterm, string scop, Func<double, double, bool> lcop, out bool erg, Command cmd)
+        {
+            Regex regCompTerm = new Regex(@"(.*)" + scop + "(.*)");
+            if (regCompTerm.IsMatch(conterm))
+            {
+                var m = regCompTerm.Match(conterm);
+                string wert1 = m.Groups[1].Value.Trim();
+                string wert2 = m.Groups[2].Value.Trim();
+
+                bool w1OK = double.TryParse(wert1, out double dblwert1);
+                bool w2OK = double.TryParse(wert2, out double dblwert2);
+                if (!w1OK)
+                {
+                    AddCommandError("C08", $"Der Ausdruck {wert1} konnte nicht als Gleitkommazahl interpretiert werden.", cmd);
+                }
+                else if (!w2OK)
+                {
+                    AddCommandError("C08", $"Der Ausdruck {wert2} konnte nicht als Gleitkommazahl interpretiert werden.", cmd);
+                }
+                else
+                {
+                    erg = lcop(dblwert1, dblwert2);
+                    return true;
+                }
+            }
+            erg = false;
+            return false;
         }
 
         private void RunCmd_UrlEncode(Command cmd)
@@ -641,7 +737,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                 input = input.Replace("$NewGuid", Guid.NewGuid().ToString());
                 input = input.Replace("$GetDateStamp", $"{DateTime.Now:yyyy-MM-dd}");
                 input = input.Replace("$GetDateTime", $"{DateTime.Now:g}");
-                input = input.Replace("$GetDate", $"{DateTime.Now:d}");                
+                input = input.Replace("$GetDate", $"{DateTime.Now:d}");
                 input = input.Replace("$GetTime", $"{DateTime.Now:T}");
                 input = input.Replace("$GetYear", $"{DateTime.Now:yyyy}");
                 input = input.Replace("$CRLF", "\r\n");
