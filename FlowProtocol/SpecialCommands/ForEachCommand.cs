@@ -20,7 +20,8 @@ namespace FlowProtocol.SpecialCommands
             int take = CommandHelper.GetIntParameter(cmd, "Take", 0, addError, true);
             int groupBy = CommandHelper.GetIntParameter(cmd, "GroupBy", 0, addError, true);
             string arrayListDiv = CommandHelper.GetTextParameter(cmd, "ArrayList", "", addError, true);
-            var list = ReadList(listfilename, cmd, addError);
+            string groupfilter = CommandHelper.GetTextParameter(cmd, "GroupFilter", "", addError, true);
+            var list = ReadList(listfilename, groupfilter, cmd, addError);
             TakeSelection(ref list, take, selectedOptions);
             SetListTemplates(list, template, res, indexVar, groupBy, arrayListDiv, cmd.SortPath);
             return new List<ResultItem>();
@@ -142,11 +143,17 @@ namespace FlowProtocol.SpecialCommands
             }
         }
 
-        private List<Tuple<string, string>> ReadList(string listfilename, Command cmd, Action<ReadErrorItem> addError)
+        private List<Tuple<string, string>> ReadList(string listfilename, string groupfilter, Command cmd, Action<ReadErrorItem> addError)
         {
             List<Tuple<string, string>> ret = new List<Tuple<string, string>>();
             char separator = Path.DirectorySeparatorChar;
             string listfilepath = TemplateDetailPath + separator + listfilename.Trim().Replace(".qfl", string.Empty) + ".qfl";
+            bool groupfilteraktive = false;
+            if (!string.IsNullOrEmpty(groupfilter))
+            {
+                groupfilteraktive = true;
+                groupfilter = "+" + groupfilter + "+";
+            }
             if (System.IO.File.Exists(listfilepath))
             {
                 using (StreamReader sr = new StreamReader(listfilepath))
@@ -172,8 +179,11 @@ namespace FlowProtocol.SpecialCommands
                         }
                         else
                         {
-                            string element = line.Trim();
-                            ret.Add(new Tuple<string, string>(element, group));
+                            if (!groupfilteraktive || string.IsNullOrEmpty(group) || groupfilter.Contains("+" + group + "+"))
+                            {
+                                string element = line.Trim();
+                                ret.Add(new Tuple<string, string>(element, group));
+                            }
                         }
                     }
                 }

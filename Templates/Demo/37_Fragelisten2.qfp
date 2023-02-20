@@ -5,4 +5,4 @@
 ?F1: Mag ich $idxL0?
 	#j: Ja, ich mag $idxL0
 		>> Probier mal $idxL1.		
-	#n: Nein		
+	#n: Nein
