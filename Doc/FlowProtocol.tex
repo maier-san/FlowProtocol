@@ -1558,4 +1558,32 @@ Beantwortet man die erste Frage mit \glqq Verschachtelt\grqq\ und die zweite mit
 \end{numlist}
 }
 Zu beachten ist, dass sich die Reihenfolge bei gruppierten Ausgaben nur innerhalb der Gruppen auswirkt.
+\subsection{Selbstlernende Vorlagen}
+Selbstlernende Systeme begegnen uns viel im Bereich der künstlichen Intelligenz und meinen meist Anwendungen, die sich ihre Fähigkeiten durch wiederholte Versuche selbst beigebracht haben, oder das noch im Laufe ihres Produktivbetriebs tun. \FlowProtocol ist durch die Möglichkeit, Änderungen und Erweiterungen unmittelbar und sehr einfach in eine Vorlage einzubauen, ebenfalls auf ständige Erweiterungen ausgelegt, wobei auch diese niedrige Schwelle schon für viele zu hoch sein kann. Um es noch einfacher zu machen, eine Vorlage bei Bedarf zu erweitern, kann man die Anleitung für die Erweiterung gleich von Anfang an in die Vorlage einbauen.
+\Beispiel
+\begin{verbatim}
+/// Man lernt nie aus
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+   #Normal: Normal
+      >> Ausgabe >> Hallo Welt
+   #InGrossbuchstaben: In Großbuchstaben
+      >> Ausgabe >> HALLO WELT
+   // Oberhalb von hier einfügen
+   #ex: Leider nicht in der Liste
+      ~Input G1: Grußform      
+      ~Input G2: Ausgabe
+      ~CamelCase CCG = $G1
+      >> Ausgabe >> $G2
+      >> Erweiterung >> Vorlagedatei öffnen:
+         > S:\FlowProtocol\Templates\Demo\39_LerneWelt.qfp
+      >> Erweiterung >> Nachfolgende Stelle suchen:
+         >|// Oberhalb von hier einfügen
+      >> Erweiterung >> Erweiterungscode einfügen:
+         >|$Chr009#$CCG: $G1
+         >|$Chr009$Chr009>> Ausgabe >> $G2   
+\end{verbatim}
+Das oben aufgeführte Beispiel bietet zwei Hallo-Welt-Ausgaben an, und ergänzt diese durch einen weiteren Eintrag \glqq Leider nicht in der Liste\grqq. Wählt man diesen aus, werden Grußform und Ausgabe als Eingabe abgefragt, und die Ausgabe in der gewünschten Form erzeugt. Zusätzlich wird eine Anleitung ausgegeben, die genau beschreibt, wie man die Vorlage um diese neue Möglichkeit erweitern kann.
+
+Die Form der Anleitung bietet sich besonders dann an, wenn die Erweiterung nach einem bestimmten Muster verläuft und selbst wieder Artefakte verwendet, die sichgut  mit \FlowProtocol-Vorlagen bereiststellen lassem, wie der Aufruf von URLs, um Werte nachzuschlagen.
 \end{document}
