@@ -1558,6 +1558,7 @@ Beantwortet man die erste Frage mit \glqq Verschachtelt\grqq\ und die zweite mit
 \end{numlist}
 }
 Zu beachten ist, dass sich die Reihenfolge bei gruppierten Ausgaben nur innerhalb der Gruppen auswirkt.
+
 \subsection{Selbstlernende Vorlagen}
 Selbstlernende Systeme begegnen uns viel im Bereich der künstlichen Intelligenz und meinen meist Anwendungen, die sich ihre Fähigkeiten durch wiederholte Versuche selbst beigebracht haben, oder das noch im Laufe ihres Produktivbetriebs tun. \FlowProtocol ist durch die Möglichkeit, Änderungen und Erweiterungen unmittelbar und sehr einfach in eine Vorlage einzubauen, ebenfalls auf ständige Erweiterungen ausgelegt, wobei auch diese niedrige Schwelle schon für viele zu hoch sein kann. Um es noch einfacher zu machen, eine Vorlage bei Bedarf zu erweitern, kann man die Anleitung für die Erweiterung gleich von Anfang an in die Vorlage einbauen.
 \Beispiel
@@ -1588,4 +1589,59 @@ Das oben aufgeführte Beispiel bietet zwei Hallo-Welt-Ausgaben an, und ergänzt di
 Diese Form der Anleitung bietet sich besonders dann an, wenn die Erweiterung nach einem gut zu beschreibenden Muster verläuft und selbst wieder Artefakte verwendet, die sich gut  mit \FlowProtocol-Vorlagen bereiststellen lassem, wie z.B.\ der Aufruf von URLs, um Werte nachzuschlagen.
 
 Alternativ zu einer solchen Anleitung kann man auch einen Mailto-Link ausgeben, der die die vermisste Option per Mail an den für die Vorlage zuständigen Mitarbeiter schickt. Dieser kann die Vorlage dann in Ruhe in der gewünschten Form erweitern. Auf diesem Weg läuft man nicht Gefahr, dass es aufgrund von Erweiterungen zu Einschränkungen bei den Vorlagen kommt. Ideal ist es, beide Varianten anzubieten, so dass jeder die Möglichkeit nutzen kann, die er sich selbst zutraut.
+
+\subsection{Programmtechnische Möglichkeiten}
+\FlowProtocol\ ist sicher nicht die erste Wahl und auch nicht dazu gedacht, um komplexe Berechnungen oder Algorithmen zur Datenverarbeitung zu implementieren, aber in manchen Fällen bietet es sich an, und es ist mehr möglich, als man auf den ersten Blick denkt.
+
+Das folgende Beispiel zeigt eine Lösung für eine solche Aufgabenstellung, die man in den üblichen Programmiersprachen sicherlich anders gelöst hätte, und demonstriert, dass man mit den hier verfügbaren Befehlen ebenfalls einiges anstellen kann.
+
+Die Aufgabenstellung besteht darin ein achtstelliges Passwort aus zufälligen Zeichen zu generieren, das mindestens einen und maximal zwei Großbuchstaben, mindestens eine und maximal zwei Ziffern und mindestens ein und maximal zwei Sonderzeichen enthält. Hintergrund dieser Anforderung ist der, dass viele Richtlinien für sichere Passwörter eine Mindestlänge von acht Zeichen und die Verwendung von Groß- und Kleinbuchstaben, sowei Ziffern und Sonderzeichen fordern, und man umgekehrt nicht zuviel davon haben möchte, weil sonst zu viele Zeichen mit der Umschalttaste eingegeben werden müssen.
+
+Um den Lösungsansatz mit einer überschaubaren Menge von Codezeilen zu zeigen, reduzieren wir die Aufgabe auf die Erstellung eines dreistelliges Passworts, das genau einen Großbuchstaben, und mit mindestens 50\% Wahrscheinlichkeit auch eine Ziffer enthält.
+\Beispiel
+\begin{verbatim}
+/// Erstelle ein sicheres Passwort
+//  Anwendungsbeispiel für die Befehlsreferenz
+
+// Ausgangsmaske
+~Set pw=123
+
+// Ersetze die Ziffern von 1 bis 3 zufällig durch ^A bis ^C
+~Random pos=1..3
+~Replace pw=$pw|$pos->^A
+~Replace pw=$pw|3->$pos
+~Random pos=1..2
+~Replace pw=$pw|$pos->^B
+~Replace pw=$pw|2->$pos
+~Replace pw=$pw|1->^C
+
+// Wähle Großbuchstaben für ^A 
+~Random zwert=65..90
+~Set zA=$Chr0$zwert
+~Replace pw=$pw|^A->$zA
+
+// Wähle Ziffer für ^B mit 50% Wahscheinlichkeit 
+~Random zB=0..9
+~Random zwert=97..122
+~SetIf zwert=0$zwert <<< $zwert<100
+~Set zX=$Chr$zwert
+~Random ausw=1..2
+~SetIf zB=$zX <<< $ausw==1
+~Replace pw=$pw|^B->$zB
+
+// Wähle Kleinbuchstaben für ^C
+~Random zwert=97..122
+~SetIf zwert=0$zwert <<< $zwert<100
+~Set zC=$Chr$zwert
+~Replace pw=$pw|^C->$zC
+
+// Ausgabe
+>> Passwort: $pw
+\end{verbatim}
+
+Ausganssituation ist eine Ausgangsmaske mit den Ziffern $1$ bis $3$. Im ersten Schritt generieren wir daraus eine zufällige Permutation der Buchsaben A, B, C, bzw.\ der Zeichenkombinationen mit vorangestelltem \verb|^|, um später keine ungewollte Wechselwirkung mit den Großbuchstaben des Passworts zu haben. Die Permuation erzeugen wir dadurch, dass wir eine  der Ziffern per Zufallsgenerator wählen und diese dann ersetzen. Anschließend ersetzen wir die höchste Ziffer durch die gewählte, damit wieder ein zusammenhängender Zahlenbereich entsteht.
+
+Nun ersetzen wir \verb|^A| durch einen Großbuchstaben, den wir zufällig im Zeichenbereich $65$ bis $90$ wählen. Anschließend wählen wir eine Ziffer und als Alternative einen Kleinbuchstaben, mit dem wir in Abhängigkeit eines Zufallswertes zwischen $1$ und $2$ die Ziffer wieder überschreiben und damit am Ende \verb|^B| ersetzen. Danach ersetzen wir \verb|^C| mit einem weiteren Kleinbuchstaben. Beim Erzeugen eines Kleinbuchstabens muss man beachten, dass man für den \verb|$Chr|-Befehl die Ziffer $0$ voranstellt, wenn der Zeichencode zweistellig ist.
+
+Die gezeigte Vorlage ist nicht interaktiv, da sie weder eine Eingabe, noch eine Frage enthält. Eine mögliche Erweiterung wäre die übergeordnete Auswahl der Komplexität oder die individuelle Bestimmung, ob und in welcher Vielfachheit bestimmte Zeichengruppen vertreten sein sollen.
 \end{document}

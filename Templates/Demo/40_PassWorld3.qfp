@@ -1,0 +1,37 @@
+/// Erstelle ein sicheres Passwort
+//  Anwendungsbeispiel für die Befehlsreferenz
+
+// Ausgangsmaske
+~Set pw=123
+
+// Ersetze die Ziffern von 1 bis 3 zufällig durch ^A bis ^C
+~Random pos=1..3
+~Replace pw=$pw|$pos->^A
+~Replace pw=$pw|3->$pos
+~Random pos=1..2
+~Replace pw=$pw|$pos->^B
+~Replace pw=$pw|2->$pos
+~Replace pw=$pw|1->^C
+
+// Wähle Großbuchstaben für ^A 
+~Random zwert=65..90
+~Set zA=$Chr0$zwert
+~Replace pw=$pw|^A->$zA
+
+// Wähle Ziffer für ^B mit 50% Wahscheinlichkeit 
+~Random zB=0..9
+~Random zwert=97..122
+~SetIf zwert=0$zwert <<< $zwert<100
+~Set zX=$Chr$zwert
+~Random ausw=1..2
+~SetIf zB=$zX <<< $ausw==1
+~Replace pw=$pw|^B->$zB
+
+// Wähle Kleinbuchstaben für ^C
+~Random zwert=97..122
+~SetIf zwert=0$zwert <<< $zwert<100
+~Set zC=$Chr$zwert
+~Replace pw=$pw|^C->$zC
+
+// Ausgabe
+>> Passwort: $pw
