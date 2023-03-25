@@ -1,0 +1,20 @@
+/// Man lernt nie aus
+//  Anwendungsbeispiel für die Befehlsreferenz
+?F1: Wie soll "Hallo Welt" ausgegeben werden?
+	#Normal: Normal
+		>> Ausgabe >> Hallo Welt
+	#InGrossbuchstaben: In Großbuchstaben
+		>> Ausgabe >> HALLO WELT
+	// Oberhalb von hier einfügen
+	#ex: Leider nicht in der Liste
+		~Input G1: Grußform		
+		~Input G2: Ausgabe
+		~CamelCase CCG = $G1
+		>> Ausgabe >> $G2
+		>> Erweiterung >> Vorlagedatei öffnen:
+			> S:\FlowProtocol\Templates\Demo\39_LerneWelt.qfp
+		>> Erweiterung >> Nachfolgende Stelle suchen:
+			>|// Oberhalb von hier einfügen
+		>> Erweiterung >> Erweiterungscode einfügen:
+			>|$Chr009#$CCG: $G1
+			>|$Chr009$Chr009>> Ausgabe >> $G2			

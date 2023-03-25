@@ -82,7 +82,11 @@ namespace FlowProtocol.Pages.FlowTemplates
             }
             TemplateBaseURL = this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path;
             TemplateDescription = currentTemplate?.Description?.Split(Environment.NewLine).ToList();
-            if (currentTemplate != null) ExtractQueryItems(currentTemplate);
+            if (currentTemplate != null)
+            {
+                ExtractQueryItems(currentTemplate);
+                MakeCodeSummery();
+            }
             return Page();
         }
 
@@ -109,10 +113,6 @@ namespace FlowProtocol.Pages.FlowTemplates
             {
                 // Alle Fragen sind beantwortet und es gibt ein Folge-Template: ausführen
                 ExtractQueryItems(t.FollowTemplate);
-            }
-            if (!ShowQueryItems.Any())
-            {
-                MakeCodeSummery();
             }
         }
 
@@ -384,7 +384,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             if (CheckCompDTerm(conterm, "<=", (x, y) => x <= y, out erg, cmd)) return erg;
             if (CheckCompDTerm(conterm, ">=", (x, y) => x >= y, out erg, cmd)) return erg;
             if (CheckCompDTerm(conterm, "<", (x, y) => x < y, out erg, cmd)) return erg;
-            if (CheckCompDTerm(conterm, ">", (x, y) => x > y, out erg, cmd)) return erg;            
+            if (CheckCompDTerm(conterm, ">", (x, y) => x > y, out erg, cmd)) return erg;
             AddCommandError("C16", $"Der Ausdruck {conterm} konnte nicht als Vergleichsterm interpretiert werden.", cmd);
             return false;
         }
