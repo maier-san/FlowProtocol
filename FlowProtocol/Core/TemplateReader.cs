@@ -14,7 +14,7 @@ namespace FlowProtocol.Core
         // Fehler beim Einlesen
         public List<ReadErrorItem> ReadErrors { get; private set; }
         public string KeyPath { get; set; }
-        public string SortPath {get; set; }
+        public string SortPath { get; set; }
         private int keyindex = 0;
         private int includeindex = 0;
         private string currentSection = string.Empty;
@@ -72,6 +72,7 @@ namespace FlowProtocol.Core
                         line = line.Replace("\t", "    ");
                         int indent = line.Length - line.TrimStart().Length;
                         line = ReplaceVariables(line, assignments);
+                        line = ReplaceTemplateVars(line, linenumber, filepath);
                         string codeline = line.Trim();
                         if (string.IsNullOrWhiteSpace(codeline))
                         {
@@ -113,10 +114,10 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regRestriction.Match(codeline);
-                                Restriction r = new Restriction() 
+                                Restriction r = new Restriction()
                                 {
-                                    Key = AddKeyNumber(m.Groups[1].Value.Trim()), 
-                                    QuestionText = m.Groups[2].Value.Trim(), 
+                                    Key = AddKeyNumber(m.Groups[1].Value.Trim()),
+                                    QuestionText = m.Groups[2].Value.Trim(),
                                     Section = currentSection,
                                     SortPath = currentsortpath
                                 };
@@ -216,13 +217,13 @@ namespace FlowProtocol.Core
                             if (parent != null)
                             {
                                 var m = regInputItem.Match(codeline);
-                                InputItem q = new InputItem() 
-                                    {
-                                        Key = AddKeyNumber(m.Groups[1].Value.Trim()), 
-                                        QuestionText = m.Groups[2].Value.Trim(), 
-                                        Section = currentSection,
-                                        SortPath = currentsortpath
-                                    };
+                                InputItem q = new InputItem()
+                                {
+                                    Key = AddKeyNumber(m.Groups[1].Value.Trim()),
+                                    QuestionText = m.Groups[2].Value.Trim(),
+                                    Section = currentSection,
+                                    SortPath = currentsortpath
+                                };
                                 parent.FlowItems.Add(q);
                                 currentQueryItem = q;
                             }
@@ -244,9 +245,9 @@ namespace FlowProtocol.Core
                                     Codeline = codeline.Trim()
                                 };
                                 var m = regCommand.Match(codeline);
-                                Command c = new Command(errortemplate) 
+                                Command c = new Command(errortemplate)
                                 {
-                                    ComandName = m.Groups[1].Value.Trim(), 
+                                    ComandName = m.Groups[1].Value.Trim(),
                                     Arguments = m.Groups[2].Value.Trim(),
                                     SortPath = currentsortpath
                                 };
@@ -324,6 +325,23 @@ namespace FlowProtocol.Core
                 ret = ret.Replace("$" + idx.Key, idx.Value);
             }
             return ret;
+        }
+
+        private string ReplaceTemplateVars(string codeline, int linenumber, string filepath)
+        {
+            if (string.IsNullOrWhiteSpace(codeline)) return codeline;
+            if (codeline.Contains("$LineNumber"))
+            {
+                var matchlist = Regex.Matches(codeline, @"\$LineNumber-([0-9]*)");
+                foreach (Match idxm in matchlist)
+                {
+                    int offset = int.Parse(idxm.Groups[1].Value);
+                    codeline = codeline.Replace(idxm.Groups[0].Value, (linenumber - offset).ToString());
+                }
+                codeline = codeline.Replace("$LineNumber", linenumber.ToString());
+            }
+            codeline = codeline.Replace("$TemplateFilePath", filepath);
+            return codeline;
         }
     }
 }

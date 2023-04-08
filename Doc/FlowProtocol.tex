@@ -5,6 +5,8 @@
 \usepackage{fancyhdr}
 \usepackage{geometry}
 \usepackage{mathptm}
+\usepackage{amsfonts}
+\setlength{\unitlength}{1mm}
 \title{FlowProtocol - Anwenderhandbuch}
 \author{Wolfgang Maier}
 %%
@@ -59,6 +61,7 @@
 \newcommand{\ZeigeFehlerItem}[4]{\item\textbf{#1}\\#2\ \textsl{#3}\\\texttt{#4}}
 \newcommand{\FehlerBeschreibungItem}[2]{\item[#1]\textsl{#2}\\}
 \newcommand{\SysVar}[2]{\item[\$#1]\textsl{#2}}
+\newcommand{\IN}{\mathbb{N}}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -1234,6 +1237,9 @@ Systemvariablen sind spezielle Variablen, die schon durch das System mit Werten 
 \SysVar{CRLF}{Gibt die Zeichenfolge \texttt{\textbackslash r\textbackslash n} (Carriage Return + Line Feed) zurück, mit der ein Zeilenumbruch auf Windows-System erzeugt wird.}
 \SysVar{LF}{Gibt das Zeichen \texttt{\textbackslash n} (Line Feed) zurück, mit dem ein Zeilenuburch auf den System Unix/Mac OS X erzeugt wird.}
 \SysVar{ChrXXX}{mit $1\le XXX\le 255$. Gibt das Zeichen mit dem ASCII-Code XXX zurück, z.B.\ \texttt{\$Chr065 = A}.}
+\SysVar{TemplateFilePath}{Gibt den Dateipfad der Vorlagendatei zurück.}
+\SysVar{LineNumber}{Gibt die Zeilennummer der entsprechenden Codezeile zurück.}
+\SysVar{LineNumber-$n$}{mit $n\in\IN$. Gibt die Zeilennummer der entsprechenden Codezeile abzüglich der Zahl $n$ zurück. Zu beachten ist, dass dieser Audruck keine Leerzeichen enthalten darf.}
 \end{description}
 
 \newpage
@@ -1570,21 +1576,19 @@ Selbstlernende Systeme begegnen uns viel im Bereich der künstlichen Intelligenz 
       >> Ausgabe >> Hallo Welt
    #InGrossbuchstaben: In Großbuchstaben
       >> Ausgabe >> HALLO WELT
-   // Oberhalb von hier einfügen
+   // Oberhalb von hier weitere Ergänzungen einfügen
    #ex: Leider nicht in der Liste
       ~Input G1: Grußform      
       ~Input G2: Ausgabe
       ~CamelCase CCG = $G1
       >> Ausgabe >> $G2
       >> Erweiterung >> Vorlagedatei öffnen:
-         > S:\FlowProtocol\Templates\Demo\39_LerneWelt.qfp
-      >> Erweiterung >> Nachfolgende Stelle suchen:
-         >|// Oberhalb von hier einfügen
-      >> Erweiterung >> Erweiterungscode einfügen:
+         > $TemplateFilePath
+         > Code oberhalb von Zeile $LineNumber-8 einfügen:
          >|$Chr009#$CCG: $G1
          >|$Chr009$Chr009>> Ausgabe >> $G2   
 \end{verbatim}
-Das oben aufgeführte Beispiel bietet zwei Hallo-Welt-Ausgaben an, und ergänzt diese durch einen weiteren Eintrag \glqq Leider nicht in der Liste\grqq. Wählt man diesen aus, werden Grußform und Ausgabe als Eingabe abgefragt, und die Ausgabe in der gewünschten Form erzeugt. Zusätzlich wird eine Anleitung ausgegeben, die genau beschreibt, wie man die Vorlage um diese neue Möglichkeit erweitern kann.
+Das oben aufgeführte Beispiel bietet zwei Hallo-Welt-Ausgaben an, und ergänzt diese durch einen weiteren Eintrag \glqq Leider nicht in der Liste\grqq. Wählt man diesen aus, werden Grußform und Ausgabe als Eingabe abgefragt, und die Ausgabe in der gewünschten Form erzeugt. Zusätzlich wird eine Anleitung ausgegeben, die genau beschreibt, wie man die Vorlage um diese neue Möglichkeit erweitern kann. Hierbei werden die beiden Systemvariablen \verb|$TemplateFilePath| und \verb|$LineNumber| verwendet, um den Pfad der Datei und die Zeilennummer zum Ausführungszeitpunkt zu bestimmen (siehe Abschnitt~\ref{Systemvariablen}).
 
 Diese Form der Anleitung bietet sich besonders dann an, wenn die Erweiterung nach einem gut zu beschreibenden Muster verläuft und selbst wieder Artefakte verwendet, die sich gut  mit \FlowProtocol-Vorlagen bereiststellen lassem, wie z.B.\ der Aufruf von URLs, um Werte nachzuschlagen.
 
