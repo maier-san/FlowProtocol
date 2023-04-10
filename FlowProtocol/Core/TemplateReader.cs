@@ -245,17 +245,26 @@ namespace FlowProtocol.Core
                                     Codeline = codeline.Trim()
                                 };
                                 var m = regCommand.Match(codeline);
-                                Command c = new Command(errortemplate)
+                                string commandname = m.Groups[1].Value.Trim();
+                                Command c;
+                                if (commandname == "If")
                                 {
-                                    ComandName = m.Groups[1].Value.Trim(),
-                                    Arguments = m.Groups[2].Value.Trim(),
-                                    SortPath = currentsortpath
-                                };
+                                    IfCondition cic = new IfCondition(errortemplate);
+                                    TemplateStack.Push(new Tuple<int, Template>(indent, cic.ConditionalTemplate));
+                                    c = cic;
+                                }
+                                else
+                                {
+                                    c = new Command(errortemplate);
+                                }
+                                c.ComandName = commandname;
+                                c.Arguments = m.Groups[2].Value.Trim();
+                                c.SortPath = currentsortpath;
                                 if (c.ComandName == "Include")
                                 {
                                     includeindex++;
                                     c.KeyPath = this.KeyPath + "_" + includeindex.ToString() + "_" + keyindex.ToString();
-                                }
+                                }                                
                                 parent.FlowItems.Add(c);
                             }
                             else AddReadError("R09", "Befehl kann keinem Kontext zugeordnet werden.", filepath, linenumber, codeline);
@@ -269,7 +278,7 @@ namespace FlowProtocol.Core
             return main;
         }
 
-        // Ergänzt einen Key der mir ' endet um einen eindeutigen Index
+        // Ergänzt einen Key der mit ' endet um einen eindeutigen Index
         private string AddKeyNumber(string key)
         {
             ;

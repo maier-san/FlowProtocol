@@ -1,0 +1,10 @@
+/// Bedingte Blöcke
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Input w: Eine Zahl zwischen 0 und 10 eingeben
+~Execute
+~If $w>=4 && $w<=6
+	>> Die Zahl liegt zwischen 4 und 6.	
+	?C: Ist das nicht toll?
+		#j: Ja
+			>> Toll!
+		#n: Nein

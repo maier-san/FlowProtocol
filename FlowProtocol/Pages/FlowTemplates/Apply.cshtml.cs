@@ -223,14 +223,15 @@ namespace FlowProtocol.Pages.FlowTemplates
                 case "Implies": RunCmd_Implies(cmd); break;
                 case "Include": RunCmd_Include(cmd); break;
                 case "Set": RunCmd_Set(cmd); break;
-                case "SetIf": RundCmd_SetIf(cmd); break;
+                case "SetIf": RunCmd_SetIf(cmd); break;
                 case "UrlEncode": RunCmd_UrlEncode(cmd); break;
                 case "Calculate": RunCmd_Calculate(cmd); break;
                 case "Round": RunCmd_Round(cmd); break;
                 case "Replace": RunCmd_Replace(cmd); break;
                 case "CamelCase": RunCmd_CamelCase(cmd); break;
                 case "Random": RunCmd_Random(cmd); break;
-                case "SetDateTimeFormat": RundCmd_SetDateTimeFormat(cmd); break;
+                case "SetDateTimeFormat": RunCmd_SetDateTimeFormat(cmd); break;
+                case "If": RunCmd_If(cmd); break;
                 case "Vote": break;
                 case "Cite": break;
                 case "ForEach": break;
@@ -337,7 +338,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             }
         }
 
-        private void RundCmd_SetIf(Command cmd)
+        private void RunCmd_SetIf(Command cmd)
         {
             string arguments = cmd.Arguments;
             Regex regSetIfExpression = new Regex(@"^([A-Za-z0-9]*)\s*=\s*(.*)<<<(.*)");
@@ -659,10 +660,28 @@ namespace FlowProtocol.Pages.FlowTemplates
         }
 
         // Setzt die Datum-Uhrzeit-Formatierung für dem SetDateTimeFormat-Befehl
-        private void RundCmd_SetDateTimeFormat(Command cmd)
+        private void RunCmd_SetDateTimeFormat(Command cmd)
         {
             string arguments = cmd.Arguments.Trim();
             if (arguments == "default") CurrentFormat = string.Empty; else CurrentFormat = arguments;
+        }
+
+        private void RunCmd_If(Command cmd)
+        {
+            IfCondition? cic = cmd as IfCondition;
+            if (cic != null)
+            {
+                string cond = cic.ConditionTerm;
+                bool condIsTrue = EvaluateCondition(cond, cmd);
+                if (condIsTrue)
+                {
+                    ExtractQueryItems(cic.ConditionalTemplate);
+                }
+            }
+            else
+            {
+                AddCommandError("C17", $"Der If-Befehl konnte nicht vollständig interpretiert werden.", cmd);
+            }
         }
 
         // Fügt einen Fehler beim ausführend eines Commandos hinzu
