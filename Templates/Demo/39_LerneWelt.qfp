@@ -12,9 +12,8 @@
 		~CamelCase CCG = $G1
 		>> Ausgabe >> $G2
 		>> Erweiterung >> Vorlagedatei öffnen:
-			> S:\FlowProtocol\Templates\Demo\39_LerneWelt.qfp
-		>> Erweiterung >> Nachfolgende Stelle suchen:
-			>|// Oberhalb von hier einfügen
+			> $TemplateFilePath
+			> Nachfolgenden Code oberhalb von Zeile $LineNumber-8 einfügen:
 		>> Erweiterung >> Erweiterungscode einfügen:
 			>|$Chr009#$CCG: $G1
 			>|$Chr009$Chr009>> Ausgabe >> $G2			
