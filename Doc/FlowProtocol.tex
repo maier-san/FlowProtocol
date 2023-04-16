@@ -1197,8 +1197,9 @@ Ein Vergleichsausdruck kann wiederum folgende Form haben:
 <z1> >= <z2>
 <z1> < <z2>
 <z1> > <z2>
+<s1> ~ <s2>
 \end{verbatim}
-Hier stehen die Ausdrücke \verb|<s1>| und \verb|<s2>|  für beliebige Zeichenfolgen und \verb|<z1>| und \verb|<z2>| für Werte, die sich zum Auswertungszeitpunkt als Gleitkommazahl interpretieren lassen. Man beachte dabei die Unterscheidung der beiden Ungleich-Operatoren \verb|!=| für Texte und \verb|<>| für Zahlen. Klammerungen und unäre Negationen sind nicht Bestandteil der Bedingungssyntax und auch nicht notwendig, da sich über die disjunktive Form und mit den verfügbaren Vergleichsoperatoren alle logischen Kombinationen abbilden lassen. Umschließende Leerzeichen werden vor der Auswertung entfernt und nicht beim Vergleich berücksichtigt.
+Hier stehen die Ausdrücke \verb|<s1>| und \verb|<s2>|  für beliebige Zeichenfolgen und \verb|<z1>| und \verb|<z2>| für Werte, die sich zum Auswertungszeitpunkt als Gleitkommazahl interpretieren lassen. Man beachte dabei die Unterscheidung der beiden Ungleich-Operatoren \verb|!=| für Texte und \verb|<>| für Zahlen. Der Operator \verb|~| steht für \glqq enthält\grqq\ im Sinne von, dass die auf der linken Seite stehende Zeichenkennte die auf der rechten Seite als Teil enthält. Klammerungen und unäre Negationen sind nicht Bestandteil der Bedingungssyntax und auch nicht notwendig, da sich über die disjunktive Form und mit den verfügbaren Vergleichsoperatoren alle logischen Kombinationen abbilden lassen. Umschließende Leerzeichen werden vor der Auswertung entfernt und nicht beim Vergleich berücksichtigt. Zu beachten ist auch, dass die Groß-klein-Schreibung von Zeichenketten immer mit berücksichtigt wird, so dass z.B.\ \verb|A != a| als wahr interpretiert wird.
 
 Anstelle eines Vergleichsausdruckes kann auch direkt ein Wahrheitswert \texttt{1} oder \texttt{true} für wahr und \texttt{0} oder \texttt{false} für falsch angegeben werden. Damit können Zwischenergebnisse berechnet und wieder erneut in Bedingungen eingesetzt werden. 
 
@@ -1207,19 +1208,50 @@ Anstelle eines Vergleichsausdruckes kann auch direkt ein Wahrheitswert \texttt{1
 /// Bedingte Zuweisungen
 //  Anwendungsbeispiel für die Befehlsreferenz
 ~Input w: Eine Zahl zwischen 0 und 10 eingeben
+~Input t: Ein Wort eingeben
 ~Execute
-~Set z=vom Rand; p=nicht prim
+~Set z=vom Rand; p=nicht prim;
 ~SetIf z=aus der Mitte <<< $w>=4 && $w<=6
 ~SetIf p=prim <<< $w==2 || $w==3 || $w==5 || $w==7
 >> Die Zahl $w ist
     > $z
     > $p
+~Set v=kein au oder äu
+~SetIf v=au oder äu <<< $t~au || $t~äu
+>> Das Wort $t enthält $v.
 \end{verbatim}
-Das obige Beispiel fragt eine Zahl zwischen 0 und 10 ab und bestimmt anhand von zwei Bedingungen Eigenschaften, die nachfolgend ausgegeben werden. 
+Das obige Beispiel fragt eine Zahl zwischen 0 und 10 und ein Wort ab und bestimmt anhand von drei Bedingungen Eigenschaften, die nachfolgend ausgegeben werden. 
 
 Beim Anwenden von bedingten Zuweisungen sollte man darauf achten, dass die Variablen schon zuvor mit dem Wert belegt wurden, der im Fall der nicht erfüllten Bedingung gesetzt sein soll. Versäumt man dies, bleibt die Variable unbelegt und wird in der nachfolgenden Verarbeitung nicht ersetzt.
 
 Die logische Auswertung innerhalb des Ausdrucks erfolgt von links nach rechts und wird jeweils abgebrochen, sobald der Ergebniswert in einer Konjunktion oder der äußeren Disjunktion feststeht. 
+
+\subsection{If-Bedingungen}\label{IfBedingungen}
+Mit Hilfe der bedingten Zuweisungen kann man Bedingungen schon umfangreich nutzen, um Variablen zu setzen. In manchen Fällen möchte man jedoch auch den Verlauf der Ausführung steuern und ähnlich wie bei den Eingaben des Benutzers ganze Abschnitte ausführen oder überspringen. Dies ist mit dem \verb|If|-Befehl möglich:
+\Syntax
+\begin{verbatim}
+~If <Bedingung>
+   <Bedingter Code>
+\end{verbatim}
+Die Bedingung wird in der gleichen Weise angegeben wie bei den bedingten Zuweisungen (siehe Abschnitt~\ref{BedingteZuweisungen}) und zum Ausführungszeitpunkt ausgewertet. Als bedingter Code werden alle nachfolgenden Anweisungen interpretiert, die gegenüber dem \verb|If|-Befehl eingerückt sind. Diese werden an die Bedingung gebunden und nur dann ausgeführt, wenn die Bedingungen als wahr ausgewertet wird. 
+
+\Beispiel
+\begin{verbatim}
+/// Bedingte Blöcke
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Input w: Eine Zahl zwischen 0 und 10 eingeben
+~Execute
+~If $w>=4 && $w<=6
+    >> Die Zahl liegt zwischen 4 und 6.    
+    ?C: Zwischen 4 und 6, toll oder?
+        #j: Ja
+            >> Toll!
+        #n: Nein
+>> Das war es!
+\end{verbatim}
+Das obige Beispiel fragt nach einer Zahl zwischen 0 und 10 und prüft, ob der eingegebene Wert zwischen 4 und 6 liegt. In diesem Fall wird eine entsprechende Ausgabe erzeugt und die Frage \glqq Zwischen 4 und 6, toll oder?\grqq\ ausgegeben. Je nach Antwort wird eine weitere Ausgabe erzeugt. Die abschließende Ausgabe  \glqq Das war es!\grqq\ wird wieder unabhängig von der Bedingung ausgegeben, da sie die gleiche Einrückungstiefe hat, wie die \verb|If|-Bedingung.
+
+Der \verb|Execute|-Befehl vor der \verb|If|-Bedingung ist übrigens notwendig, da die Interpretation der Bedingungen auch hier voraussetzt, dass die dort verwendeten Variablen, in diesem Fall \texttt{w}, belegt sind.
 
 \newpage
 \section{Systemvariablen}\label{Systemvariablen}
@@ -1309,8 +1341,9 @@ Ausführungsfehler treten im Zusammenhang mit der Ausführung von Befehlen auf und
 \FehlerBeschreibungItem{C12}{Der Ausdruck $\dots$ konnte nicht als Rundungsausdruck interpretiert werden.} Tritt auf, wenn ein im Zusammenhang mit einen \texttt{Round}-Befehl angegebener Audruck nicht wie in Abschnitt~\ref{Berechnungen} beschrieben interpretiert werden kann.
 \FehlerBeschreibungItem{C13}{Der Ausdruck $\dots$ konnte nicht als Ersetzungsausdruck interpretiert werden.} Tritt auf, wenn ein im Zusammenhang mit einen \texttt{Replace}-Befehl angegebener Audruck nicht wie in Abschnitt~\ref{Ersetzungen} beschrieben interpretiert werden kann.
 \FehlerBeschreibungItem{C14}{Die angegebenen Werte bilden kein gültiges Intervall.} Tritt auf, wenn für die beiden für den \texttt{Random}-Befehl angegebenen Intervallgrenzen kein gültiges Intervall bilden, also der erste Wert größer ist, als der zweite.
-\FehlerBeschreibungItem{C15}{Die Listendatei $\dots$ konnte nicht gefunden werden.} Tritt auf, wenn beim Fragelisten-Befehl \verb|~ForEach| (siehe Abschnitt~\ref{Fragelisten}) die angegebene Fragedatei nicht gefunden werden kann. 
+\FehlerBeschreibungItem{C15}{Die Listendatei $\dots$ konnte nicht gefunden werden.} Tritt auf, wenn beim Fragelisten-Befehl \verb|~ForEach| die angegebene Fragedatei nicht gefunden werden kann. Siehe Abschnitt~\ref{Fragelisten}.
 \FehlerBeschreibungItem{C16}{Der Ausdruck $\dots$ konnte nicht als Vergleichsterm interpretiert werden.} Tritt auf, wenn bei einer bedingten Zuweisung ein Ausdruck nicht als Vergleichsterm interpretiert werden kann. Siehe Abschnitt~\ref{BedingteZuweisungen}.
+\FehlerBeschreibungItem{C17}{Der If-Befehl konnte nicht vollständig interpretiert werden.} Beschreibt eine Fehler in Verbindung mit einem \verb|If|-Befehl. Siehe Abschnitt~\ref{IfBedingungen}.
 \end{description}
 \newpage
 \section{Spezialbefehle}
