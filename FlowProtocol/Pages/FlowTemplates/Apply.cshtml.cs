@@ -386,6 +386,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             if (CheckCompDTerm(conterm, ">=", (x, y) => x >= y, out erg, cmd)) return erg;
             if (CheckCompDTerm(conterm, "<", (x, y) => x < y, out erg, cmd)) return erg;
             if (CheckCompDTerm(conterm, ">", (x, y) => x > y, out erg, cmd)) return erg;
+            if (CheckCompSTerm(conterm, "~", (x, y) => x.Contains(y), out erg, cmd)) return erg;
             AddCommandError("C16", $"Der Ausdruck {conterm} konnte nicht als Vergleichsterm interpretiert werden.", cmd);
             return false;
         }

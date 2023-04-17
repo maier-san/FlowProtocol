@@ -1,10 +1,14 @@
 /// Bedingte Zuweisungen
 //  Anwendungsbeispiel für die Befehlsreferenz
 ~Input w: Eine Zahl zwischen 0 und 10 eingeben
+~Input t: Ein Wort
 ~Execute
-~Set z=vom Rand; p=nicht prim
+~Set z=vom Rand; p=nicht prim;
 ~SetIf z=aus der Mitte <<< $w>=4 && $w<=6
 ~SetIf p=prim <<< $w==2 || $w==3 || $w==5 || $w==7
 >> Die Zahl $w ist
 	> $z
 	> $p
+~Set v=kein au oder äu
+~SetIf v=au oder äu <<< $t~au || $t~äu
+>> Das Wort $t enthält $v.
