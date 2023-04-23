@@ -1,0 +1,44 @@
+/// Terminologie-Checker
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Input txinp: Text
+>> Ergebnis >> Eingegebener Text
+	> $txinp
+~Execute
+// Bestätigungen
+~Set txcon=$txinp
+~Replace txcon=$txcon|Auswahlfeld->Auswahlfeld(*)
+~Replace txcon=$txcon|Kennwort->Kennwort(*)
+~Replace txcon=$txcon|Kursstatus->Kursstatus(*)
+~Replace txcon=$txcon|Veranstaltungsstatus->Veranstaltungsstatus(*)
+// Korrekturen
+~Set txout=$txinp
+~Replace txout=$txout|die Checkbox->das Auswahlfeld
+~Replace txout=$txout|Checkbox->Auswahlfeld
+~Replace txout=$txout|Kurs-Status->Kursstatus
+~Replace txout=$txout|Passwort->Kennwort
+// Warnungen
+~Set txwrn=$txinp
+// Kontextabhängige Ersetzungen
+~If $txout~Status
+	?W: Der Begriff "Status" muss differenziert werden.
+		#v1: Kursstatus (Status eines Kurses)
+			~Replace txout=$txout|Status->Kursstatus
+		#v2: Veranstaltungssstatus (Status einer Veranstaltung)
+			~Replace txout=$txout|Status->Veranstaltungsstatus
+		#w: "Status" mit (!) kennzeichnen
+			~Replace txwrn=$txwrn|Status->Status(!)
+			>> Anmerkungen >> "Status" muss differnziert werden.
+		#x: "Status" unverändert lassen
+// Auswertung			
+~If $txinp==$txout
+	>> Ergebnis >> Keine Terminologie-Ersetzungen.
+~If $txinp!=$txout
+	>> Ergebnis >> Terminologie-Ersetzungen:
+		> $txinp
+		> $txout
+~If $txinp!=$txcon
+	>> Ergebnis >> Korrekte Benennungen (*):
+		> $txcon
+~If $txinp!=$txwrn
+	>> Ergebnis >> Warnungen (!):
+		> $txwrn
