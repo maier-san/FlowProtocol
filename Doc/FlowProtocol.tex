@@ -623,7 +623,7 @@ In manchen Fällen kann es sinnvoll sein, kurze Texte oder einzelne Begriffe abzu
 \begin{verbatim}
 ~Input  <Eingabeschlüssel>: <Fragetext>
 \end{verbatim}
-Der Schlüssel dient wie bei den Fragen zur Verwaltung der Eingabe in der URL, und der Fragetext wird an der Oberfläche angezeigt. Der Zugriff auf die Eingabe erfolgt wie bei Variablen über den Eingabeschlüssel, indem man das \$-Zeichen voranstellt. Eine Eingabe kann ebenso wie die Antwort auf eine Frage mit dem \verb|~Implies|-Befehl impliziert werden. Die Zeichenzahl ist pro Antwort auf maximal 50 Zeichen beschränkt, und aufgrund der beschränkten Zeichenzahl in der URL sollte diese Funktion nicht überstrapaziert werden.
+Der Schlüssel dient wie bei den Fragen zur Verwaltung der Eingabe in der URL, und der Fragetext wird an der Oberfläche angezeigt. Der Zugriff auf die Eingabe erfolgt wie bei Variablen über den Eingabeschlüssel, indem man das \$-Zeichen voranstellt. Eine Eingabe kann ebenso wie die Antwort auf eine Frage mit dem \verb|~Implies|-Befehl impliziert werden. Die Zeichenzahl ist pro Antwort auf maximal 100 Zeichen beschränkt, und aufgrund der beschränkten Zeichenzahl in der URL sollte diese Funktion nicht überstrapaziert werden.
 
 \Beispiel
 \begin{verbatim}
@@ -1681,4 +1681,58 @@ Ausganssituation ist eine Ausgangsmaske mit den Ziffern $1$ bis $3$. Im ersten S
 Nun ersetzen wir \verb|^A| durch einen Großbuchstaben, den wir zufällig im Zeichenbereich $65$ bis $90$ wählen. Anschließend wählen wir eine Ziffer und als Alternative einen Kleinbuchstaben, mit dem wir in Abhängigkeit eines Zufallswertes zwischen $1$ und $2$ die Ziffer wieder überschreiben und damit am Ende \verb|^B| ersetzen. Danach ersetzen wir \verb|^C| mit einem weiteren Kleinbuchstaben. Beim Erzeugen eines Kleinbuchstabens muss man beachten, dass man für den \verb|$Chr|-Befehl die Ziffer $0$ voranstellt, wenn der Zeichencode zweistellig ist.
 
 Die gezeigte Vorlage ist nicht interaktiv, da sie weder eine Eingabe, noch eine Frage enthält. Eine mögliche Erweiterung wäre die übergeordnete Auswahl der Komplexität oder die individuelle Bestimmung, ob und in welcher Vielfachheit bestimmte Zeichengruppen vertreten sein sollen.
+
+\subsection{Terminologiesystem}
+Terminologie is teine komplexe Angelegenheit, und die Einigung auf bestimmte Benennungen kann ebenso aufreibend sein, die der Weg zur Einhaltung. Aus diesem Grund kosten richtige Terminologiersystemne mindestens fünfstellig.
+
+Das nachfolgende Beispiel zeigt, wie man auch mit \FlowProtocol\ ein einfaches, aber dennoch brauchbares Terminologiesystem aufbauen kann:
+
+\Beispiel
+\begin{verbatim}
+/// Terminologie-Checker
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Input txinp: Text
+>> Ergebnis >> Eingegebener Text
+    > $txinp
+~Execute
+// Bestätigungen
+~Set txcon=$txinp
+~Replace txcon=$txcon|Auswahlfeld->Auswahlfeld(*)
+~Replace txcon=$txcon|Kennwort->Kennwort(*)
+~Replace txcon=$txcon|Kursstatus->Kursstatus(*)
+~Replace txcon=$txcon|Veranstaltungsstatus->Veranstaltungsstatus(*)
+// Korrekturen
+~Set txout=$txinp
+~Replace txout=$txout|die Checkbox->das Auswahlfeld
+~Replace txout=$txout|Checkbox->Auswahlfeld
+~Replace txout=$txout|Kurs-Status->Kursstatus
+~Replace txout=$txout|Passwort->Kennwort
+// Warnungen
+~Set txwrn=$txinp
+// Kontextabhängige Ersetzungen
+~If $txout~Status
+    ?W: Der Begriff "Status" muss differenziert werden.
+        #v1: Kursstatus (Status eines Kurses)
+            ~Replace txout=$txout|Status->Kursstatus
+        #v2: Veranstaltungssstatus (Status einer Veranstaltung)
+            ~Replace txout=$txout|Status->Veranstaltungsstatus
+        #w: "Status" mit (!) kennzeichnen
+            ~Replace txwrn=$txwrn|Status->Status(!)
+            >> Anmerkungen >> "Status" muss differnziert werden.
+        #x: "Status" unverändert lassen
+// Auswertung            
+~If $txinp==$txout
+    >> Ergebnis >> Keine Terminologie-Ersetzungen.
+~If $txinp!=$txout
+    >> Ergebnis >> Terminologie-Ersetzungen:
+        > $txinp
+        > $txout
+~If $txinp!=$txcon
+    >> Ergebnis >> Korrekte Benennungen (*):
+        > $txcon
+~If $txinp!=$txwrn
+    >> Ergebnis >> Warnungen (!):
+        > $txwrn
+\end{verbatim}
+Eingegeben wird ein Text, der terminologisch geprüft werden soll. In einem ersten Schritt werden dabei die Begriffe mit einen Sternchen gekennzeichnet, die Teil der definierten Terminologie sind. In einem zweiten Schritt werden Benennungen ersetzt, die nicht Teil der definierten Terminologie sind, z.B. die Benennung \glqq Passwort\grqq\ durch \glqq Kennwort\grqq. In einem dritten Schritt werden Begriffe behandelt, deren Klärung kontextbezogen erfolgen muss, und die ggf.\ weitere Abfragen notwednig machen. Im Beispiel oben wird der Begriff \glqq Status\grqq\ bemängelt, da dieser in der definierten Terminologie stets weiter differenziert werden sollte. Es werden verschiedene Status zur Auswahl angeboten und auch die Möglichkeit, den Begriff zu kennzeichnen. Am Ende wird ausgewertet und ausgegeben, ob Terminologie-Ersetzungen durchgeführt wurden. Zusätzlich werden die Begriffe gekennzeichnet, die Teil der definierten Terminologie sind, so dass man erkennen kann, ob ein Begriff evtl.\ noch unbekannt ist und eingepflegt werden sollte.
 \end{document}
