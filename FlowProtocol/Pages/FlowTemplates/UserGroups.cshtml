@@ -4,29 +4,31 @@
     ViewData["Title"] = "Anwendergruppen";
 }
 <h2>Anwendergruppen</h2>
-@if(Model.TemplatePathFound)
+@if (Model.TemplatePathFound)
 {
     <p>Wählen Sie die passende Anwendergruppe aus, um die zugeordneten Vorlagen anzuzeigen.</p>
     <table class="cinereousTable">
-    <tbody>
-    @for(int row = 0; row < Model.UserGroupArray?.Rows; row++)
-    {
-        <tr>
-            @for(int col = 0; col < Model.UserGroupArray?.Cols; col++)
+        <tbody>
+            @for (int row = 0; row < Model.UserGroupArray?.Rows; row++)
             {
-                @if(Model.UserGroupArray?.Array?[row,col] != null)
-                {
-                    <td>
-                        <a asp-page="./List" asp-route-userGroup="@Model.UserGroupArray.Array[row,col]">@Model.UserGroupArray.Array[row,col]</a>
-                    </td>
-                }
+                <tr>
+                    @for (int col = 0; col < Model.UserGroupArray?.Cols; col++)
+                    {
+                        @if (Model.UserGroupArray?.Array?[row, col] != null)
+                        {
+                            <td>
+                                <a asp-page="./List"
+                    asp-route-userGroup="@Model.UserGroupArray.Array[row,col]">@Model.UserGroupArray.Array[row,col]</a>
+                            </td>
+                        }
+                    }
+                </tr>
             }
-        </tr>
-    }
-    </tbody>
+        </tbody>
     </table>
 }
 else
 {
-    <p>Das Vorlagenverzeichnis @Model.TemplatePath wurde nicht gefunden. Bitte prüfen Sie die Einstellung TemplatePath in der Datei appsettings.json.</p>
+    <p>Das Vorlagenverzeichnis @Model.TemplatePath wurde nicht gefunden. Bitte prüfen Sie die Einstellung TemplatePath in
+        der Datei appsettings.json.</p>
 }

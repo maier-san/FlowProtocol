@@ -14,7 +14,9 @@
             <p>
                 @foreach (var line in Model.TemplateDescription)
                 {
-                    @line<br>
+                    @line
+
+                    <br>
                 }
             </p>
             <hr>
@@ -65,7 +67,9 @@
                             </div>
                         }
                     </div>
-                </div><br>
+                </div>
+
+                <br>
             }
             else if (q.Item3 != null)
             { // InputItem
@@ -79,10 +83,12 @@
                         {
                             @await Html.PartialAsync("_HelpTextLines", q.Item3)
                         }
-                        <input type="text" class="form-control" access="false" id="@q.Item3.Key" asp-for="SelectedOptions[q.Item3.Key]"
-                maxlength="100">
+                        <input type="text" class="form-control" access="false" id="@q.Item3.Key"
+                asp-for="SelectedOptions[q.Item3.Key]" maxlength="100">
                     </div>
-                </div><br>
+                </div>
+
+                <br>
             }
         }
         <button type="submit" class="btn btn-primary">Weiter</button>
@@ -109,7 +115,7 @@ else
                     @if (t.SubItems.Any())
                     {
                         <ul>
-                            @foreach (var s in t.SubItems)
+                            @foreach (var s in t.SubItems.Where(x => !String.IsNullOrWhiteSpace(x)))
                             {
                                 <li>
                                     @if (Model.IsURL(s, out string url, out string displaytext))

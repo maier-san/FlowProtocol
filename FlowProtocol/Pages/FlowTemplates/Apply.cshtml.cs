@@ -74,7 +74,7 @@ namespace FlowProtocol.Pages.FlowTemplates
                 return RedirectToPage("./NoTemplate");
             }
             TemplateDetailPath = fi.DirectoryName;
-            TemplateBreadcrumb = templateDec.Replace(separator.ToString(), ", ");
+            TemplateBreadcrumb = templateDec.Replace(separator.ToString(), ", ").TrimStart('_');
             Template? currentTemplate = LoadTemplate(templateFileName);
             if (currentTemplate == null)
             {
