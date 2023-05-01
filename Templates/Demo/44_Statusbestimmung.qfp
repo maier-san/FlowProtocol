@@ -1,0 +1,28 @@
+/// Einer von 3 Status wird anhand von Kriterien zugeordnet
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Set S1OK=?; S2OK=?; S3OK=?
+?S': Welcher Status soll geprüft werden?
+	#S1: Status 1
+		~Include Statuskriterien CC=Status1
+	#S2: Status 2
+		~Include Statuskriterien CC=Status2
+	#S3: Status 3
+		~Include Statuskriterien CC=Status3
+~Execute
+~If $Erg==Status0
+	>> Ergebnis ist Status 0
+	>> Für Status 1 fehlt
+		> $S1KritA
+		> $S1KritB
+~If $Erg==Status1
+	>> Ergebnis ist Status 1
+	>> Für Status 2 fehlt
+		> $S2KritA
+		> $S2KritB
+~If $Erg==Status2
+	>> Ergebnis ist Status 2
+	>> Für Status 3 fehlt
+		> $S3KritA
+		> $S3KritB
+~If $Erg==Status3
+	>> Ergebnis ist Status 3	

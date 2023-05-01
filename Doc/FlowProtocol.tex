@@ -1560,7 +1560,7 @@ Man beachte, dass hier bewusst darauf verzichtet wird, das Wissen explizit durch
 Durch die Möglichkeit, sich nur eine kleine zufällige Teilmenge an Aussagen vorlegen zu lassen, hat man zusätzlich auch ein Instrument, um das Wissengebiet regelmäßig stichprobenartig zu überprüfen.
 
 \newpage
-\section{Erklärende Beispiele}
+\section{Erklärende Beispiele und Anwendungsbeispiele}
 \subsection{Reihenfolge bei Verschachtelungen}
 Sowohl über die Verschachtelungen von Fragen (siehe Abschnitt~\ref{Verschachtelungen}), als auch über den Aufruf von Funktionen (siehe Abschnitt~\ref{Funktionen} und \ref{ParametrisierteFunktionen}) werden die Ausgaben in einer verschachtelten Struktur angeordnet, bei der die Aufrufe tieferer Verschachtelungsebenen im Code der Vorlage auch mit einer bestimmten Position, z.B.\ zwischen Ausgabe $A$ und $B$ assoziiert sind. Bei der Erzeugung der Ausgabe wird diese Reihenfolge innerhalb der einzelnen Ausgabegruppe wiederhergestellt:
 \Beispiel
@@ -1739,4 +1739,116 @@ Das nachfolgende Beispiel zeigt, wie man auch mit \FlowProtocol\ ein einfaches, 
         > $txwrn
 \end{verbatim}
 Eingegeben wird ein Text, der terminologisch geprüft werden soll. In einem ersten Schritt werden dabei die Begriffe mit einen Sternchen gekennzeichnet, die Teil der definierten Terminologie sind. In einem zweiten Schritt werden Benennungen ersetzt, die nicht Teil der definierten Terminologie sind, z.B. die Benennung \glqq Passwort\grqq\ durch \glqq Kennwort\grqq. In einem dritten Schritt werden Begriffe behandelt, deren Klärung kontextbezogen erfolgen muss, und die ggf.\ weitere Abfragen notwednig machen. Im Beispiel oben wird der Begriff \glqq Status\grqq\ bemängelt, da dieser in der definierten Terminologie stets weiter differenziert werden sollte. Es werden verschiedene Status zur Auswahl angeboten und auch die Möglichkeit, den Begriff zu kennzeichnen. Am Ende wird ausgewertet und ausgegeben, ob Terminologie-Ersetzungen durchgeführt wurden. Zusätzlich werden die Begriffe gekennzeichnet, die Teil der definierten Terminologie sind, so dass man erkennen kann, ob ein Begriff evtl.\ noch unbekannt ist und eingepflegt werden sollte.
+
+\subsection{Statusbestimmung}
+Komplexe Objekte wie Projekte oder Kurse können einen Status haben, der vom Vorhandensein bestimmter Artefakte oder der erfolgreichen Abarbeitung bestimmter Aufgaben abhängig ist, und damit auch wieder einen Rückschluss auf diese Gegebenheiten ermöglicht. Meist bauen die Status aufeinander auf, so dass bei erreichen eines Status direkt geprüft werden kann, ob evtl. auch schon der Folgestatus erreicht ist.
+
+Das nachfolgende Beispiel demonstriert, wie man einen von drei Status für ein hier nicht weiter spezifiziertes Objekt über eine Vorlage bestimmen kann, wenn jeder Status gegenüber seinem Vorgängerstatus durch zwei notwendige Kriterien bestimmt wird. Zusätzlich wird ein Status 0 als Ausgangsstatus angenommen, der dann vorliegt, wenn selbst die Kriterien von Status 1 nicht erfüllt sind.
+
+Das besondere an der Vorlage ist, dass sie davon ausgeht, dass bereits ein Status vorliegt, und die Bestimmung des neuen Status genau dort ansetzen soll, anstatt immer wieder bei Null anzufangen und die Kriterien aller Status der Reihe nach abzufragen. In diesem Fall wird sogar davon ausgegangen, dass auch ein Rückschritt auf den Vorgängerstatus möglich ist, wenn die für den aktuellen Status vorausgesetzen Kriterien aktuell nicht mehr alle erfüllt sind. Ein solcher Rückschritt ist gerade bei Projektstatus nicht unüblich.
+
+Der Aufbau der Vorlage besteht aus der nachfolgenden Vorlagedatei
+\Beispiel
+\begin{verbatim}
+/// Einer von 3 Status wird anhand von Kriterien zugeordnet
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Set S1OK=?; S2OK=?; S3OK=?
+?S': Welcher Status soll geprüft werden?
+    #S1: Status 1
+        ~Include Statuskriterien CC=Status1
+    #S2: Status 2
+        ~Include Statuskriterien CC=Status2
+    #S3: Status 3
+        ~Include Statuskriterien CC=Status3
+~Execute
+~If $Erg==Status0
+    >> Ergebnis ist Status 0
+    >> Für Status 1 fehlt
+        > $S1KritA
+        > $S1KritB
+~If $Erg==Status1
+    >> Ergebnis ist Status 1
+    >> Für Status 2 fehlt
+        > $S2KritA
+        > $S2KritB
+~If $Erg==Status2
+    >> Ergebnis ist Status 2
+    >> Für Status 3 fehlt
+        > $S3KritA
+        > $S3KritB
+~If $Erg==Status3
+    >> Ergebnis ist Status 3    
+\end{verbatim}
+und der Funktionsdatei Statuskriterien.qff:
+\begin{verbatim}
+// Statusbestimmung
+// $CC: Eingabestatus
+~If $CC==Status1
+    ~Set S1OK=j
+    ?SB$CC': Kriterium A für Status 1
+        #e: erfüllt
+            ~Set S1KritA=
+        #n: nicht erfüllt
+            ~Set S1OK=n
+            ~Set S1KritA=Kriterium A1
+    ?SB$CC': Kriterium B für Status 1
+        #e: erfüllt
+            ~Set S1KritB=
+        #n: nicht erfüllt
+            ~Set S1OK=n
+            ~Set S1KritB=Kriterium B1
+    ~Execute
+    ~If $S1OK==j && $S2OK==?
+        ~Include Statuskriterien CC=Status2
+    ~If $S1OK==j && $S2OK==n
+        ~Set Erg=Status1
+    ~If $S1OK==n 
+        ~Set Erg=Status0
+~If $CC==Status2
+    ~Set S2OK=j
+    ?SB$CC': Kriterium A für Status 2
+        #e: erfüllt
+            ~Set S2KritA=
+        #n: nicht erfüllt
+            ~Set S2OK=n
+            ~Set S2KritA=Kriterium A2
+    ?SB$CC': Kriterium B für Status 2
+        #e: erfüllt
+            ~Set S2KritB=
+        #n: nicht erfüllt
+            ~Set S2OK=n
+            ~Set S2KritB=Kriterium B2
+    ~Execute
+    ~If $S2OK==j && $S3OK==?
+        ~Include Statuskriterien CC=Status3
+    ~If $S2OK==j && $S3OK==n
+        ~Set Erg=Status2
+    ~If $S2OK==n && $S1OK==?
+        ~Include Statuskriterien CC=Status1
+~If $CC==Status3
+    ~Set S3OK=j
+    ?SB$CC': Kriterium A für Status 3
+        #e: erfüllt
+            ~Set S3KritA=
+        #n: nicht erfüllt
+            ~Set S3OK=n
+            ~Set S3KritA=Kriterium A3
+    ?SB$CC': Kriterium B für Status 3
+        #e: erfüllt
+            ~Set S3KritB=
+        #n: nicht erfüllt
+            ~Set S3OK=n
+            ~Set S3KritB=Kriterium B3
+    ~Execute
+    ~If $S3OK==j
+        ~Set Erg=Status3
+    ~If $S3OK==n && $S2OK==j
+        ~Set Erg=Status2
+    ~If $S3OK==n && $S2OK==?
+        ~Include Statuskriterien CC=Status2    
+\end{verbatim}
+Die Vorlagedatei fragt den Ausgangsstatus ab und ruf anschließend die Funktionsdatei mit dem entsprechenden Status als Parameter auf.
+Dabei werden die Kriterien für diesen Status abgefragt und geprüft, ob diese vollständig erfüllt sind. Ist dies der Fall, so erfolgt ein rekursiver Aufruf für den Folgestatus, falls nicht, für den Vorgängerstatus. Die Rekursion endet, sobald alle Kriterien für einen Status erfüllt, die für den Folgestatus jedoch nicht erfüllt sind, bzw.\ wenn die Kriterien für den ersten Status nicht erfüllt, oder die für den letzten Status erfüllt sind. In der Ausgabe, die wieder von der Vorlagedatei übernommen wird, wird dann auch zusätzlich zu dem ermittelten Status ausgegeben, welche der Kriterien für den Folgestatus noch nicht erfüllt sind.
+
+In einem realen Anwendungsfall hat man vermutlich mehr Status und mehr Kriterien mit komplexeren Abhängigkeiten. Denkbar sind auch Konstellationen bei denen einzelne Status in Abhängigkeit von Kriterien übersprungen werden können. Durch die explizite Abbildung der Bedingungen und Sprungziele lässt sich hier so gut wie alles umsetzen.
 \end{document}
