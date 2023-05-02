@@ -1,0 +1,65 @@
+// Statusbestimmung
+// $CC: Eingabestatus
+~If $CC==Status1
+	~Set S1OK=j
+	?SB$CC': Kriterium A für Status 1
+		#e: erfüllt
+			~Set S1KritA=
+		#n: nicht erfüllt
+			~Set S1OK=n
+			~Set S1KritA=Kriterium A1
+	?SB$CC': Kriterium B für Status 1
+		#e: erfüllt
+			~Set S1KritB=
+		#n: nicht erfüllt
+			~Set S1OK=n
+			~Set S1KritB=Kriterium B1
+	~Execute
+	~If $S1OK==j && $S2OK==?
+		~Include Statuskriterien CC=Status2
+	~If $S1OK==j && $S2OK==n
+		~Set Erg=Status1
+	~If $S1OK==n 
+		~Set Erg=Status0
+~If $CC==Status2
+	~Set S2OK=j
+	?SB$CC': Kriterium A für Status 2
+		#e: erfüllt
+			~Set S2KritA=
+		#n: nicht erfüllt
+			~Set S2OK=n
+			~Set S2KritA=Kriterium A2
+	?SB$CC': Kriterium B für Status 2
+		#e: erfüllt
+			~Set S2KritB=
+		#n: nicht erfüllt
+			~Set S2OK=n
+			~Set S2KritB=Kriterium B2
+	~Execute
+	~If $S2OK==j && $S3OK==?
+		~Include Statuskriterien CC=Status3
+	~If $S2OK==j && $S3OK==n
+		~Set Erg=Status2
+	~If $S2OK==n && $S1OK==?
+		~Include Statuskriterien CC=Status1
+~If $CC==Status3
+	~Set S3OK=j
+	?SB$CC': Kriterium A für Status 3
+		#e: erfüllt
+			~Set S3KritA=
+		#n: nicht erfüllt
+			~Set S3OK=n
+			~Set S3KritA=Kriterium A3
+	?SB$CC': Kriterium B für Status 3
+		#e: erfüllt
+			~Set S3KritB=
+		#n: nicht erfüllt
+			~Set S3OK=n
+			~Set S3KritB=Kriterium B3
+	~Execute
+	~If $S3OK==j
+		~Set Erg=Status3
+	~If $S3OK==n && $S2OK==j
+		~Set Erg=Status2
+	~If $S3OK==n && $S2OK==?
+		~Include Statuskriterien CC=Status2	
