@@ -387,6 +387,7 @@ namespace FlowProtocol.Pages.FlowTemplates
             if (CheckCompDTerm(conterm, "<", (x, y) => x < y, out erg, cmd)) return erg;
             if (CheckCompDTerm(conterm, ">", (x, y) => x > y, out erg, cmd)) return erg;
             if (CheckCompSTerm(conterm, "~", (x, y) => x.Contains(y), out erg, cmd)) return erg;
+            if (CheckCompSTerm(conterm, "!~", (x, y) => !x.Contains(y), out erg, cmd)) return erg;
             AddCommandError("C16", $"Der Ausdruck {conterm} konnte nicht als Vergleichsterm interpretiert werden.", cmd);
             return false;
         }
@@ -755,11 +756,17 @@ namespace FlowProtocol.Pages.FlowTemplates
                 input = input.Replace("$MyResultURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path + this.HttpContext.Request.QueryString);
                 input = input.Replace("$MyBaseURL", this.HttpContext.Request.Scheme + "://" + this.HttpContext.Request.Host + this.HttpContext.Request.Path);
                 input = input.Replace("$NewGuid", Guid.NewGuid().ToString());
-                input = input.Replace("$GetDateStamp", $"{DateTime.Now:yyyy-MM-dd}");
-                input = input.Replace("$GetDateTime", $"{DateTime.Now:g}");
-                input = input.Replace("$GetDate", $"{DateTime.Now:d}");
-                input = input.Replace("$GetTime", $"{DateTime.Now:T}");
-                input = input.Replace("$GetYear", $"{DateTime.Now:yyyy}");
+                if (input.Contains("$Get"))
+                {
+                    DateTime cNow = DateTime.Now;
+                    input = input.Replace("$GetDateStamp", $"{cNow:yyyy-MM-dd}");
+                    input = input.Replace("$GetDateTime", $"{cNow:g}");
+                    input = input.Replace("$GetDate", $"{cNow:d}");
+                    input = input.Replace("$GetTime", $"{cNow:T}");
+                    input = input.Replace("$GetYear", $"{cNow:yyyy}");
+                    input = input.Replace("$GetDayMinutes", $"{cNow.Minute + cNow.Hour * 60}");
+                    input = input.Replace("$GetDaySeconds", $"{cNow.Second + cNow.Minute * 60 + cNow.Hour * 3600}");
+                }
                 input = input.Replace("$CRLF", "\r\n");
                 input = input.Replace("$LF", "\n");
                 if (input.Contains("$GetFDateTime"))

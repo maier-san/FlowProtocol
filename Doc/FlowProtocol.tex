@@ -1202,8 +1202,9 @@ Ein Vergleichsausdruck kann wiederum folgende Form haben:
 <z1> < <z2>
 <z1> > <z2>
 <s1> ~ <s2>
+<s1> !~ <s2>
 \end{verbatim}
-Hier stehen die Ausdrücke \verb|<s1>| und \verb|<s2>|  für beliebige Zeichenfolgen und \verb|<z1>| und \verb|<z2>| für Werte, die sich zum Auswertungszeitpunkt als Gleitkommazahl interpretieren lassen. Man beachte dabei die Unterscheidung der beiden Ungleich-Operatoren \verb|!=| für Texte und \verb|<>| für Zahlen. Der Operator \verb|~| steht für \glqq enthält\grqq\ im Sinne von, dass die auf der linken Seite stehende Zeichenkennte die auf der rechten Seite als Teil enthält. Klammerungen und unäre Negationen sind nicht Bestandteil der Bedingungssyntax und auch nicht notwendig, da sich über die disjunktive Form und mit den verfügbaren Vergleichsoperatoren alle logischen Kombinationen abbilden lassen. Umschließende Leerzeichen werden vor der Auswertung entfernt und nicht beim Vergleich berücksichtigt. Zu beachten ist auch, dass die Groß-klein-Schreibung von Zeichenketten immer mit berücksichtigt wird, so dass z.B.\ \verb|A != a| als wahr interpretiert wird.
+Hier stehen die Ausdrücke \verb|<s1>| und \verb|<s2>|  für beliebige Zeichenfolgen und \verb|<z1>| und \verb|<z2>| für Werte, die sich zum Auswertungszeitpunkt als Gleitkommazahl interpretieren lassen. Man beachte dabei die Unterscheidung der beiden Ungleich-Operatoren \verb|!=| für Texte und \verb|<>| für Zahlen. Der Operator \verb|~| steht für \glqq enthält\grqq\ im Sinne von, dass die auf der linken Seite stehende Zeichenkennte die auf der rechten Seite als Teil enthält. Entsprechend steht \verb|!~| für \glqq enthält nicht\grqq. Klammerungen und unäre Negationen sind nicht Bestandteil der Bedingungssyntax und auch nicht notwendig, da sich über die disjunktive Form und mit den verfügbaren Vergleichsoperatoren alle logischen Kombinationen abbilden lassen. Umschließende Leerzeichen werden vor der Auswertung entfernt und nicht beim Vergleich berücksichtigt. Zu beachten ist auch, dass die Groß-klein-Schreibung von Zeichenketten immer mit berücksichtigt wird, so dass z.B.\ \verb|A != a| als wahr interpretiert wird.
 
 Anstelle eines Vergleichsausdruckes kann auch direkt ein Wahrheitswert \texttt{1} oder \texttt{true} für wahr und \texttt{0} oder \texttt{false} für falsch angegeben werden. Damit können Zwischenergebnisse berechnet und wieder erneut in Bedingungen eingesetzt werden. 
 
@@ -1265,6 +1266,8 @@ Systemvariablen sind spezielle Variablen, die schon durch das System mit Werten 
 \SysVar{GetDate}{Gibt das aktuelle Datum in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{29.09.2022}.}
 \SysVar{GetDateStamp}{Gibt das aktuelle Datum als alphanumerisch sortierbaren Datumstempel zurück, z.B.\ \texttt{2022-09-22}.}
 \SysVar{GetDateTime}{Gibt den aktuellen Zeitpunkt mit Datum und Uhrzeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{29.09.2022 17:26}.}
+\SysVar{GetDayMinutes}{Gibt die Anzahl der Minuten des heutigen Tages zurück, z.B.\ \texttt{721}.}
+\SysVar{GetDaySeconds}{Gibt die Anzahl der Sekunden des heutigen Tages zurück, z.B.\ \texttt{43281}.}
 \SysVar{GetFDateTime}{Gibt den aktuellen Zeitpunkt in der Formatierun zurück, die aktuell über den Befehl \texttt{SetDateTimeFormat} (siehe Abschnitt~\ref{Datumsformatierung}) eingestellt ist.}
 \SysVar{GetTime}{Gibt die aktuelle Zeit in der auf dem System eingestellten Formatierung zurück, z.B.\ \texttt{17:26}.}
 \SysVar{GetYear}{Gibt das aktuelle Jahr im Format yyyy zurück, z.B.\ \texttt{2022}.}
@@ -1687,7 +1690,7 @@ Nun ersetzen wir \verb|^A| durch einen Großbuchstaben, den wir zufällig im Zeich
 Die gezeigte Vorlage ist nicht interaktiv, da sie weder eine Eingabe, noch eine Frage enthält. Eine mögliche Erweiterung wäre die übergeordnete Auswahl der Komplexität oder die individuelle Bestimmung, ob und in welcher Vielfachheit bestimmte Zeichengruppen vertreten sein sollen.
 
 \subsection{Terminologiesystem}
-Terminologie is teine komplexe Angelegenheit, und die Einigung auf bestimmte Benennungen kann ebenso aufreibend sein, die der Weg zur Einhaltung. Aus diesem Grund kosten richtige Terminologiersystemne mindestens fünfstellig.
+Terminologie ist eine komplexe Angelegenheit, und die Einigung auf bestimmte Benennungen kann ebenso aufreibend sein, die der Weg zur Einhaltung. Aus diesem Grund kosten richtige Terminologiersystemne mindestens fünfstellig.
 
 Das nachfolgende Beispiel zeigt, wie man auch mit \FlowProtocol\ ein einfaches, aber dennoch brauchbares Terminologiesystem aufbauen kann:
 
