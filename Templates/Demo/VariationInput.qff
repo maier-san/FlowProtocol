@@ -1,0 +1,11 @@
+// Funktion Variation
+// Parameter: varidx: gibt die Nummer der Variation an.
+~Input Var$varidx: Gib die Variation $varidx an:
+~Execute
+~Include VariationswertInput varidx=$varidx; validx=1; vartext=$Var$varidx
+~Execute
+?NV$varidx: Soll eine weitere Variation erfasst werden?
+	#j: Ja
+		~Set dummy=$varidx; dummy+=1
+		~Include VariationInput varidx=$dummy
+	#n: Nein
