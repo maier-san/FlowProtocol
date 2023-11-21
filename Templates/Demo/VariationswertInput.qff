@@ -1,0 +1,12 @@
+// Funktion Variationswert
+// Parameter: varidx: gibt die Nummer der Variation an.
+//            validx: gibt die Nummer des Variantionswertes an.
+//            vartext: Text, der die Variation beschreibt
+~Input Var$varidx: Gib die Variation $varidx an:
+~Input Val$varidxX$validx: Gib den Variationswert $validx für die Variation "$vartext" an:
+>> Variation $varidx: $vartext >> $Val$varidxX$validx
+?NW$varidxX$validx: Soll ein weiterer Variationswert für die Variation "$vartext" erfasst werden?
+	#j: Ja
+		~Set dummy=$validx; dummy+=1
+		~Include VariationswertInput varidx=$varidx; validx=$dummy; vartext=$vartext
+	#n: Nein

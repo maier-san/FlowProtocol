@@ -991,7 +991,7 @@ mit Funktionsdatei
 \end{verbatim}
 Das Beispiel zeigt den typischen Anwendungsfall einer Funktion, die für verschiedene Variablenwerte aufgerufen werden kann, und die auch eine Eingabe pro Aufruf ermöglicht.
 
-\subsection{Zufallswerte}
+\subsection{Zufallswerte}\label{Zufallswerte}
 Manchmal benötigt man einen Zufallswert, z.B. als Schlüsselwert in Code-Fragmenten oder um den Anwender bei der zufälligen Auswahl einer Stichprobe zu unterstützen. Dieser kann über eine eingebaute Funktion erzeugt werden.
 \Syntax
 \begin{verbatim}
@@ -1854,4 +1854,75 @@ Die Vorlagedatei fragt den Ausgangsstatus ab und ruf anschließend die Funktionsd
 Dabei werden die Kriterien für diesen Status abgefragt und geprüft, ob diese vollständig erfüllt sind. Ist dies der Fall, so erfolgt ein rekursiver Aufruf für den Folgestatus, falls nicht, für den Vorgängerstatus. Die Rekursion endet, sobald alle Kriterien für einen Status erfüllt, die für den Folgestatus jedoch nicht erfüllt sind, bzw.\ wenn die Kriterien für den ersten Status nicht erfüllt, oder die für den letzten Status erfüllt sind. In der Ausgabe, die wieder von der Vorlagedatei übernommen wird, wird dann auch zusätzlich zu dem ermittelten Status ausgegeben, welche der Kriterien für den Folgestatus noch nicht erfüllt sind.
 
 In einem realen Anwendungsfall hat man vermutlich mehr Status und mehr Kriterien mit komplexeren Abhängigkeiten. Denkbar sind auch Konstellationen bei denen einzelne Status in Abhängigkeit von Kriterien übersprungen werden können. Durch die explizite Abbildung der Bedingungen und Sprungziele lässt sich hier so gut wie alles umsetzen.
+
+\subsection{Kombinationsbildung}
+Qualitativ gute Softwareentwicklung setzt an vielen Stellen den Überblick über die verschiedenen Variationen voraus, die im Zuge der Bearbeitung auftreten können. Dies gilt durchgängig von der Entwurfsphase bis hin zum Integrationstest. Insbesondere dann, wenn  verschiedene Variationen voneinander abhängig sind und daher prinzipiell alle Kombinationen einzeln betrachtet werden müssen, tut man gut daran, alle kombinatorisch möglichen Fälle systematisch aufzulisten.
+
+Die Abfrage einer solchen Konstellation und die anschließende kombinatoriche Auflistung kann mit der nachfolgenden Vorlage umgesetzt werden:
+\Beispiel
+\begin{verbatim}
+/// Erzeugt alle Kombinationen aus mehreren Variationen
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Include VInput varidx=1
+~Execute
+~Include VWOutput varidx=1; validx=1; kbw=
+\end{verbatim}
+Zusätzlich benötigt werden Funktionen VInput.qff:
+\begin{verbatim}
+// Funktion Variation Input
+// Parameter: varidx: Nummer der Variation
+~Input Var$varidx: Gib die Variation $varidx an:
+~Execute
+~Include VWInput varidx=$varidx; validx=1; vtxt=$Var$varidx
+~Execute
+?NV$varidx: Weitere Variation erfassen?
+    #j: Ja
+        ~Set dummy=$varidx; dummy+=1
+        ~Include VInput varidx=$dummy
+    #n: Nein
+\end{verbatim}
+VWInput.qff:
+\begin{verbatim}
+// Funktion Variationswert Input
+// Parameter: varidx: Nummer der Variation
+//            validx: Nummer des Variantionswertes
+//            vtxt: Text, der die Variation beschreibt
+~Input Var$varidx: Gib die Variation $varidx an:
+~Input Val$varidxX$validx: Wert $validx für Variation "$vtxt":
+>> Variation $varidx: $vtxt >> $Val$varidxX$validx
+?NW$varidxX$validx: Weiteren Wert für "$vtxt" erfassen?
+    #j: Ja
+        ~Set dummy=$validx; dummy+=1
+        ~Include VWInput varidx=$varidx; validx=$dummy; vtxt=$vtxt
+    #n: Nein
+\end{verbatim}
+VWOutput.qff:
+\begin{verbatim}
+// Funktion Variationswert Output
+// Parameter: varidx: Nummer der Variation
+//            validx: Nummer des Variantionswertes
+//            kbw: Teilergebnis einer Kombination
+~If $kbw==
+    ~Set reskbw=$Var$varidx: $Val$varidxX$validx
+~If $kbw!=
+    ~Set reskbw=$kbw / $Var$varidx: $Val$varidxX$validx
+?NV$varidx: Weitere Variation erfassen?
+    #j: Ja
+        ~Set dummy=$varidx; dummy+=1
+        ~Include VWOutput varidx=$dummy; validx=1; kbw=$reskbw
+    #n: Nein
+        >> Kombinationen >> $reskbw
+?NW$varidxX$validx: Weiteren Wert für "$vtxt" erfassen?
+    #j: Ja
+        ~Set dummy=$validx; dummy+=1
+        ~Include VWOutput varidx=$varidx; validx=$dummy; kbw=$kbw
+    #n: Nein
+\end{verbatim}
+Die Ausgangsdatei der Vorlage ruft zuerst eine Funktion für die Eingabe auf und erzeugt im Anschluss die Ausgabe der Kombinationen mit einer anderen Funktion. Die Funktion für die Eingabe einer Variation ruft ihrerseits wieder eine Funktion für die Eingabe eines Variationswertes auf. Beide Funktionen fragen am Ende nach, ob es weitere Variationen, bzw.\ Variationswerte gibt und rufen sich in diesem Fall mit einem hochgezählten Index rekursiv auf (vgl.\ auch Abschnitt \ref{Schleifen}).
+
+Die Ausgabe der Kombinationen funktioniert mit einer einzigen Funktion, die sich mit Hilfe der schon bei der Eingabe beantworteten Fragen wahrweise mit erhöhtem Index für die Variation oder den Variationswert so selbst aufruft, dass alle Kombinationen durchlaufen werden.
+
+Anstatt alle Kombinationen auszugeben könnte man mit Hilfe von Zufallswerten und If-Bedingungen auch eine Teilmenge bestimmen und diese für zufällige Stichproben verwenden (vgl.\ Abschnitt \ref{Zufallswerte} und \ref{IfBedingungen}). Relevanz oder Testergebnis für eine Kombination könnte auch direkt durch die Vorlage vom Benutzer abgefragt werden.
+
+
 \end{document}

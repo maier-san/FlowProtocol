@@ -1,0 +1,5 @@
+/// Erzeugt alle Kombinationen aus mehreren Variationen
+//  Anwendungsbeispiel für die Befehlsreferenz
+~Include VariationInput varidx=1
+~Execute
+~Include VariationswertOutput varidx=1; validx=1; kombiw=

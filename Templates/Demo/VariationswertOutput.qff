@@ -1,0 +1,19 @@
+// Funktion Variationswert
+// Parameter: varidx: gibt die Nummer der Variation an.
+//            validx: gibt die Nummer des Variantionswertes an.
+//            kombiw: gibt den Kombinationswert der bisherigen Variationen an.
+~If $kombiw==
+	~Set reskombi=$Var$varidx: $Val$varidxX$validx
+~If $kombiw!=
+	~Set reskombi=$kombiw / $Var$varidx: $Val$varidxX$validx
+?NV$varidx: Soll eine weitere Variation erfasst werden?
+	#j: Ja
+		~Set dummy=$varidx; dummy+=1
+		~Include VariationswertOutput varidx=$dummy; validx=1; kombiw=$reskombi
+	#n: Nein
+		>> Kombinationen >> $reskombi
+?NW$varidxX$validx: Soll ein weiterer Variationswert für die Variation "$vartext" erfasst werden?
+	#j: Ja
+		~Set dummy=$validx; dummy+=1
+		~Include VariationswertOutput varidx=$varidx; validx=$dummy; kombiw=$kombiw
+	#n: Nein
