@@ -294,9 +294,9 @@ namespace FlowProtocol.Pages.FlowTemplates
                 }
                 Dictionary<string, string> assignments = CommandHelper.ReadAssignments(m.Groups[2].Value);
                 RecursionCount++;
-                if (RecursionCount > 100)
+                if (RecursionCount > 1000)
                 {
-                    AddCommandError("C05", $"Der Aufruf der Funktionsdatei {templateFileName} überschreitet das Rekursionsmaximum von 100.", cmd);
+                    AddCommandError("C05", $"Der Aufruf der Funktionsdatei {templateFileName} überschreitet das Rekursionsmaximum von 1000.", cmd);
                     return;
                 }
                 Template? subTemplate = LoadTemplate(templateFileName, assignments, cmd.KeyPath, cmd.SortPath);
