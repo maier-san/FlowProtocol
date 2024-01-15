@@ -30,8 +30,10 @@ jobs:
             docker build -f ./docker/flowprotocol.dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/es_flowprotocol:${{ github.sha }} .
             docker tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/es_flowprotocol:${{ github.sha }} ${{ secrets.REGISTRY_LOGIN_SERVER }}/es_flowprotocol:latest
             docker push --all-tags ${{ secrets.REGISTRY_LOGIN_SERVER }}/es_flowprotocol
-        - if: ${{ secrets.REGISTRY_PASSWORD != '' }}
-          name: 'Deploy to Azure Container Instances'
+        - name: 'Deploy to Azure Container Instances'
+          env: 
+            env_secret: ${{ secrets.REGISTRY_PASSWORD }}
+          if: ${{ env.env_secret != '' }}
           uses: 'azure/aci-deploy@v1'
           with:
             resource-group: ${{ secrets.RESOURCE_GROUP }}
