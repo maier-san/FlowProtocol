@@ -21,4 +21,5 @@ RUN dotnet publish ./FlowProtocol.sln -c release -o /app --no-restore
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 COPY --from=build /app ./
+COPY Templates/Demo/ ./data/demo/
 ENTRYPOINT ["dotnet", "FlowProtocol.dll"]
